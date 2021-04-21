@@ -5,13 +5,9 @@ import com.godeltech.mastery.backend.domain.entity.Car;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface CarMapper {
-
-  // stub
-  CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
 
   @Mappings({
     @Mapping(target = "model", source = "model"),
