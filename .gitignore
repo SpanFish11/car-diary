@@ -51,6 +51,8 @@ pnpm-debug.log*
 # logback
 logback.out.xml
 
+backend/target/
+
 frontend/dist/
 frontend/node/
 frontend/node_modules/
