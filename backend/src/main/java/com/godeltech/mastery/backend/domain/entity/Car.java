@@ -4,18 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.time.LocalDate;
+import javax.persistence.Table;
+import java.io.Serial;
+import java.io.Serializable;
 
-import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -23,28 +22,32 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Car {
+@Table(name = "m_cars")
+public class Car implements Serializable {
+
+  @Serial private static final long serialVersionUID = -5977596408904041847L;
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
   @ManyToOne
-  @JoinColumn(nullable = false)
+  @JoinColumn(name = "model", nullable = false)
   private Model model;
 
-  @Enumerated(STRING)
-  @ColumnTransformer(read = "UPPER(colour)")
-  @Column(nullable = false)
+  @ManyToOne
+  @JoinColumn(name = "brand", nullable = false)
   private Brand brand;
 
-  @Column(nullable = false)
-  private LocalDate year;
+  @Column(name = "year", nullable = false)
+  private Integer year;
 
+  @Column(name = "photo_url")
   private String photoUrl;
 
-  @Column(nullable = false)
+  @Column(name = "vin_code", nullable = false, length = 17)
   private String vin;
 
+  @Column(name = "mileage")
   private Integer mileage;
 }

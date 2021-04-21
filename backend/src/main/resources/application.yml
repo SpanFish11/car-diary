@@ -1,12 +1,16 @@
-spring:
-  jackson:
-    mapper:
-      accept-case-insensitive-enums: true
-
-# AWS S3 configuration
 aws:
   s3:
     accessKeyId: access_key
     secretAccessKey: secret_key
     bucket: bucket
     region: eu-west-1
+
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
