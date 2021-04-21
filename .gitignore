@@ -52,3 +52,16 @@ pnpm-debug.log*
 logback.out.xml
 
 backend/target/
+
+frontend/dist/
+frontend/node/
+frontend/node_modules/
+frontend/npm-debug.log
+frontend/target
+frontend/test-output
+frontend/tests/e2e/reports
+frontend/tests/unit/coverage
+frontend/yarn-error.log
+frontend/yarn.lock
+security/target/
+selenium-debug.log
