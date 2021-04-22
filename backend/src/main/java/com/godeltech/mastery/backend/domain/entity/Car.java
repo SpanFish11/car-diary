@@ -21,7 +21,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Table(name = "m_cars")
 public class Car implements Serializable {
 
@@ -32,11 +32,11 @@ public class Car implements Serializable {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "model", nullable = false)
+  @JoinColumn(name = "model_id", nullable = false)
   private Model model;
 
   @ManyToOne
-  @JoinColumn(name = "brand", nullable = false)
+  @JoinColumn(name = "brand_id", nullable = false)
   private Brand brand;
 
   @Column(name = "year", nullable = false)

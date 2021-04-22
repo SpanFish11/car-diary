@@ -49,10 +49,8 @@ class CarControllerUnitTest {
     given(carService.getAllCars()).willReturn(expected);
 
     final ResponseEntity<List<CarDTO>> actual = carController.getAllCars();
-    assertThat(actual.getBody(), isA(List.class));
+    assertThatStatusCodeAndBodyAndClass(actual, expected, OK, List.class);
     assertThat(actual.getBody(), hasSize(3));
-    assertThat(actual.getBody(), is(expected));
-    assertThat(actual.getStatusCode(), is(OK));
 
     then(carService).should(only()).getAllCars();
   }
@@ -65,9 +63,7 @@ class CarControllerUnitTest {
     given(carService.getCarById(id)).willReturn(expected);
 
     final ResponseEntity<CarDTO> actual = carController.getCarById(id);
-    assertThat(actual.getBody(), isA(CarDTO.class));
-    assertThat(actual.getBody(), is(expected));
-    assertThat(actual.getStatusCode(), is(OK));
+    assertThatStatusCodeAndBodyAndClass(actual, expected, OK, CarDTO.class);
 
     then(carService).should(only()).getCarById(argThat(id::equals));
   }
@@ -75,12 +71,12 @@ class CarControllerUnitTest {
   @Test
   void createCar() {
     final CarCreateRequest request = CarCreateRequest.builder().build();
+    final Long expected = 1L;
 
-    willDoNothing().given(carService).addNewCar(request);
+    given(carService.addNewCar(request)).willReturn(expected);
 
-    final ResponseEntity<HttpStatus> actual = carController.createCar(request);
-    assertThat(actual.getBody(), nullValue());
-    assertThat(actual.getStatusCode(), is(CREATED));
+    final ResponseEntity<Long> actual = carController.createCar(request);
+    assertThatStatusCodeAndBodyAndClass(actual, expected, CREATED, Long.class);
 
     then(carService).should(only()).addNewCar(argThat(request::equals));
   }
@@ -95,10 +91,24 @@ class CarControllerUnitTest {
 
     final ResponseEntity<HttpStatus> actual = carController.updateCarPhoto(id, multipartFile);
     assertThat(actual.getBody(), nullValue());
-    assertThat(actual.getStatusCode(), is(OK));
+    assertThatStatusCode(actual, OK);
 
     then(carService)
         .should(only())
         .updateCarPhoto(argThat(id::equals), argThat(multipartFile::equals));
+  }
+
+  private void assertThatStatusCode(final ResponseEntity<?> actual, final HttpStatus status) {
+    assertThat(actual.getStatusCode(), is(status));
+  }
+
+  private void assertThatStatusCodeAndBodyAndClass(
+      final ResponseEntity<?> actual,
+      final Object object,
+      final HttpStatus status,
+      final Class<?> clazz) {
+    assertThat(actual.getBody(), isA(clazz));
+    assertThat(actual.getBody(), is(object));
+    assertThat(actual.getStatusCode(), is(status));
   }
 }
