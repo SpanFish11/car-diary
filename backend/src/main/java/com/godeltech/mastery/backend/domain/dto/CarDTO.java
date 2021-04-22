@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class CarDTO {
 
+  private Long id;
   private Model model;
   private Brand brand;
   private Integer year;

@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface CarMapper {
 
@@ -18,6 +20,7 @@ public interface CarMapper {
   Car map(CarCreateRequest carCreateRequest);
 
   @Mappings({
+    @Mapping(target = "id", source = "id"),
     @Mapping(target = "model", source = "model"),
     @Mapping(target = "brand", source = "brand"),
     @Mapping(target = "year", source = "year"),
@@ -26,4 +29,6 @@ public interface CarMapper {
     @Mapping(target = "mileage", source = "mileage")
   })
   CarDTO map(Car car);
+
+  List<CarDTO> map(List<Car> cars);
 }

@@ -41,9 +41,8 @@ public class CarController {
   }
 
   @PostMapping
-  public ResponseEntity<HttpStatus> createCar(@RequestBody @Valid final CarCreateRequest request) {
-    carService.addNewCar(request);
-    return new ResponseEntity<>(CREATED);
+  public ResponseEntity<Long> createCar(@RequestBody @Valid final CarCreateRequest request) {
+    return new ResponseEntity<>(carService.addNewCar(request), CREATED);
   }
 
   @PatchMapping("/{car_id}/photos")
