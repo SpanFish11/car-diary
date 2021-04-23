@@ -56,7 +56,8 @@ public class AwsServiceImpl implements AwsService {
     }
   }
 
-  private PutObjectRequest createObjectRequest(Long carId, byte[] imageBytes, String imageUUID) {
+  private PutObjectRequest createObjectRequest(
+      final Long carId, final byte[] imageBytes, final String imageUUID) {
     return PutObjectRequest.builder()
         .bucket(bucketName)
         .contentType(IMAGE_CONTENT_TYPE)
@@ -66,7 +67,7 @@ public class AwsServiceImpl implements AwsService {
         .build();
   }
 
-  private GetUrlRequest createUrlRequest(String imageUUID) {
+  private GetUrlRequest createUrlRequest(final String imageUUID) {
     return GetUrlRequest.builder().bucket(bucketName).key(imageUUID).build();
   }
 }
