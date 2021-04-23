@@ -1,16 +1,19 @@
-aws:
-  s3:
-    accessKeyId: access_key
-    secretAccessKey: secret_key
-    bucket: bucket
-    region: eu-west-1
-
 spring:
+  main:
+    banner-mode: off
   datasource:
-    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:postgres}
-    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create
+
+aws:
+  s3:
+    images:
+      accessKeyId: ${AWS_ACCES_KEY:key}
+      secretAccessKey: ${AWS_SECRET_KEY:secret}
+      region: ${AWS_REGION:region}
+      bucketName: ${AWS_BUCKET_NAME:bucket}
+      carFolderName: ${AWS_CAR_FOLDER_NAME:folder}
