@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -157,8 +156,7 @@ class CarServiceUnitTest {
     final Long brandId = 1L;
     final CarCreateRequest request =
         CarCreateRequest.builder().brandId(brandId).modelId(modelId).vin("5454544848").build();
-    final Brand brand =
-        new Brand(brandId, "Nissan", Set.of(new Model(1L, "Murano", new Brand())));
+    final Brand brand = new Brand(brandId, "Nissan", Set.of(new Model(1L, "Murano", new Brand())));
     final EntityNotFoundException expected = new EntityNotFoundException("model", modelId);
     final String message = expected.getMessage();
 
@@ -172,7 +170,7 @@ class CarServiceUnitTest {
   }
 
   @Test
-  void updateCarPhoto() throws IOException {
+  void updateCarPhoto() {
     final Long id = 1L;
     final MultipartFile multipartFile =
         new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
@@ -180,20 +178,22 @@ class CarServiceUnitTest {
     final Car carExpected = Car.builder().id(id).vin("25654985656").build();
     final Car car = Car.builder().id(id).photoUrl(url).vin("5454544848").build();
 
-    given(awsService.uploadImage(multipartFile)).willReturn(url);
+    given(awsService.uploadImage(multipartFile, id)).willReturn(url);
     given(carRepository.findById(id)).willReturn(Optional.of(carExpected));
     given(carRepository.save(car)).willReturn(car);
 
     carService.updateCarPhoto(id, multipartFile);
 
-    then(awsService).should(only()).uploadImage(argThat(multipartFile::equals));
+    then(awsService)
+        .should(only())
+        .uploadImage(argThat(multipartFile::equals), argThat(id::equals));
     then(carRepository).should(atLeastOnce()).findById(argThat(id::equals));
     verify(carRepository, atLeastOnce()).save(valueCaptor.capture());
     then(carRepository).should(atLeastOnce()).save(argThat(valueCaptor.getValue()::equals));
   }
 
   @Test
-  void updateCarPhoto_given_invalidId() throws IOException {
+  void updateCarPhoto_given_invalidId() {
     final Long id = 60L;
     final MultipartFile multipartFile =
         new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
@@ -201,33 +201,37 @@ class CarServiceUnitTest {
     final EntityNotFoundException expected = new EntityNotFoundException("car", id);
     final String message = expected.getMessage();
 
-    given(awsService.uploadImage(multipartFile)).willReturn(url);
     given(carRepository.findById(id)).willThrow(expected);
+    given(awsService.uploadImage(multipartFile, id)).willReturn(url);
 
     final EntityNotFoundException actual =
         assertThrows(
             EntityNotFoundException.class, () -> carService.updateCarPhoto(id, multipartFile));
     checkException(message, actual);
 
-    then(awsService).should(only()).uploadImage(argThat(multipartFile::equals));
     then(carRepository).should(only()).findById(argThat(id::equals));
   }
 
   @Test
-  void updateCarPhoto_given_imageButAwsThrowException() throws IOException {
+  void updateCarPhoto_given_imageButAwsThrowException() {
     final Long id = 1L;
+    final Car car = Car.builder().id(id).build();
     final MultipartFile multipartFile =
         new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
-    final IOException expected = new IOException("Something went wrong while uploading a picture");
+    final RuntimeException expected =
+        new RuntimeException("Something went wrong while uploading a picture");
     final String message = expected.getMessage();
 
-    given(awsService.uploadImage(multipartFile)).willThrow(expected);
+    given(carRepository.findById(id)).willReturn(Optional.of(car));
+    given(awsService.uploadImage(multipartFile, id)).willThrow(expected);
 
-    final IOException actual =
-        assertThrows(IOException.class, () -> carService.updateCarPhoto(id, multipartFile));
+    final RuntimeException actual =
+        assertThrows(RuntimeException.class, () -> carService.updateCarPhoto(id, multipartFile));
     checkException(message, actual);
 
-    then(awsService).should(only()).uploadImage(argThat(multipartFile::equals));
+    then(awsService)
+        .should(only())
+        .uploadImage(argThat(multipartFile::equals), argThat(id::equals));
   }
 
   private void checkException(final String message, final Throwable actual) {
