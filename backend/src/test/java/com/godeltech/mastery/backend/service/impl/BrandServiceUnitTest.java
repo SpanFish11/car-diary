@@ -1,14 +1,17 @@
 package com.godeltech.mastery.backend.service.impl;
 
+import com.godeltech.mastery.backend.domain.dto.BrandDTO;
+import com.godeltech.mastery.backend.domain.dto.ModelDTO;
 import com.godeltech.mastery.backend.domain.entity.Brand;
 import com.godeltech.mastery.backend.domain.entity.Model;
+import com.godeltech.mastery.backend.exception.EntityNotFoundException;
+import com.godeltech.mastery.backend.mapper.BrandMapper;
 import com.godeltech.mastery.backend.repository.BrandRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +31,8 @@ class BrandServiceUnitTest {
 
   @Mock BrandRepository brandRepository;
 
+  @Mock BrandMapper brandMapper;
+
   @InjectMocks BrandServiceImpl brandService;
 
   @BeforeEach
@@ -37,10 +42,15 @@ class BrandServiceUnitTest {
 
   @Test
   void getAllBrands() {
-    final List<Brand> expected = List.of(new Brand(1L, "Nissan", Set.of(new Model(1L, "Murano", new Brand()))));
+    final List<Brand> brands =
+            List.of(new Brand(1L, "Nissan", Set.of(new Model(1L, "Murano", new Brand()))));
+    final List<BrandDTO> expected =
+            List.of(new BrandDTO(1L, "Nissan", Set.of(new ModelDTO(1L, "Murano"))));
 
-    given(brandRepository.findAll()).willReturn(expected);
-    final List<Brand> actual = brandService.getAllBrands();
+    given(brandRepository.findAll()).willReturn(brands);
+    given(brandMapper.map(brands)).willReturn(expected);
+
+    final List<BrandDTO> actual = brandService.getAllBrands();
 
     assertThat(actual, hasSize(1));
     assertThat(actual, containsInAnyOrder(expected.toArray()));
@@ -50,15 +60,23 @@ class BrandServiceUnitTest {
 
   @Test
   void getModelsByCorrectBrandId() {
-    final Set<Model> models = Set.of(new Model(1L, "Coolray", new Brand()), new Model(2L, "Emgrand", new Brand()));
+    final Set<Model> models =
+            Set.of(new Model(1L, "Coolray", new Brand()), new Model(2L, "Emgrand", new Brand()));
+    final Set<ModelDTO> modelsDTO =
+            Set.of(
+                    new ModelDTO(1L, "Coolray"),
+                    new ModelDTO(2L, "Emgrand"));
     final Long id = 2L;
     final Brand expected = new Brand(id, "Nissan", models);
+    final BrandDTO brandDTO = new BrandDTO(id, "Nissan", modelsDTO);
 
     given(brandRepository.findById(id)).willReturn(Optional.of(expected));
-    final List<Model> actual = brandService.getModelsByBrandId(2L);
+    given(brandMapper.map(expected)).willReturn(brandDTO);
+
+    final List<ModelDTO> actual = brandService.getModelsByBrandId(2L);
 
     assertThat(actual, hasSize(2));
-    assertThat(actual, containsInAnyOrder(models.toArray()));
+    assertThat(actual, containsInAnyOrder(modelsDTO.toArray()));
 
     then(brandRepository).should(only()).findById(id);
   }
@@ -71,8 +89,8 @@ class BrandServiceUnitTest {
 
     given(brandRepository.findById(id)).willThrow(excepted);
 
-    EntityNotFoundException actual =
-        assertThrows(EntityNotFoundException.class, () -> brandService.getModelsByBrandId(id));
+    final EntityNotFoundException actual =
+            assertThrows(EntityNotFoundException.class, () -> brandService.getModelsByBrandId(id));
     assertThat(actual.getMessage(), is(message));
 
     then(brandRepository).should(only()).findById(id);
