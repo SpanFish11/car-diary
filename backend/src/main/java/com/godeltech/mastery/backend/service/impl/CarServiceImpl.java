@@ -50,8 +50,9 @@ public class CarServiceImpl implements CarService {
   @Override
   @SneakyThrows
   public void updateCarPhoto(final Long id, final MultipartFile multipartFile) {
-    final String photoUrl = awsService.uploadImage(multipartFile);
-    final Car car = getCar(id).toBuilder().photoUrl(photoUrl).build();
+    final Car car = getCar(id);
+    final String photoUrl = awsService.uploadImage(multipartFile, id);
+    car.setPhotoUrl(photoUrl);
     carRepository.save(car);
   }
 
