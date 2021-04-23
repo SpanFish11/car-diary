@@ -2,42 +2,72 @@ package com.godeltech.mastery.backend.service.impl;
 
 import com.godeltech.mastery.backend.service.AwsService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.core.exception.SdkException;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3Utilities;
 import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
-import java.net.URL;
-import java.nio.ByteBuffer;
 
+import static java.lang.String.format;
+import static java.nio.ByteBuffer.wrap;
+import static java.util.UUID.randomUUID;
+import static software.amazon.awssdk.core.async.AsyncRequestBody.fromByteBuffer;
+import static software.amazon.awssdk.services.s3.model.ObjectCannedACL.PUBLIC_READ;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AwsServiceImpl implements AwsService {
 
-  private final S3Client s3Client;
+  private static final String IMAGE_CONTENT_TYPE = "image/jpeg";
 
-  @Value(value = "${aws.s3.bucket}")
+  private final S3AsyncClient s3AsyncClient;
+  private final S3Utilities s3Utilities;
+
+  @Value(value = "${aws.s3.images.bucketName}")
   private String bucketName;
 
+  @Value(value = "${aws.s3.images.carFolderName}")
+  private String folderName;
+
   @Override
-  @Async
-  public String uploadImage(MultipartFile multipartFile) throws IOException {
-        final byte[] imageBytes = multipartFile.getBytes();
-        PutObjectResponse putObjectRequest =
-            s3Client.putObject(
-                PutObjectRequest.builder().bucket(bucketName).build(),
-                RequestBody.fromByteBuffer(ByteBuffer.wrap(imageBytes)));
-        final URL reportUrl =
-            s3Client.utilities().getUrl(GetUrlRequest.builder().bucket(bucketName).build());
-        return reportUrl.toString();
+  public String uploadImage(final MultipartFile multipartFile, final Long carId) {
+    final byte[] imageBytes = getBytesFromMultipartFile(multipartFile);
+    final var imageUUID = randomUUID().toString();
+
+    s3AsyncClient.putObject(
+        createObjectRequest(carId, imageBytes, imageUUID), fromByteBuffer(wrap(imageBytes)));
+
+    return s3Utilities.getUrl(createUrlRequest(imageUUID)).toString();
+  }
+
+  private byte[] getBytesFromMultipartFile(final MultipartFile multipartFile) {
+    try {
+      return multipartFile.getBytes();
+    } catch (final IOException e) {
+      log.error("Cant get bytes from multipartFile", e);
+      throw SdkException.create("Cant get bytes from multipartFile", e);
+    }
+  }
+
+  private PutObjectRequest createObjectRequest(
+      final Long carId, final byte[] imageBytes, final String imageUUID) {
+    return PutObjectRequest.builder()
+        .bucket(bucketName)
+        .contentType(IMAGE_CONTENT_TYPE)
+        .contentLength((long) imageBytes.length)
+        .acl(PUBLIC_READ)
+        .key(format("%s/%s/%s.jpg", folderName, carId, imageUUID))
+        .build();
+  }
+
+  private GetUrlRequest createUrlRequest(final String imageUUID) {
+    return GetUrlRequest.builder().bucket(bucketName).key(imageUUID).build();
   }
 }
