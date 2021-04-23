@@ -17,3 +17,13 @@ aws:
       region: ${AWS_REGION:region}
       bucketName: ${AWS_BUCKET_NAME:bucket}
       carFolderName: ${AWS_CAR_FOLDER_NAME:folder}
+
+springdoc:
+  packages-to-scan: com.godeltech.mastery.backend.rest
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    disable-swagger-default-url: true
