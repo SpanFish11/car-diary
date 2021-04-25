@@ -206,6 +206,14 @@ export default {
             this.photoToUpload.photo != null ? this.uploadPhoto(response.data) : this.makeToast(response.status)
             this.$bvModal.hide('modal')
           }).catch((error) => {
+        this.$bvToast.toast(`Sorry, but the car has not been added. Try again.!`, {
+          title: 'Something went wrong :(',
+          variant: "danger",
+          autoHideDelay: 5000,
+          solid: true,
+          toaster: "b-toaster-top-center",
+          appendToast: false
+        })
         console.log('ERROR: ' + error.response.data);
       });
       // TODO подумать над этим
@@ -221,28 +229,28 @@ export default {
             console.log(response.status)
             this.makeToast(response.status)
           }).catch(error => {
+        this.$bvToast.toast(`Sorry, but something went wrong with the image upload. Try again while editing the car.`, {
+          title: 'Car create successful!',
+          variant: "warning",
+          autoHideDelay: 5000,
+          solid: true,
+          toaster: "b-toaster-top-center",
+          appendToast: false
+        })
         console.log('ERROR: ' + error.response.data)
       })
     },
     makeToast(status = Number()) {
       this.resetForm()
-      status === 200 || status === 201
-          ? this.$bvToast.toast(`You're breathtaking! ❤`, {
-            title: 'Car create successful!',
-            variant: "success",
-            autoHideDelay: 5000,
-            solid: true,
-            toaster: "b-toaster-top-center",
-            appendToast: false
-          })
-          : this.$bvToast.toast(`Sorry, but the car has not been added. Try again.!`, {
-            title: 'Something went wrong :(',
-            variant: "danger",
-            autoHideDelay: 5000,
-            solid: true,
-            toaster: "b-toaster-top-center",
-            appendToast: false
-          })
+      if (status === 200 || status === 201)
+        this.$bvToast.toast(`You're breathtaking! ❤`, {
+          title: 'Car create successful!',
+          variant: "success",
+          autoHideDelay: 5000,
+          solid: true,
+          toaster: "b-toaster-top-center",
+          appendToast: false
+        })
     }
   }
 }

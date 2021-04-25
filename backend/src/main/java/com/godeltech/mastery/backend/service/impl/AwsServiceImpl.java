@@ -47,9 +47,8 @@ public class AwsServiceImpl implements AwsService {
     return getUrl(carId, imageUUID);
   }
 
-  private String getUrl(Long carId, String imageUUID) {
-    final StringBuilder sb =
-        new StringBuilder(s3Utilities.getUrl(createUrlRequest(imageUUID)).toString());
+  private String getUrl(final Long carId, final String imageUUID) {
+    final var sb = new StringBuilder(s3Utilities.getUrl(createUrlRequest(imageUUID)).toString());
     sb.insert(53, format("%s/%s/", folderName, carId));
     return sb + ".jpg";
   }
