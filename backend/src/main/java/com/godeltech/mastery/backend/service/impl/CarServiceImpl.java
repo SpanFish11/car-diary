@@ -12,6 +12,7 @@ import com.godeltech.mastery.backend.repository.CarRepository;
 import com.godeltech.mastery.backend.service.AwsService;
 import com.godeltech.mastery.backend.service.CarService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,9 @@ public class CarServiceImpl implements CarService {
   private final BrandRepository brandRepository;
   private final AwsService awsService;
   private final CarMapper mapper;
+
+  @Value(value = "${aws.s3.images.defaultCarImage}")
+  private String defaultCarImage;
 
   @Override
   public List<CarDTO> getAllCars() {
@@ -43,6 +47,7 @@ public class CarServiceImpl implements CarService {
     final Car car = mapper.map(carCreateRequest);
     car.setBrand(brand);
     car.setModel(model);
+    car.setPhotoUrl(defaultCarImage);
     return carRepository.save(car).getId();
   }
 

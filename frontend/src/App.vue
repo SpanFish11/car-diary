@@ -1,14 +1,25 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <NavBar/>
+    <AddNewCarModal/>
+    <Main/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NavBar from '@/components/NavBar'
+import AddNewCarModal from "@/components/AddNewCarModal";
+import Main from "@/components/Main";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    NavBar,
+    AddNewCarModal,
+    Main
+  },
+  metaInfo: {
+    title: 'Car Page'
   }
 }
 </script>

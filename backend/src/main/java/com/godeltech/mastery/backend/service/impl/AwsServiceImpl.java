@@ -44,7 +44,14 @@ public class AwsServiceImpl implements AwsService {
     s3AsyncClient.putObject(
         createObjectRequest(carId, imageBytes, imageUUID), fromByteBuffer(wrap(imageBytes)));
 
-    return s3Utilities.getUrl(createUrlRequest(imageUUID)).toString();
+    return getUrl(carId, imageUUID);
+  }
+
+  private String getUrl(Long carId, String imageUUID) {
+    final StringBuilder sb =
+        new StringBuilder(s3Utilities.getUrl(createUrlRequest(imageUUID)).toString());
+    sb.insert(53, format("%s/%s/", folderName, carId));
+    return sb + ".jpg";
   }
 
   private byte[] getBytesFromMultipartFile(final MultipartFile multipartFile) {

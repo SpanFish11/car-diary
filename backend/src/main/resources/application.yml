@@ -17,6 +17,7 @@ aws:
       region: ${AWS_REGION:region}
       bucketName: ${AWS_BUCKET_NAME:bucket}
       carFolderName: ${AWS_CAR_FOLDER_NAME:folder}
+      defaultCarImage: ${DEFAULT_CAR_IMAGE:.url}
 
 springdoc:
   packages-to-scan: com.godeltech.mastery.backend.rest
