@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Nissan",
+    "models": [
+      {
+        "id": 2,
+        "name": "Terrano"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Geely",
+    "models": [
+      {
+        "id": 1,
+        "name": "Coolray"
+      },
+      {
+        "id": 3,
+        "name": "Emgrand"
+      }
+    ]
+  }
+]
