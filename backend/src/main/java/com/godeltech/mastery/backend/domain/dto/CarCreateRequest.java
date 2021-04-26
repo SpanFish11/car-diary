@@ -27,10 +27,10 @@ public class CarCreateRequest {
   private Integer year;
 
   @NotBlank(message = "VIN code is mandatory")
-  @Size(min = 17, max = 17, message = "Value should be")
+  @Size(min = 17, max = 17, message = "Value should be 17 characters long")
   private String vin;
 
-  @NotNull(message = "Brand is mandatory")
+  @NotNull(message = "Mileage is mandatory")
   @Min(value = 0, message = "Value should be greater then or equal to 0")
   private Integer mileage;
 }

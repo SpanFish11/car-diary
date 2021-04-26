@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -82,7 +83,7 @@ class CarControllerUnitTest {
   }
 
   @Test
-  void updateCarPhoto() {
+  void updateCarPhoto() throws HttpMediaTypeNotSupportedException {
     final Long id = 1L;
     final MultipartFile multipartFile =
         new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
