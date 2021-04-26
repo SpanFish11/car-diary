@@ -12,6 +12,7 @@
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>backend</name>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>16</java.version>
