@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +22,15 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Objects;
 
+import static java.util.List.of;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.MediaType.IMAGE_JPEG;
+import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.MediaType.IMAGE_PNG;
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
+import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Tag(name = "Car Controller", description = "Operations about car")
@@ -55,8 +63,15 @@ public class CarController {
   @PatchMapping("/{car_id}/photos")
   public ResponseEntity<HttpStatus> updateCarPhoto(
       @PathVariable("car_id") @Min(1) final Long id,
-      @RequestPart(value = "photo") final MultipartFile photo) {
+      @RequestPart(value = "photo") final MultipartFile photo) throws HttpMediaTypeNotSupportedException {
+    checkImageMediaType(photo.getContentType());
     carService.updateCarPhoto(id, photo);
     return ok().build();
+  }
+
+  private void checkImageMediaType(final String type) throws HttpMediaTypeNotSupportedException {
+    if (!Objects.equals(type, IMAGE_JPEG_VALUE) && !Objects.equals(type, IMAGE_PNG_VALUE)) {
+      throw new HttpMediaTypeNotSupportedException(parseMediaType(type), of(IMAGE_JPEG, IMAGE_PNG));
+    }
   }
 }

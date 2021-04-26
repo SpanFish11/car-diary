@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModelDTO {
-    private Long id;
-    private String name;
+
+  private Long id;
+  private String name;
 }
