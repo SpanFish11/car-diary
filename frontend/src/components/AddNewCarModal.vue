@@ -169,6 +169,7 @@ export default {
           })
     },
     loadAllModelsByBrandId() {
+      this.newCar.modelId = null
       if (this.newCar.brandId === null) {
         this.models = [{value: null, text: "Choose..."}]
         this.newCar.modelId = null
