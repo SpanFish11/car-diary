@@ -16,6 +16,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -35,7 +36,7 @@ public class Brand implements Serializable {
   @Column(name = "name", nullable = false)
   private String name;
 
-  @OneToMany(mappedBy = "brand")
+  @OneToMany(mappedBy = "brand", fetch = EAGER)
   @JsonManagedReference
   private Set<Model> models;
 }

@@ -52,6 +52,7 @@ pnpm-debug.log*
 logback.out.xml
 
 backend/target/
+backend/src/main/resources/public/
 
 frontend/dist/
 frontend/node/
