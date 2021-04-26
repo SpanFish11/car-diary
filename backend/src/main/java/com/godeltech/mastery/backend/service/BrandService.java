@@ -1,6 +1,7 @@
 package com.godeltech.mastery.backend.service;
 
-import com.godeltech.mastery.backend.domain.entity.Brand;
+import com.godeltech.mastery.backend.domain.dto.BrandDTO;
+import com.godeltech.mastery.backend.domain.dto.ModelDTO;
 import com.godeltech.mastery.backend.domain.entity.Model;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Service
 public interface BrandService {
 
-  List<Brand> getAllBrands();
+  List<BrandDTO> getAllBrands();
 
-  List<Model> getModelsByBrandId(Long id);
+  List<ModelDTO> getModelsByBrandId(Long id);
 }

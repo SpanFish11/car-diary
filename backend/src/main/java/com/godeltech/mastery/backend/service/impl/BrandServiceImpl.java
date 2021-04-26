@@ -1,36 +1,35 @@
 package com.godeltech.mastery.backend.service.impl;
 
-import com.godeltech.mastery.backend.domain.entity.Brand;
-import com.godeltech.mastery.backend.domain.entity.Model;
+import com.godeltech.mastery.backend.domain.dto.BrandDTO;
+import com.godeltech.mastery.backend.domain.dto.ModelDTO;
+import com.godeltech.mastery.backend.exception.EntityNotFoundException;
+import com.godeltech.mastery.backend.mapper.BrandMapper;
 import com.godeltech.mastery.backend.repository.BrandRepository;
 import com.godeltech.mastery.backend.service.BrandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-
-import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
 public class BrandServiceImpl implements BrandService {
 
   private final BrandRepository brandRepository;
+  private final BrandMapper brandMapper;
 
   @Override
-  public List<Brand> getAllBrands() {
-    return brandRepository.findAll();
+  public List<BrandDTO> getAllBrands() {
+    return brandMapper.map(brandRepository.findAll());
   }
 
   @Override
-  public List<Model> getModelsByBrandId(final Long id) {
-    return brandRepository
-        .findById(id)
-        .orElseThrow(
-            () ->
-                new EntityNotFoundException(
-                    format("Brand or brand models are not found with brand id %d", id)))
+  public List<ModelDTO> getModelsByBrandId(final Long id) {
+    return brandMapper
+        .map(
+            brandRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Brand", id)))
         .getModels()
         .stream()
         .toList();

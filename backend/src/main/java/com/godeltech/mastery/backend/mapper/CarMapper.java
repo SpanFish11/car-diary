@@ -9,7 +9,9 @@ import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+    componentModel = "spring",
+    uses = {ModelMapper.class, BrandMapper.class})
 public interface CarMapper {
 
   @Mappings({

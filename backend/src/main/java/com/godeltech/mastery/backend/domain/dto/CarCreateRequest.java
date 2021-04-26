@@ -23,7 +23,7 @@ public class CarCreateRequest {
 
   @NotNull(message = "Year is mandatory")
   @Min(value = 1900, message = "Value should be greater then or equal to 1900")
-  @Max(value = 2020, message = "Value should be greater then or equal to 2020")
+  @Max(value = 2021, message = "Value should be greater then or equal to 2021")
   private Integer year;
 
   @NotBlank(message = "VIN code is mandatory")
