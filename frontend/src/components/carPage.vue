@@ -76,15 +76,16 @@
                 </div>
                 <div class="mb-3 text-start">
                   <label for="manufacture-year" class="col-form-label">Manufacture year:</label>
-                  <input type="number" class="form-control" id="manufacture-year" v-model="newCar.year" min="1980"
+                  <input type="number" class="form-control" id="manufacture-year" v-model="newCar.year" min="1900"
                          max="2021" required>
                   <div class="invalid-feedback">
-                    Please input a year(between 1980 and 2021).
+                    Please input a year(between 1900 and 2021).
                   </div>
                 </div>
                 <div class="input-group mb-3 text-start">
                   <span class="input-group-text">Mileage:</span>
-                  <input type="text" placeholder="20000" class="form-control" id="mileage" v-model="newCar.mileage" pattern="[0-9]*">
+                  <input type="text" placeholder="20000" class="form-control" id="mileage" v-model="newCar.mileage"
+                         pattern="[0-9]*">
                   <span class="input-group-text">km</span>
                   <div class="valid-feedback">
                     For new car mileage can be 0.
@@ -92,7 +93,7 @@
                 </div>
 
                 <div class="input-group mb-3">
-                  <input type="file" class="form-control" id="inputGroupFile02">
+                  <input type="file" class="form-control" id="inputGroupFile02" ref="file">
                   <label class="input-group-text" for="inputGroupFile02">Upload</label>
                   <div class="valid-feedback text-start">
                     It isn`t necessary to add a photo of the car.
@@ -216,18 +217,33 @@ export default {
       this.newCar.brandId = this.brands.find(x => x.name === this.selectedBrand).id;
       this.newCar.modelId = this.models.find(x => x.name === this.selectedModel).id;
     },
-    addNewCar: function () {
-      if (this.newCar.brandId !== 0 && this.newCar.modelId !== 0 && this.newCar.vin.trim().length !== 0) {
-        axios.post('/api/v1/cars', this.newCar, {
+    uploadPhoto: function (carId) {
+      const photo = this.$refs.file.files[0];
+      if (photo) {
+        let formData = new FormData();
+        formData.append('photo', photo);
+        axios.patch('/api/v1/cars/' + carId + '/photos', formData, {
           headers: {
-            'Content-type': 'application/json'
+            'Content-Type': 'multipart/form-data'
           }
-        }).then((response) => {
-          if (response.status === 201) {
-            window.location.reload()
+        }).then(function () {
+          console.log('SUCCESS');
+        }).catch(error => console.error(error));
+      }
+    },
+    addNewCar: function () {
+      const self = this;
+      if (this.newCar.brandId !== 0 && this.newCar.modelId !== 0 && this.newCar.vin.trim().length !== 0
+          && !(this.newCar.year < 1900 || this.newCar.year > 2021)) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/v1/cars', false);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+          if (xhr.status === 201) {
+            self.uploadPhoto(xhr.response);
           }
-        })
-            .catch(error => console.error(error));
+        }
+        xhr.send(JSON.stringify(this.newCar));
       }
     }
   }
