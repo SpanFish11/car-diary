@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -31,11 +32,11 @@ public class Car implements Serializable {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = EAGER)
   @JoinColumn(name = "model_id", nullable = false)
   private Model model;
 
-  @ManyToOne
+  @ManyToOne(fetch = EAGER)
   @JoinColumn(name = "brand_id", nullable = false)
   private Brand brand;
 

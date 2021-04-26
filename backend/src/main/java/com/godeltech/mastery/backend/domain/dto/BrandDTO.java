@@ -10,7 +10,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BrandDTO {
-    private Long id;
-    private String name;
-    private Set<ModelDTO> models;
+  private Long id;
+  private String name;
+  private Set<ModelDTO> models;
 }

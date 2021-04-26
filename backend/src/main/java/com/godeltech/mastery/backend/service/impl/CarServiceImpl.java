@@ -12,7 +12,6 @@ import com.godeltech.mastery.backend.repository.CarRepository;
 import com.godeltech.mastery.backend.service.AwsService;
 import com.godeltech.mastery.backend.service.CarService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,7 +47,6 @@ public class CarServiceImpl implements CarService {
   }
 
   @Override
-  @SneakyThrows
   public void updateCarPhoto(final Long id, final MultipartFile multipartFile) {
     final Car car = getCar(id);
     final String photoUrl = awsService.uploadImage(multipartFile, id);

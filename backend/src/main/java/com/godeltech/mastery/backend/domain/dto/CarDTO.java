@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarDTO {
 
-    private Long id;
-    private ModelDTO model;
-    private BrandDTO brand;
-    private Integer year;
-    private String photoUrl;
-    private String vin;
-    private Integer mileage;
+  private Long id;
+  private ModelDTO model;
+  private BrandDTO brand;
+  private Integer year;
+  private String photoUrl;
+  private String vin;
+  private Integer mileage;
 }
