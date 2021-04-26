@@ -31,7 +31,7 @@ public class Model implements Serializable {
   @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
-  @Column(name ="name", nullable = false)
+  @Column(name ="name", nullable = false, unique = true)
   private String name;
 
   @ManyToOne(fetch = EAGER)

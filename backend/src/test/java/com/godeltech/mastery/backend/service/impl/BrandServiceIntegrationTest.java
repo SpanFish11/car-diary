@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@Sql(scripts = "/tests/initTestDB.sql")
+@Sql(scripts = "/tests/brands/initTestDB.sql")
 class BrandServiceIntegrationTest {
 
   @Autowired private BrandMapper brandMapper;

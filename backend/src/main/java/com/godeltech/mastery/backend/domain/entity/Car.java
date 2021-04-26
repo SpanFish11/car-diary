@@ -46,7 +46,7 @@ public class Car implements Serializable {
   @Column(name = "photo_url")
   private String photoUrl;
 
-  @Column(name = "vin_code", nullable = false, length = 17)
+  @Column(name = "vin_code", nullable = false, length = 17, unique = true)
   private String vin;
 
   @Column(name = "mileage")
