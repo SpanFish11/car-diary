@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -30,6 +31,8 @@ import static org.mockito.Mockito.only;
 import static org.mockito.quality.Strictness.LENIENT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = LENIENT)
@@ -86,7 +89,8 @@ class CarControllerUnitTest {
   void updateCarPhoto() throws HttpMediaTypeNotSupportedException {
     final Long id = 1L;
     final MultipartFile multipartFile =
-        new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
+        new MockMultipartFile(
+            "sourceFile.jpeg", "sourceFile.jpeg", IMAGE_JPEG_VALUE, "Hello World".getBytes());
 
     willDoNothing().given(carService).updateCarPhoto(id, multipartFile);
 
@@ -97,6 +101,29 @@ class CarControllerUnitTest {
     then(carService)
         .should(only())
         .updateCarPhoto(argThat(id::equals), argThat(multipartFile::equals));
+  }
+
+  @Test
+  void updateCarPhoto_invalidMediaType() {
+    final Long id = 1L;
+    final var expected =
+        new HttpMediaTypeNotSupportedException("Content type 'multipart/form-data' not supported");
+    final String message = expected.getMessage();
+    final var multipartFile =
+        new MockMultipartFile(
+            "sourceFile.tmp",
+            "sourceFile.tmp",
+            MULTIPART_FORM_DATA_VALUE,
+            "Hello World".getBytes());
+
+    willDoNothing().given(carService).updateCarPhoto(id, multipartFile);
+
+    final HttpMediaTypeNotSupportedException actual =
+        assertThrows(
+            HttpMediaTypeNotSupportedException.class,
+            () -> carController.updateCarPhoto(id, multipartFile));
+
+    assertThat(actual.getMessage(), is(message));
   }
 
   private void assertThatStatusCode(final ResponseEntity<?> actual, final HttpStatus status) {
