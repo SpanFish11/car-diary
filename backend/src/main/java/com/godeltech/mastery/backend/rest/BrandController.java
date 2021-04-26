@@ -1,9 +1,13 @@
 package com.godeltech.mastery.backend.rest;
 
 import com.godeltech.mastery.backend.domain.dto.BrandDTO;
+import com.godeltech.mastery.backend.domain.dto.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.domain.dto.ModelDTO;
 import com.godeltech.mastery.backend.service.BrandService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +29,20 @@ public class BrandController {
 
   private final BrandService brandService;
 
-  @Operation(summary = "Get all brands", description = "Endpoint for getting all brands")
+  @Operation(
+      summary = "Get all brands",
+      description = "Endpoint for getting all brands",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Bad Request",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
+      })
   @GetMapping
   public ResponseEntity<List<BrandDTO>> getAllBrands() {
     return ok(brandService.getAllBrands());
@@ -33,7 +50,22 @@ public class BrandController {
 
   @Operation(
       summary = "Get all brand models",
-      description = "Endpoint for getting all brand models")
+      description = "Endpoint for getting all brand models",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Bad Request",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "Not found",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
+      })
   @GetMapping("/{brand_id}/models")
   public ResponseEntity<List<ModelDTO>> getAllModelById(
       @PathVariable(name = "brand_id") @Min(1) Long id) {
