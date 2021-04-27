@@ -43,7 +43,6 @@ export default {
   data: () => ({
     cars: []
   }),
-
   mounted() {
     this.loadAllCars()
   },

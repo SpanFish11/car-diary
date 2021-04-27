@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import {AXIOS} from "@/backend-api";
+import {AXIOS} from "@/backend-api"
 
 function processResponse(data) {
   let arr = [{value: null, text: "Choose..."}]
@@ -169,6 +169,7 @@ export default {
           })
     },
     loadAllModelsByBrandId() {
+      this.newCar.modelId = null
       if (this.newCar.brandId === null) {
         this.models = [{value: null, text: "Choose..."}]
         this.newCar.modelId = null
@@ -196,7 +197,7 @@ export default {
 
       this.$nextTick(() => {
         this.$refs.observer.reset();
-      });
+      })
     },
     addNewCar() {
       if (this.newCar.mileage == null)
@@ -206,6 +207,7 @@ export default {
             this.photoToUpload.photo != null ? this.uploadPhoto(response.data) : this.makeToast(response.status)
             this.$bvModal.hide('modal')
           }).catch((error) => {
+        console.log('ERROR: ' + error.response.data)
         this.$bvToast.toast(`Sorry, but the car has not been added. Try again.!`, {
           title: 'Something went wrong :(',
           variant: "danger",
@@ -214,10 +216,7 @@ export default {
           toaster: "b-toaster-top-center",
           appendToast: false
         })
-        console.log('ERROR: ' + error.response.data);
-      });
-      // TODO подумать над этим
-      // window.location.reload()
+      })
     },
     uploadPhoto(data) {
       const formData = new FormData()
@@ -229,6 +228,7 @@ export default {
             console.log(response.status)
             this.makeToast(response.status)
           }).catch(error => {
+        console.log('ERROR: ' + error.response.data)
         this.$bvToast.toast(`Sorry, but something went wrong with the image upload. Try again while editing the car.`, {
           title: 'Car create successful!',
           variant: "warning",
@@ -237,7 +237,6 @@ export default {
           toaster: "b-toaster-top-center",
           appendToast: false
         })
-        console.log('ERROR: ' + error.response.data)
       })
     },
     makeToast(status = Number()) {

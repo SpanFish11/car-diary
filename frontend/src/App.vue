@@ -8,8 +8,8 @@
 
 <script>
 import NavBar from '@/components/NavBar'
-import AddNewCarModal from "@/components/AddNewCarModal";
-import Main from "@/components/Main";
+import AddNewCarModal from "@/components/AddNewCarModal"
+import Main from "@/components/Main"
 
 export default {
   name: 'App',
