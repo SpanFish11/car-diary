@@ -23,7 +23,6 @@ import java.util.Set;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,8 +47,8 @@ class CarServiceIntegrationTest {
 
   @Test
   void getAllCars() {
-    final ModelDTO terrano = new ModelDTO(2L, "Terrano");
-    final ModelDTO coolray = new ModelDTO(1L, "Coolray");
+    final var terrano = new ModelDTO(2L, "Terrano");
+    final var coolray = new ModelDTO(1L, "Coolray");
 
     final List<CarDTO> expected =
         List.of(
@@ -73,15 +72,13 @@ class CarServiceIntegrationTest {
                 .build());
 
     final List<CarDTO> actual = carService.getAllCars();
-
-    assertThat(actual, hasSize(2));
     assertThat(actual, is(expected));
   }
 
   @Test
   void getCarByCorrectId() {
-    final ModelDTO terrano = new ModelDTO(2L, "Terrano");
-    final CarDTO expected =
+    final var terrano = new ModelDTO(2L, "Terrano");
+    final var expected =
         CarDTO.builder()
             .id(1L)
             .brand(new BrandDTO(1L, "Nissan", Set.of(terrano)))
@@ -98,17 +95,16 @@ class CarServiceIntegrationTest {
   @Test
   void getCarByIncorrectId() {
     final Long id = 7L;
-    final String message = format("Could not find any car with the ID %d.", id);
+    final var message = format("Could not find any car with the ID %d.", id);
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> carService.getCarById(id));
-
     assertThat(actual.getMessage(), is(message));
   }
 
   @Test
   void addNewCar() {
-    final CarCreateRequest carRequest =
+    final var carRequest =
         CarCreateRequest.builder()
             .brandId(1L)
             .mileage(25405)
@@ -122,7 +118,7 @@ class CarServiceIntegrationTest {
 
   @Test
   void addNewCarIncorrectBrandId() {
-    final CarCreateRequest carRequest =
+    final var carRequest =
         CarCreateRequest.builder()
             .brandId(7L)
             .modelId(2L)
@@ -130,7 +126,7 @@ class CarServiceIntegrationTest {
             .vin("4S3BMHB68B3286050")
             .mileage(25405)
             .build();
-    final String message = format("Could not find any brand with the ID 7.");
+    final var message = "Could not find any brand with the ID 7.";
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(carRequest));
@@ -140,7 +136,7 @@ class CarServiceIntegrationTest {
 
   @Test
   void addNewCarIncorrectModelId() {
-    final CarCreateRequest carRequest =
+    final var carRequest =
         CarCreateRequest.builder()
             .brandId(1L)
             .modelId(9L)
@@ -148,7 +144,7 @@ class CarServiceIntegrationTest {
             .vin("4S3BMHB68B3286050")
             .mileage(25405)
             .build();
-    final String message = format("Could not find any model with the ID 9.");
+    final var message = "Could not find any model with the ID 9.";
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(carRequest));
@@ -159,7 +155,7 @@ class CarServiceIntegrationTest {
   @Test
   void updateCarPhoto() {
     final Long carId = 1L;
-    final MockMultipartFile multipartFile =
+    final var multipartFile =
         new MockMultipartFile(
             "image.jpg", "image.jpg", MULTIPART_FORM_DATA_VALUE, "Hello World".getBytes());
 

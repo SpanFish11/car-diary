@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.NestedServletException;
 
 import java.io.File;
@@ -25,6 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,19 +33,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class BrandControllerIntegrationTest {
 
   private MockMvc mockMvc;
+
+  @Autowired private ObjectMapper objectMapper;
   @Autowired private BrandService brandService;
 
   @BeforeEach
   void setUp() {
-    mockMvc = MockMvcBuilders.standaloneSetup(new BrandController(brandService)).build();
+    mockMvc = standaloneSetup(new BrandController(brandService)).build();
   }
 
   @Test
   void getAllBrands() throws Exception {
-    final ObjectMapper mapper = new ObjectMapper();
-    final String jsonString =
-        mapper.writeValueAsString(
-            mapper.readValue(
+    final var jsonString =
+        objectMapper.writeValueAsString(
+            objectMapper.readValue(
                 new File("src/main/resources/tests/brands/allBrands.json"), JSONArray.class));
 
     mockMvc
@@ -57,10 +58,9 @@ class BrandControllerIntegrationTest {
 
   @Test
   void getAllModelByCorrectId() throws Exception {
-    final ObjectMapper mapper = new ObjectMapper();
-    final String jsonString =
-        mapper.writeValueAsString(
-            mapper.readValue(
+    final var jsonString =
+        objectMapper.writeValueAsString(
+            objectMapper.readValue(
                 new File("src/main/resources/tests/brands/modelsById.json"), JSONArray.class));
 
     mockMvc
@@ -71,7 +71,7 @@ class BrandControllerIntegrationTest {
   }
 
   @Test
-  void getAllModelByIncorrectId() throws Exception {
+  void getAllModelByIncorrectId() {
     assertThrows(
         NestedServletException.class,
         () ->

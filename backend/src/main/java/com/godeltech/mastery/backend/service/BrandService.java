@@ -2,7 +2,6 @@ package com.godeltech.mastery.backend.service;
 
 import com.godeltech.mastery.backend.domain.dto.BrandDTO;
 import com.godeltech.mastery.backend.domain.dto.ModelDTO;
-import com.godeltech.mastery.backend.domain.entity.Model;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
