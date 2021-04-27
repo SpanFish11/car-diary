@@ -1,0 +1,37 @@
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    url: ${DATABASE_URLL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+
+  flyway:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    locations: classpath:/migrations
+    baseline-on-migrate: true
+    baseline-description: <<Flyway Scripts>>
+    ignore-missing-migrations: true
+
+aws:
+  s3:
+    images:
+      accessKeyId: ${AWS_ACCES_KEY:key}
+      secretAccessKey: ${AWS_SECRET_KEY:secret}
+      region: ${AWS_REGION:region}
+      bucketName: ${AWS_BUCKET_NAME:bucket}
+      carFolderName: ${AWS_CAR_FOLDER_NAME:folder}
+      defaultCarImage: ${DEFAULT_CAR_IMAGE:.url}
+
+springdoc:
+  packages-to-scan: com.godeltech.mastery.backend.rest
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    disable-swagger-default-url: true
