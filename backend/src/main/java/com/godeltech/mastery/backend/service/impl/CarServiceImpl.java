@@ -42,9 +42,9 @@ public class CarServiceImpl implements CarService {
 
   @Override
   public Long addNewCar(final CarCreateRequest carCreateRequest) {
-    final Brand brand = getBrandById(carCreateRequest.getBrandId());
-    final Model model = getModelById(carCreateRequest.getModelId(), brand);
-    final Car car = mapper.map(carCreateRequest);
+    final var brand = getBrandById(carCreateRequest.getBrandId());
+    final var model = getModelById(carCreateRequest.getModelId(), brand);
+    final var car = mapper.map(carCreateRequest);
     car.setBrand(brand);
     car.setModel(model);
     car.setPhotoUrl(defaultCarImage);
@@ -53,8 +53,8 @@ public class CarServiceImpl implements CarService {
 
   @Override
   public void updateCarPhoto(final Long id, final MultipartFile multipartFile) {
-    final Car car = getCar(id);
-    final String photoUrl = awsService.uploadImage(multipartFile, id);
+    final var car = getCar(id);
+    final var photoUrl = awsService.uploadImage(multipartFile, id);
     car.setPhotoUrl(photoUrl);
     carRepository.save(car);
   }

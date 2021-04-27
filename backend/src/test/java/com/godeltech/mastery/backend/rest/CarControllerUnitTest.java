@@ -90,13 +90,13 @@ class CarControllerUnitTest {
     final Long id = 1L;
     final MultipartFile multipartFile =
         new MockMultipartFile(
-            "sourceFile.jpeg", "sourceFile.jpeg", IMAGE_JPEG_VALUE, "Hello World".getBytes());
+            "photo", "sourceFile.jpeg", IMAGE_JPEG_VALUE, "Hello World".getBytes());
 
     willDoNothing().given(carService).updateCarPhoto(id, multipartFile);
 
     final ResponseEntity<HttpStatus> actual = carController.updateCarPhoto(id, multipartFile);
     assertThat(actual.getBody(), nullValue());
-    assertThatStatusCode(actual, OK);
+    assertThat(actual.getStatusCode(), is(OK));
 
     then(carService)
         .should(only())
@@ -111,7 +111,7 @@ class CarControllerUnitTest {
     final String message = expected.getMessage();
     final var multipartFile =
         new MockMultipartFile(
-            "sourceFile.tmp",
+            "photo",
             "sourceFile.tmp",
             MULTIPART_FORM_DATA_VALUE,
             "Hello World".getBytes());
@@ -126,12 +126,8 @@ class CarControllerUnitTest {
     assertThat(actual.getMessage(), is(message));
   }
 
-  private void assertThatStatusCode(final ResponseEntity<?> actual, final HttpStatus status) {
-    assertThat(actual.getStatusCode(), is(status));
-  }
-
-  private void assertThatStatusCodeAndBodyAndClass(
-      final ResponseEntity<?> actual,
+  private <T> void assertThatStatusCodeAndBodyAndClass(
+      final ResponseEntity<T> actual,
       final Object object,
       final HttpStatus status,
       final Class<?> clazz) {

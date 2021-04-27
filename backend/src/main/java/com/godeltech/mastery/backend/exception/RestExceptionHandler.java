@@ -72,7 +72,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler({javax.validation.ConstraintViolationException.class})
   protected ResponseEntity<Object> handleConstraintViolationException(
-      javax.validation.ConstraintViolationException ex) {
+      final javax.validation.ConstraintViolationException ex) {
     final var message = "Validation error";
     final var exResponse = new ExceptionResponseDTO(BAD_REQUEST);
     exResponse.setMessage(message);
@@ -83,7 +83,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler({MethodArgumentTypeMismatchException.class})
   protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-      MethodArgumentTypeMismatchException ex, WebRequest request) {
+      final MethodArgumentTypeMismatchException ex, final WebRequest request) {
     final var exResponse = new ExceptionResponseDTO(BAD_REQUEST);
     exResponse.setMessage(
         format(

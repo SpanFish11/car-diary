@@ -89,7 +89,7 @@ public class ExceptionResponseDTO implements Serializable {
           if (errors.containsKey(((PathImpl) e.getPropertyPath()).getLeafNode().asString())) {
             errors.put(
                 ((PathImpl) e.getPropertyPath()).getLeafNode().asString(),
-                String.format(
+                format(
                     "%s; %s",
                     errors.get(((PathImpl) e.getPropertyPath()).getLeafNode().asString()),
                     e.getMessage()));
