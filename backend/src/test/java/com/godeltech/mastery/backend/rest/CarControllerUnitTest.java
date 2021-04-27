@@ -90,7 +90,7 @@ class CarControllerUnitTest {
     final Long id = 1L;
     final MultipartFile multipartFile =
         new MockMultipartFile(
-            "sourceFile.jpeg", "sourceFile.jpeg", IMAGE_JPEG_VALUE, "Hello World".getBytes());
+            "photo", "sourceFile.jpeg", IMAGE_JPEG_VALUE, "Hello World".getBytes());
 
     willDoNothing().given(carService).updateCarPhoto(id, multipartFile);
 
@@ -111,7 +111,7 @@ class CarControllerUnitTest {
     final String message = expected.getMessage();
     final var multipartFile =
         new MockMultipartFile(
-            "sourceFile.tmp",
+            "photo",
             "sourceFile.tmp",
             MULTIPART_FORM_DATA_VALUE,
             "Hello World".getBytes());
