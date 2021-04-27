@@ -3,6 +3,8 @@
     <div class="album bg-light">
       <div class="container">
 
+        <small class="text-muted">Mileage {{ car.mileage }} km</small>
+
         <b-card-group columns v-if="cars.length !== 0">
 
           <b-card v-for="car in cars" v-bind:key="car.text"
@@ -43,7 +45,6 @@ export default {
   data: () => ({
     cars: []
   }),
-
   mounted() {
     this.loadAllCars()
   },
