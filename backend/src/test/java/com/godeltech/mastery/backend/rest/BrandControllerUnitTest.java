@@ -7,13 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.mockito.BDDMockito.given;
@@ -43,30 +43,32 @@ class BrandControllerUnitTest {
     given(brandService.getAllBrands()).willReturn(excepted);
 
     final ResponseEntity<List<BrandDTO>> actual = brandController.getAllBrands();
-
-    assertThat(actual.getBody(), isA(List.class));
-    assertThat(actual.getBody(), hasSize(2));
-    assertThat(actual.getBody(), is(excepted));
-    assertThat(actual.getStatusCode(), is(OK));
+    assertThatResponseEntity(List.class, excepted, actual, OK);
 
     then(brandService).should(only()).getAllBrands();
   }
 
   @Test
   void getAllModelById() {
-    final Long brandId = 1L;
+    final var brandId = 1L;
     final List<ModelDTO> excepted =
         List.of(new ModelDTO(3L, "Tuggella"), new ModelDTO(9L, "Atlas"));
 
     given(brandService.getModelsByBrandId(brandId)).willReturn(excepted);
 
     final ResponseEntity<List<ModelDTO>> actual = brandController.getAllModelById(brandId);
-
-    assertThat(actual.getBody(), isA(List.class));
-    assertThat(actual.getBody(), hasSize(2));
-    assertThat(actual.getBody(), is(excepted));
-    assertThat(actual.getStatusCode(), is(OK));
+    assertThatResponseEntity(List.class, excepted, actual, OK);
 
     then(brandService).should(only()).getModelsByBrandId(brandId);
+  }
+
+  private <T> void assertThatResponseEntity(
+      final Class<?> clazz,
+      final List<T> excepted,
+      final ResponseEntity<List<T>> actual,
+      final HttpStatus status) {
+    assertThat(actual.getBody(), isA(clazz));
+    assertThat(actual.getBody(), is(excepted));
+    assertThat(actual.getStatusCode(), is(status));
   }
 }

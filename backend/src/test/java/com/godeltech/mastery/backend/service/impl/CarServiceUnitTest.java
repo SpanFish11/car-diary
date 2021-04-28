@@ -12,8 +12,6 @@ import com.godeltech.mastery.backend.repository.CarRepository;
 import com.godeltech.mastery.backend.service.AwsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,8 +24,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,7 +33,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.only;
-import static org.mockito.Mockito.verify;
 import static org.mockito.quality.Strictness.LENIENT;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,8 +45,6 @@ class CarServiceUnitTest {
   @Mock CarRepository carRepository;
 
   @InjectMocks CarServiceImpl carService;
-
-  @Captor ArgumentCaptor<Car> valueCaptor;
 
   @Test
   void getAllCars() {
@@ -70,9 +63,7 @@ class CarServiceUnitTest {
     given(carMapper.map(carsExpected)).willReturn(dtoExpected);
 
     final List<CarDTO> actual = carService.getAllCars();
-    assertThat(actual, isA(List.class));
-    assertThat(actual, hasSize(3));
-    assertThat(actual, containsInAnyOrder(dtoExpected.toArray()));
+    assertThatObject(List.class, actual, dtoExpected);
 
     then(carRepository).should(only()).findAll();
     then(carMapper).should(only()).map(refEq(carsExpected));
@@ -88,8 +79,7 @@ class CarServiceUnitTest {
     given(carMapper.map(carExpected)).willReturn(dtoExpected);
 
     final CarDTO actual = carService.getCarById(id);
-    assertThat(actual, isA(CarDTO.class));
-    assertThat(actual, is(dtoExpected));
+    assertThatObject(CarDTO.class, actual, dtoExpected);
 
     then(carRepository).should(only()).findById(argThat(id::equals));
     then(carMapper).should(only()).map(refEq(carExpected));
@@ -105,7 +95,7 @@ class CarServiceUnitTest {
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> carService.getCarById(id));
-    checkException(message, actual);
+    assertThat(actual.getMessage(), is(message));
 
     then(carRepository).should(only()).findById(argThat(id::equals));
   }
@@ -125,8 +115,7 @@ class CarServiceUnitTest {
     given(carRepository.save(saveCarExpected)).willReturn(car);
 
     final Long actual = carService.addNewCar(request);
-    assertThat(actual, isA(Long.class));
-    assertThat(actual, is(expected));
+    assertThatObject(Long.class, actual, expected);
 
     then(brandRepository).should(only()).findById(argThat(id::equals));
     then(carMapper).should(only()).map(refEq(request));
@@ -145,7 +134,7 @@ class CarServiceUnitTest {
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(request));
-    checkException(message, actual);
+    assertThat(actual.getMessage(), is(message));
 
     then(brandRepository).should(only()).findById(argThat(id::equals));
   }
@@ -164,7 +153,7 @@ class CarServiceUnitTest {
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(request));
-    checkException(message, actual);
+    assertThat(actual.getMessage(), is(message));
 
     then(brandRepository).should(only()).findById(argThat(brandId::equals));
   }
@@ -180,7 +169,7 @@ class CarServiceUnitTest {
 
     given(awsService.uploadImage(multipartFile, id)).willReturn(url);
     given(carRepository.findById(id)).willReturn(Optional.of(carExpected));
-    given(carRepository.save(car)).willReturn(car);
+    given(carRepository.save(carExpected)).willReturn(car);
 
     carService.updateCarPhoto(id, multipartFile);
 
@@ -188,8 +177,7 @@ class CarServiceUnitTest {
         .should(only())
         .uploadImage(argThat(multipartFile::equals), argThat(id::equals));
     then(carRepository).should(atLeastOnce()).findById(argThat(id::equals));
-    verify(carRepository, atLeastOnce()).save(valueCaptor.capture());
-    then(carRepository).should(atLeastOnce()).save(argThat(valueCaptor.getValue()::equals));
+    then(carRepository).should(atLeastOnce()).save(argThat(carExpected::equals));
   }
 
   @Test
@@ -207,7 +195,7 @@ class CarServiceUnitTest {
     final EntityNotFoundException actual =
         assertThrows(
             EntityNotFoundException.class, () -> carService.updateCarPhoto(id, multipartFile));
-    checkException(message, actual);
+    assertThat(actual.getMessage(), is(message));
 
     then(carRepository).should(only()).findById(argThat(id::equals));
   }
@@ -227,15 +215,15 @@ class CarServiceUnitTest {
 
     final RuntimeException actual =
         assertThrows(RuntimeException.class, () -> carService.updateCarPhoto(id, multipartFile));
-    checkException(message, actual);
+    assertThat(actual.getMessage(), is(message));
 
     then(awsService)
         .should(only())
         .uploadImage(argThat(multipartFile::equals), argThat(id::equals));
   }
 
-  private void checkException(final String message, final Throwable actual) {
-    assertThat(actual, isA(Throwable.class));
-    assertThat(actual.getMessage(), is(message));
+  private <T> void assertThatObject(final Class<T> clazz, final T actual, final T expected) {
+    assertThat(actual, isA(clazz));
+    assertThat(actual, is(expected));
   }
 }

@@ -29,7 +29,7 @@ public class BrandServiceImpl implements BrandService {
         .map(
             brandRepository
                 .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Brand", id)))
+                .orElseThrow(() -> new EntityNotFoundException("brand", id)))
         .getModels()
         .stream()
         .toList();

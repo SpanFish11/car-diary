@@ -68,7 +68,7 @@ public class BrandController {
       })
   @GetMapping("/{brand_id}/models")
   public ResponseEntity<List<ModelDTO>> getAllModelById(
-      @PathVariable(name = "brand_id") @Min(1) Long id) {
+      @PathVariable(name = "brand_id") @Min(1) final Long id) {
     return ok(brandService.getModelsByBrandId(id));
   }
 }

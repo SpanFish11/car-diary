@@ -96,7 +96,7 @@ class CarControllerUnitTest {
 
     final ResponseEntity<HttpStatus> actual = carController.updateCarPhoto(id, multipartFile);
     assertThat(actual.getBody(), nullValue());
-    assertThatStatusCode(actual, OK);
+    assertThat(actual.getStatusCode(), is(OK));
 
     then(carService)
         .should(only())
@@ -126,12 +126,8 @@ class CarControllerUnitTest {
     assertThat(actual.getMessage(), is(message));
   }
 
-  private void assertThatStatusCode(final ResponseEntity<?> actual, final HttpStatus status) {
-    assertThat(actual.getStatusCode(), is(status));
-  }
-
-  private void assertThatStatusCodeAndBodyAndClass(
-      final ResponseEntity<?> actual,
+  private <T> void assertThatStatusCodeAndBodyAndClass(
+      final ResponseEntity<T> actual,
       final Object object,
       final HttpStatus status,
       final Class<?> clazz) {

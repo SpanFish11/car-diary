@@ -18,7 +18,6 @@ import java.util.Set;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -46,8 +45,6 @@ class BrandServiceIntegrationTest {
                 2L, "Geely", Set.of(new ModelDTO(1L, "Coolray"), new ModelDTO(3L, "Emgrand"))));
 
     final List<BrandDTO> actual = brandService.getAllBrands();
-
-    assertThat(actual, hasSize(2));
     assertThat(actual, is(expected));
   }
 
@@ -56,15 +53,13 @@ class BrandServiceIntegrationTest {
     final List<ModelDTO> expected = List.of(new ModelDTO(2L, "Terrano"));
 
     final List<ModelDTO> actual = brandService.getModelsByBrandId(1L);
-
-    assertThat(actual, hasSize(1));
     assertThat(actual, is(expected));
   }
 
   @Test
   void getModelsByBrandIncorrectId() {
     final Long id = 27L;
-    final String message = format("Could not find any Brand with the ID %d.", id);
+    final var message = format("Could not find any brand with the ID %d.", id);
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> brandService.getModelsByBrandId(id));

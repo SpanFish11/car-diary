@@ -14,17 +14,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.util.NestedServletException;
 
@@ -36,13 +31,17 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,19 +50,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CarControllerIntegrationTest {
 
   private MockMvc mockMvc;
+
+  @Autowired private ObjectMapper objectMapper;
   @Autowired private CarService carService;
 
   @BeforeEach
   void setUp() {
-    mockMvc = MockMvcBuilders.standaloneSetup(new CarController(carService)).build();
+    mockMvc = standaloneSetup(new CarController(carService)).build();
   }
 
   @Test
   void getAllCars() throws Exception {
-    final var mapper = new ObjectMapper();
-    final String jsonString =
-        mapper.writeValueAsString(
-            mapper.readValue(
+    final var jsonString =
+        objectMapper.writeValueAsString(
+            objectMapper.readValue(
                 new File("src/main/resources/tests/cars/allCars.json"), JSONArray.class));
 
     mockMvc
@@ -75,10 +75,9 @@ class CarControllerIntegrationTest {
 
   @Test
   void getCarById() throws Exception {
-    final var mapper = new ObjectMapper();
-    final String jsonString =
-        mapper.writeValueAsString(
-            mapper.readValue(
+    final var jsonString =
+        objectMapper.writeValueAsString(
+            objectMapper.readValue(
                 new File("src/main/resources/tests/cars/findCarById.json"), JSONObject.class));
 
     mockMvc
@@ -110,7 +109,6 @@ class CarControllerIntegrationTest {
 
   @Test
   void createCar() throws Exception {
-    final var mapper = new ObjectMapper();
     final var carRequest =
         CarCreateRequest.builder()
             .brandId(1L)
@@ -121,15 +119,15 @@ class CarControllerIntegrationTest {
             .build();
 
     final String result =
-        mapper.writeValueAsString(
-            mapper.readValue(
+        objectMapper.writeValueAsString(
+            objectMapper.readValue(
                 new File("src/main/resources/tests/cars/afterAddCar.json"), JSONArray.class));
 
     mockMvc
         .perform(
             post("/api/v1/cars")
-                .content(mapper.writeValueAsString(carRequest))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .content(objectMapper.writeValueAsString(carRequest))
+                .header(CONTENT_TYPE, MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated());
 
     mockMvc
@@ -141,13 +139,14 @@ class CarControllerIntegrationTest {
 
   @ParameterizedTest
   @MethodSource("provideCarRequestForException")
-  void createCarIncorrectData(final CarCreateRequest carRequest, final String message) throws Exception {
+  void createCarIncorrectData(final CarCreateRequest carRequest, final String message)
+      throws Exception {
 
     mockMvc
         .perform(
             post("/api/v1/cars")
-                .content(new ObjectMapper().writeValueAsString(carRequest))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .content(objectMapper.writeValueAsString(carRequest))
+                .header(CONTENT_TYPE, APPLICATION_JSON))
         .andExpect(status().is4xxClientError())
         .andExpect(
             result ->
@@ -160,7 +159,7 @@ class CarControllerIntegrationTest {
   }
 
   private static Stream<Arguments> provideCarRequestForException() {
-    CarCreateRequest createRequest =
+    final var createRequest =
         CarCreateRequest.builder()
             .brandId(1L)
             .modelId(2L)
@@ -193,36 +192,38 @@ class CarControllerIntegrationTest {
 
   @Test
   void updateCarPhoto() throws Exception {
+    final var url = "/api/v1/cars/{car_id}/photos";
+    final Integer carId = 1;
+    final var methodType = PATCH.name();
     final var multipartFile =
         new MockMultipartFile(
             "photo", "sourceFile.jpeg", IMAGE_JPEG_VALUE, "Hello World".getBytes());
 
-    MockMultipartHttpServletRequestBuilder builder =
-        MockMvcRequestBuilders.multipart("/api/v1/cars/{car_id}/photos", 1);
-    builder.with(
-        request -> {
-          request.setMethod("PATCH");
-          return request;
-        });
-    mockMvc.perform(builder.file(multipartFile)).andExpect(status().isOk());
+    mockMvc.perform(makeRequest(url, carId, methodType, multipartFile)).andExpect(status().isOk());
   }
 
   @Test
   void updateCarPhotoIncorrectMediaType() throws Exception {
+    final var url = "/api/v1/cars/{car_id}/photos";
+    final Integer carId = 1;
+    final var methodType = PATCH.name();
     final var multipartFile =
         new MockMultipartFile(
             "photo", "sourceFile.tmp", MULTIPART_FORM_DATA_VALUE, "Hello World".getBytes());
 
-    MockMultipartHttpServletRequestBuilder builder =
-        MockMvcRequestBuilders.multipart("/api/v1/cars/{car_id}/photos", 1);
+    mockMvc
+        .perform(makeRequest(url, carId, methodType, multipartFile))
+        .andExpect(status().isUnsupportedMediaType());
+  }
+
+  private MockMultipartHttpServletRequestBuilder makeRequest(
+      final String url, final Integer id, final String method, MockMultipartFile file) {
+    final MockMultipartHttpServletRequestBuilder builder = multipart(url, id);
     builder.with(
-        new RequestPostProcessor() {
-          @Override
-          public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-            request.setMethod("PATCH");
-            return request;
-          }
+        request -> {
+          request.setMethod(method);
+          return request;
         });
-    mockMvc.perform(builder.file(multipartFile)).andExpect(status().isUnsupportedMediaType());
+    return builder.file(file);
   }
 }
