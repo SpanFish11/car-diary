@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class CarDTO {
 
   private Long id;
-  private ModelDTO model;
   private BrandDTO brand;
+  private ModelDTO model;
   private Integer year;
   private String photoUrl;
   private String vin;

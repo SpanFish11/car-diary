@@ -2,13 +2,12 @@ package com.godeltech.mastery.backend.service.impl;
 
 import com.godeltech.mastery.backend.domain.dto.CarCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.CarDTO;
-import com.godeltech.mastery.backend.domain.entity.Brand;
 import com.godeltech.mastery.backend.domain.entity.Car;
 import com.godeltech.mastery.backend.domain.entity.Model;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.CarMapper;
-import com.godeltech.mastery.backend.repository.BrandRepository;
 import com.godeltech.mastery.backend.repository.CarRepository;
+import com.godeltech.mastery.backend.repository.ModelRepository;
 import com.godeltech.mastery.backend.service.AwsService;
 import com.godeltech.mastery.backend.service.CarService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,8 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
 
   private final CarRepository carRepository;
-  private final BrandRepository brandRepository;
   private final AwsService awsService;
+  private final ModelRepository modelRepository;
   private final CarMapper mapper;
 
   @Value(value = "${aws.s3.images.defaultCarImage}")
@@ -42,10 +41,8 @@ public class CarServiceImpl implements CarService {
 
   @Override
   public Long addNewCar(final CarCreateRequest carCreateRequest) {
-    final var brand = getBrandById(carCreateRequest.getBrandId());
-    final var model = getModelById(carCreateRequest.getModelId(), brand);
+    final var model = getModelById(carCreateRequest.getModelId());
     final var car = mapper.map(carCreateRequest);
-    car.setBrand(brand);
     car.setModel(model);
     car.setPhotoUrl(defaultCarImage);
     return carRepository.save(car).getId();
@@ -63,14 +60,7 @@ public class CarServiceImpl implements CarService {
     return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("car", id));
   }
 
-  private Brand getBrandById(final Long id) {
-    return brandRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("brand", id));
-  }
-
-  private Model getModelById(final Long id, final Brand brand) {
-    return brand.getModels().stream()
-        .filter(m -> m.getId().equals(id))
-        .findFirst()
-        .orElseThrow(() -> new EntityNotFoundException("model", id));
+  private Model getModelById(final Long id) {
+    return modelRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("model", id));
   }
 }

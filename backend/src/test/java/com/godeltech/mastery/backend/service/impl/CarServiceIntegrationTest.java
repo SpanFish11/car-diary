@@ -1,13 +1,12 @@
 package com.godeltech.mastery.backend.service.impl;
 
-import com.godeltech.mastery.backend.domain.dto.BrandDTO;
 import com.godeltech.mastery.backend.domain.dto.CarCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.CarDTO;
 import com.godeltech.mastery.backend.domain.dto.ModelDTO;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.CarMapper;
-import com.godeltech.mastery.backend.repository.BrandRepository;
 import com.godeltech.mastery.backend.repository.CarRepository;
+import com.godeltech.mastery.backend.repository.ModelRepository;
 import com.godeltech.mastery.backend.service.AwsService;
 import com.godeltech.mastery.backend.service.CarService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.Set;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,7 +32,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 class CarServiceIntegrationTest {
 
   @Autowired private CarRepository carRepository;
-  @Autowired private BrandRepository brandRepository;
+  @Autowired private ModelRepository modelRepository;
   @Autowired private AwsService awsService;
   @Autowired private CarMapper mapper;
 
@@ -42,7 +40,7 @@ class CarServiceIntegrationTest {
 
   @BeforeEach
   void setUp() {
-    carService = new CarServiceImpl(carRepository, brandRepository, awsService, mapper);
+    carService = new CarServiceImpl(carRepository, awsService, modelRepository, mapper);
   }
 
   @Test
@@ -54,7 +52,6 @@ class CarServiceIntegrationTest {
         List.of(
             CarDTO.builder()
                 .id(1L)
-                .brand(new BrandDTO(1L, "Nissan", Set.of(terrano)))
                 .model(terrano)
                 .year(2017)
                 .photoUrl("nissan.jpg")
@@ -63,7 +60,6 @@ class CarServiceIntegrationTest {
                 .build(),
             CarDTO.builder()
                 .id(2L)
-                .brand(new BrandDTO(2L, "Geely", Set.of(coolray)))
                 .model(coolray)
                 .year(2021)
                 .photoUrl("geely.jpg")
@@ -81,7 +77,6 @@ class CarServiceIntegrationTest {
     final var expected =
         CarDTO.builder()
             .id(1L)
-            .brand(new BrandDTO(1L, "Nissan", Set.of(terrano)))
             .model(terrano)
             .year(2017)
             .photoUrl("nissan.jpg")
@@ -106,7 +101,6 @@ class CarServiceIntegrationTest {
   void addNewCar() {
     final var carRequest =
         CarCreateRequest.builder()
-            .brandId(1L)
             .mileage(25405)
             .modelId(2L)
             .vin("4S3BMGB68B3286050")
@@ -117,28 +111,9 @@ class CarServiceIntegrationTest {
   }
 
   @Test
-  void addNewCarIncorrectBrandId() {
-    final var carRequest =
-        CarCreateRequest.builder()
-            .brandId(7L)
-            .modelId(2L)
-            .year(2017)
-            .vin("4S3BMHB68B3286050")
-            .mileage(25405)
-            .build();
-    final var message = "Could not find any brand with the ID 7.";
-
-    final EntityNotFoundException actual =
-        assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(carRequest));
-
-    assertThat(actual.getMessage(), is(message));
-  }
-
-  @Test
   void addNewCarIncorrectModelId() {
     final var carRequest =
         CarCreateRequest.builder()
-            .brandId(1L)
             .modelId(9L)
             .year(2017)
             .vin("4S3BMHB68B3286050")
