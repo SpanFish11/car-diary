@@ -13,7 +13,6 @@ public class CarDTO {
 
   private Long id;
   private ModelDTO model;
-  private BrandDTO brand;
   private Integer year;
   private String photoUrl;
   private String vin;
