@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class CarDTO {
 
   private Long id;
+  private BrandDTO brand;
   private ModelDTO model;
   private Integer year;
   private String photoUrl;

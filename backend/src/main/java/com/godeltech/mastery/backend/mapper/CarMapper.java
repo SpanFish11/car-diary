@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(
     componentModel = "spring",
-    uses = {ModelMapper.class})
+    uses = {ModelMapper.class, BrandMapper.class})
 public interface CarMapper {
 
   @Mapping(target = "year", source = "year")
@@ -19,6 +19,7 @@ public interface CarMapper {
   Car map(CarCreateRequest carCreateRequest);
 
   @Mapping(target = "id", source = "id")
+  @Mapping(target = "brand", source = "model.brand")
   @Mapping(target = "model", source = "model")
   @Mapping(target = "year", source = "year")
   @Mapping(target = "photoUrl", source = "photoUrl")
