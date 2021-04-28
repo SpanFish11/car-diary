@@ -1,5 +1,6 @@
 package com.godeltech.mastery.backend.service.impl;
 
+import com.godeltech.mastery.backend.domain.dto.BrandDTO;
 import com.godeltech.mastery.backend.domain.dto.CarCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.CarDTO;
 import com.godeltech.mastery.backend.domain.dto.ModelDTO;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -49,23 +51,25 @@ class CarServiceIntegrationTest {
     final var coolray = new ModelDTO(1L, "Coolray");
 
     final List<CarDTO> expected =
-        List.of(
-            CarDTO.builder()
-                .id(1L)
-                .model(terrano)
-                .year(2017)
-                .photoUrl("nissan.jpg")
-                .vin("4S3BMHB68B3286050")
-                .mileage(25405)
-                .build(),
-            CarDTO.builder()
-                .id(2L)
-                .model(coolray)
-                .year(2021)
-                .photoUrl("geely.jpg")
-                .vin("4Y1SL65848Z411439")
-                .mileage(0)
-                .build());
+            List.of(
+                    CarDTO.builder()
+                            .id(1L)
+                            .brand(new BrandDTO(1L, "Nissan", Set.of(terrano)))
+                            .model(terrano)
+                            .year(2017)
+                            .photoUrl("nissan.jpg")
+                            .vin("4S3BMHB68B3286050")
+                            .mileage(25405)
+                            .build(),
+                    CarDTO.builder()
+                            .id(2L)
+                            .brand(new BrandDTO(2L, "Geely", Set.of(coolray)))
+                            .model(coolray)
+                            .year(2021)
+                            .photoUrl("geely.jpg")
+                            .vin("4Y1SL65848Z411439")
+                            .mileage(0)
+                            .build());
 
     final List<CarDTO> actual = carService.getAllCars();
     assertThat(actual, is(expected));
@@ -75,14 +79,15 @@ class CarServiceIntegrationTest {
   void getCarByCorrectId() {
     final var terrano = new ModelDTO(2L, "Terrano");
     final var expected =
-        CarDTO.builder()
-            .id(1L)
-            .model(terrano)
-            .year(2017)
-            .photoUrl("nissan.jpg")
-            .vin("4S3BMHB68B3286050")
-            .mileage(25405)
-            .build();
+            CarDTO.builder()
+                    .id(1L)
+                    .brand(new BrandDTO(1L, "Nissan", Set.of(terrano)))
+                    .model(terrano)
+                    .year(2017)
+                    .photoUrl("nissan.jpg")
+                    .vin("4S3BMHB68B3286050")
+                    .mileage(25405)
+                    .build();
 
     assertThat(carService.getCarById(1L), is(expected));
   }
