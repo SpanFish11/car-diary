@@ -1,28 +1,44 @@
 <template>
   <div id="app">
     <NavBar/>
-    <AddNewCarModal/>
-    <Main/>
+    <div> <!--    v-if='this.$route.path == "/"'-->
+      <b-jumbotron id="jumbo" header="THIS IS CAR DIARY" class="text-center container-fluid">
+
+        <template #lead>
+          The unique and free car management system
+        </template>
+      </b-jumbotron>
+    </div>
+    <b-overlay :show="show" rounded="sm">
+      <router-view/>
+    </b-overlay>
   </div>
 </template>
 
 <script>
+
 import NavBar from '@/components/NavBar'
-import AddNewCarModal from "@/components/AddNewCarModal"
-import Main from "@/components/Main"
 
 export default {
   name: 'App',
   components: {
-    NavBar,
-    AddNewCarModal,
-    Main
+    NavBar
   },
   metaInfo: {
-    title: 'Car Page'
-  }
+    title: 'Hello',
+    titleTemplate: '%s | Car Diary'
+  },
+  data: () => ({
+    show: false
+  })
 }
 </script>
 
 <style>
+#jumbo {
+  color: white;
+  text-shadow: 1px 1px 2px black, 0 0 1em black;
+  background-image: url('https://i.ibb.co/0B6VGBj/wallhaven-5w33q3ff-1.jpg');
+  -webkit-background-size: cover;
+}
 </style>

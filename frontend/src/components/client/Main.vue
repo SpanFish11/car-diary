@@ -1,5 +1,7 @@
 <template>
   <main>
+    <AddNewCarModal/>
+
     <div class="album bg-light">
       <div class="container">
 
@@ -36,10 +38,18 @@
 </template>
 
 <script>
+import AddNewCarModal from "@/components/client/AddNewCarModal";
 import {AXIOS} from "@/backend-api"
 
 export default {
   name: "Main",
+  metaInfo: {
+    title: 'All Cars',
+    titleTemplate: '%s | Client Application'
+  },
+  components: {
+    AddNewCarModal
+  },
   data: () => ({
     cars: []
   }),
