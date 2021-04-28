@@ -111,10 +111,7 @@ class CarControllerUnitTest {
     final String message = expected.getMessage();
     final var multipartFile =
         new MockMultipartFile(
-            "photo",
-            "sourceFile.tmp",
-            MULTIPART_FORM_DATA_VALUE,
-            "Hello World".getBytes());
+            "photo", "sourceFile.tmp", MULTIPART_FORM_DATA_VALUE, "Hello World".getBytes());
 
     willDoNothing().given(carService).updateCarPhoto(id, multipartFile);
 

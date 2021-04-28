@@ -36,10 +36,6 @@ public class Car implements Serializable {
   @JoinColumn(name = "model_id", nullable = false)
   private Model model;
 
-  @ManyToOne(fetch = EAGER)
-  @JoinColumn(name = "brand_id", nullable = false)
-  private Brand brand;
-
   @Column(name = "year", nullable = false)
   private Integer year;
 

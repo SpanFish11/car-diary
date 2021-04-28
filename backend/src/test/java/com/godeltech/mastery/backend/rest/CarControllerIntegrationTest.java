@@ -111,7 +111,6 @@ class CarControllerIntegrationTest {
   void createCar() throws Exception {
     final var carRequest =
         CarCreateRequest.builder()
-            .brandId(1L)
             .modelId(2L)
             .year(2019)
             .vin("4S3BTLB68B3286050")
@@ -161,14 +160,12 @@ class CarControllerIntegrationTest {
   private static Stream<Arguments> provideCarRequestForException() {
     final var createRequest =
         CarCreateRequest.builder()
-            .brandId(1L)
             .modelId(2L)
             .year(2019)
             .vin("4S3BILL68B328RGF0")
             .mileage(20705)
             .build();
     return Stream.of(
-        Arguments.of(createRequest.toBuilder().brandId(null).build(), "Brand is mandatory"),
         Arguments.of(createRequest.toBuilder().modelId(null).build(), "Model is mandatory"),
         Arguments.of(
             createRequest.toBuilder().year(1899).build(),

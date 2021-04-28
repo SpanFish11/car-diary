@@ -39,7 +39,7 @@ class CarMapperTest {
   @Test
   void testMapCarCreateRequest() {
     final var carCreateRequest =
-        CarCreateRequest.builder().year(2019).vin("4Y1SL65848Z411439").mileage(631).build();
+            CarCreateRequest.builder().year(2019).vin("4Y1SL65848Z411439").mileage(631).build();
     final var expected = Car.builder().year(2019).vin("4Y1SL65848Z411439").mileage(631).build();
 
     final var actual = carMapper.map(carCreateRequest);
@@ -49,14 +49,14 @@ class CarMapperTest {
 
   @Test
   void testMapCarDTO() {
-    final var model = new Model(3L, "Curdden", new Brand());
-    final var brand = new Brand(1L, "Nissan", Set.of(model));
+    final var brand = new Brand(1L, "Nissan", Set.of());
+    final var model = new Model(3L, "Curdden", brand);
     final var modelDTO = new ModelDTO(3L, "Curdden");
     final var brandDTO = new BrandDTO(1L, "Nissan", Set.of(modelDTO));
     final var carRequest =
-        Car.builder().id(1L).vin("4Y1SL65848Z411439").model(model).brand(brand).build();
+            Car.builder().id(1L).vin("4Y1SL65848Z411439").model(model).build();
     final var expected =
-        CarDTO.builder().id(1L).vin("4Y1SL65848Z411439").model(modelDTO).brand(brandDTO).build();
+            CarDTO.builder().id(1L).vin("4Y1SL65848Z411439").model(modelDTO).brand(brandDTO).build();
 
     given(modelMapper.map(model)).willReturn(modelDTO);
     given(brandMapper.map(brand)).willReturn(brandDTO);
@@ -71,8 +71,8 @@ class CarMapperTest {
 
   @Test
   void testMapListOfCar() {
-    final var model = new Model(3L, "Curdden", new Brand());
-    final var brand = new Brand(1L, "Nissan", Set.of(model));
+    final var brand = new Brand(1L, "Nissan", Set.of());
+    final var model = new Model(3L, "Curdden", brand);
     final var modelDTO = new ModelDTO(3L, "Curdden");
     final var brandDTO = new BrandDTO(1L, "Nissan", Set.of(modelDTO));
 
@@ -80,13 +80,13 @@ class CarMapperTest {
     given(brandMapper.map(brand)).willReturn(brandDTO);
 
     final var carsRequest =
-        List.of(
-            Car.builder().vin("4S3BMHB68B3286050").model(model).brand(brand).build(),
-            Car.builder().vin("4Y1SL65848Z411439").model(model).brand(brand).build());
+            List.of(
+                    Car.builder().vin("4S3BMHB68B3286050").model(model).build(),
+                    Car.builder().vin("4Y1SL65848Z411439").model(model).build());
     final var expected =
-        List.of(
-            CarDTO.builder().vin("4S3BMHB68B3286050").model(modelDTO).brand(brandDTO).build(),
-            CarDTO.builder().vin("4Y1SL65848Z411439").model(modelDTO).brand(brandDTO).build());
+            List.of(
+                    CarDTO.builder().vin("4S3BMHB68B3286050").model(modelDTO).brand(brandDTO).build(),
+                    CarDTO.builder().vin("4Y1SL65848Z411439").model(modelDTO).brand(brandDTO).build());
 
     final var actual = carMapper.map(carsRequest);
 
