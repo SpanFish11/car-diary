@@ -5,16 +5,6 @@
       "id": 2,
       "name": "Terrano"
     },
-    "brand": {
-      "id": 1,
-      "name": "Nissan",
-      "models": [
-        {
-          "id": 2,
-          "name": "Terrano"
-        }
-      ]
-    },
     "year": 2017,
     "photoUrl": "nissan.jpg",
     "vin": "4S3BMHB68B3286050",
@@ -25,16 +15,6 @@
     "model": {
       "id": 1,
       "name": "Coolray"
-    },
-    "brand": {
-      "id": 2,
-      "name": "Geely",
-      "models": [
-        {
-          "id": 1,
-          "name": "Coolray"
-        }
-      ]
     },
     "year": 2021,
     "photoUrl": "geely.jpg",

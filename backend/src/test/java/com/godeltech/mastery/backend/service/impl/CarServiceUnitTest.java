@@ -7,8 +7,8 @@ import com.godeltech.mastery.backend.domain.entity.Car;
 import com.godeltech.mastery.backend.domain.entity.Model;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.CarMapper;
-import com.godeltech.mastery.backend.repository.BrandRepository;
 import com.godeltech.mastery.backend.repository.CarRepository;
+import com.godeltech.mastery.backend.repository.ModelRepository;
 import com.godeltech.mastery.backend.service.AwsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -41,7 +40,7 @@ class CarServiceUnitTest {
 
   @Mock CarMapper carMapper;
   @Mock AwsService awsService;
-  @Mock BrandRepository brandRepository;
+  @Mock ModelRepository modelRepository;
   @Mock CarRepository carRepository;
 
   @InjectMocks CarServiceImpl carService;
@@ -105,57 +104,38 @@ class CarServiceUnitTest {
     final Long id = 2L;
     final Long expected = 1L;
     final CarCreateRequest request =
-        CarCreateRequest.builder().brandId(id).modelId(id).vin("5454544848").build();
-    final Brand brand = new Brand(id, "Nissan", Set.of(new Model(id, "Murano", new Brand())));
+        CarCreateRequest.builder().modelId(id).vin("5454544848").build();
+    final Model model = new Model(id, "Murano", new Brand());
     final Car saveCarExpected = Car.builder().vin("5454544848").build();
     final Car car = saveCarExpected.toBuilder().id(expected).build();
 
-    given(brandRepository.findById(id)).willReturn(Optional.of(brand));
+    given(modelRepository.findById(id)).willReturn(Optional.of(model));
     given(carMapper.map(request)).willReturn(saveCarExpected);
     given(carRepository.save(saveCarExpected)).willReturn(car);
 
     final Long actual = carService.addNewCar(request);
     assertThatObject(Long.class, actual, expected);
 
-    then(brandRepository).should(only()).findById(argThat(id::equals));
+    then(modelRepository).should(only()).findById(argThat(id::equals));
     then(carMapper).should(only()).map(refEq(request));
     then(carRepository).should(only()).save(argThat(saveCarExpected::equals));
   }
 
   @Test
-  void addNewCar_given_InvalidBrandId() {
-    final Long id = 500L;
-    final CarCreateRequest request =
-        CarCreateRequest.builder().brandId(id).modelId(id).vin("5454544848").build();
-    final EntityNotFoundException expected = new EntityNotFoundException("brand", id);
-    final String message = expected.getMessage();
-
-    given(brandRepository.findById(id)).willThrow(expected);
-
-    final EntityNotFoundException actual =
-        assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(request));
-    assertThat(actual.getMessage(), is(message));
-
-    then(brandRepository).should(only()).findById(argThat(id::equals));
-  }
-
-  @Test
   void addNewCar_given_InvalidModelId() {
     final Long modelId = 99L;
-    final Long brandId = 1L;
     final CarCreateRequest request =
-        CarCreateRequest.builder().brandId(brandId).modelId(modelId).vin("5454544848").build();
-    final Brand brand = new Brand(brandId, "Nissan", Set.of(new Model(1L, "Murano", new Brand())));
+        CarCreateRequest.builder().modelId(modelId).vin("5454544848").build();
     final EntityNotFoundException expected = new EntityNotFoundException("model", modelId);
     final String message = expected.getMessage();
 
-    given(brandRepository.findById(brandId)).willReturn(Optional.of(brand));
+    given(modelRepository.findById(modelId)).willThrow(expected);
 
     final EntityNotFoundException actual =
         assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(request));
     assertThat(actual.getMessage(), is(message));
 
-    then(brandRepository).should(only()).findById(argThat(brandId::equals));
+    then(modelRepository).should(only()).findById(argThat(modelId::equals));
   }
 
   @Test

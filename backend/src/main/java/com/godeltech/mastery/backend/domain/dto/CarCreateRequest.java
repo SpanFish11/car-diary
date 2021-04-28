@@ -17,10 +17,6 @@ import javax.validation.constraints.Size;
 @Builder(toBuilder = true)
 public class CarCreateRequest {
 
-  @NotNull(message = "Brand is mandatory")
-  @Min(value = 1, message = "Value should be greater then or equal to 1")
-  private Long brandId;
-
   @NotNull(message = "Model is mandatory")
   @Min(value = 1, message = "Value should be greater then or equal to 1")
   private Long modelId;
