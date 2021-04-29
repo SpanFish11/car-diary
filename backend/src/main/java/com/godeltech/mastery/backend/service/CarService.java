@@ -12,14 +12,13 @@ import java.util.List;
 @Service
 public interface CarService {
 
-  Page<CarDTO> getAllCarsOrFindByFilter(
-      final Filter filter, final Integer page, final Integer pageSize);
+  Page<CarDTO> getAllCarsOrFindByFilter(Filter filter, Integer page, Integer pageSize);
 
   List<CarDTO> getAllCars();
 
-  CarDTO getCarById(final Long id);
+  CarDTO getCarById(Long id);
 
-  Long addNewCar(final CarCreateRequest carCreateRequest);
+  Long addNewCar(CarCreateRequest carCreateRequest);
 
-  void updateCarPhoto(final Long id, final MultipartFile multipartFile);
+  void updateCarPhoto(Long id, MultipartFile multipartFile);
 }
