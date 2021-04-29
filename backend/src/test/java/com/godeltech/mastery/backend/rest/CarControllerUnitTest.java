@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.nullValue;
@@ -54,7 +53,6 @@ class CarControllerUnitTest {
 
     final ResponseEntity<List<CarDTO>> actual = carController.getAllCars();
     assertThatStatusCodeAndBodyAndClass(actual, expected, OK, List.class);
-    assertThat(actual.getBody(), hasSize(3));
 
     then(carService).should(only()).getAllCars();
   }

@@ -18,4 +18,6 @@ public class CarDTO {
   private String photoUrl;
   private String vin;
   private Integer mileage;
+  private Boolean ours;
+  private ClientDTO client;
 }

@@ -1,8 +1,10 @@
 package com.godeltech.mastery.backend.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -47,4 +49,12 @@ public class Car implements Serializable {
 
   @Column(name = "mileage")
   private Integer mileage;
+
+  @Column(name = "ours")
+  private Boolean ours;
+
+  @ManyToOne(fetch = EAGER)
+  @JoinColumn(name = "client_id")
+  @JsonBackReference
+  private Client client;
 }
