@@ -83,8 +83,10 @@
 
 function processResponse(data) {
   let arr = []
-  data.forEach(function (item) {
-    arr.push({id: item.id, text: item.name})
+  data.forEach(function (brands)  {
+    brands.models.forEach(function (models) {
+      arr.push({id: models.id, text: models.name})
+    })
   })
   return arr
 }
@@ -122,7 +124,7 @@ export default {
       this.pushEvent()
     },
     loadAllModels() {
-      AXIOS.get('models').then(response => {
+      AXIOS.get('brands').then(response => {
         this.options = processResponse(response.data);
       }).catch(error => {
         console.log('ERROR: ' + error.response.data)
