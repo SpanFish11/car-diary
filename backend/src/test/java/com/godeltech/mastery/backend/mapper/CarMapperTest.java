@@ -3,9 +3,11 @@ package com.godeltech.mastery.backend.mapper;
 import com.godeltech.mastery.backend.domain.dto.BrandDTO;
 import com.godeltech.mastery.backend.domain.dto.CarCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.CarDTO;
+import com.godeltech.mastery.backend.domain.dto.ClientDTO;
 import com.godeltech.mastery.backend.domain.dto.ModelDTO;
 import com.godeltech.mastery.backend.domain.entity.Brand;
 import com.godeltech.mastery.backend.domain.entity.Car;
+import com.godeltech.mastery.backend.domain.entity.Client;
 import com.godeltech.mastery.backend.domain.entity.Model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,7 @@ class CarMapperTest {
 
   @Mock private BrandMapper brandMapper;
   @Mock private ModelMapper modelMapper;
+  @Mock private ClientMapper clientMapper;
 
   @InjectMocks private final CarMapper carMapper = getMapper(CarMapper.class);
 
@@ -49,17 +52,26 @@ class CarMapperTest {
 
   @Test
   void testMapCarDTO() {
-    final var model = new Model(3L, "Curdden", new Brand());
-    final var brand = new Brand(1L, "Nissan", Set.of(model));
+    final var brand = new Brand(1L, "Nissan", Set.of());
+    final var model = new Model(3L, "Curdden", brand);
+    final var client = new Client(2L, "John", "Snow", "shon344@mail.com", "sdsdsd", Set.of());
     final var modelDTO = new ModelDTO(3L, "Curdden");
     final var brandDTO = new BrandDTO(1L, "Nissan", Set.of(modelDTO));
+    final var clientDTO = new ClientDTO(2L, "John", "Snow", "shon344@mail.com");
     final var carRequest =
-        Car.builder().id(1L).vin("4Y1SL65848Z411439").model(model).brand(brand).build();
+        Car.builder().id(1L).vin("4Y1SL65848Z411439").model(model).client(client).build();
     final var expected =
-        CarDTO.builder().id(1L).vin("4Y1SL65848Z411439").model(modelDTO).brand(brandDTO).build();
+        CarDTO.builder()
+            .id(1L)
+            .vin("4Y1SL65848Z411439")
+            .model(modelDTO)
+            .brand(brandDTO)
+            .client(clientDTO)
+            .build();
 
     given(modelMapper.map(model)).willReturn(modelDTO);
     given(brandMapper.map(brand)).willReturn(brandDTO);
+    given(clientMapper.toDto(client)).willReturn(clientDTO);
 
     final var actual = carMapper.map(carRequest);
 
@@ -67,12 +79,13 @@ class CarMapperTest {
 
     then(modelMapper).should(only()).map(model);
     then(brandMapper).should(only()).map(brand);
+    then(clientMapper).should(only()).toDto(client);
   }
 
   @Test
   void testMapListOfCar() {
-    final var model = new Model(3L, "Curdden", new Brand());
-    final var brand = new Brand(1L, "Nissan", Set.of(model));
+    final var brand = new Brand(1L, "Nissan", Set.of());
+    final var model = new Model(3L, "Curdden", brand);
     final var modelDTO = new ModelDTO(3L, "Curdden");
     final var brandDTO = new BrandDTO(1L, "Nissan", Set.of(modelDTO));
 
@@ -81,8 +94,8 @@ class CarMapperTest {
 
     final var carsRequest =
         List.of(
-            Car.builder().vin("4S3BMHB68B3286050").model(model).brand(brand).build(),
-            Car.builder().vin("4Y1SL65848Z411439").model(model).brand(brand).build());
+            Car.builder().vin("4S3BMHB68B3286050").model(model).build(),
+            Car.builder().vin("4Y1SL65848Z411439").model(model).build());
     final var expected =
         List.of(
             CarDTO.builder().vin("4S3BMHB68B3286050").model(modelDTO).brand(brandDTO).build(),

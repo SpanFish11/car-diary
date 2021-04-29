@@ -5,31 +5,28 @@ import com.godeltech.mastery.backend.domain.dto.CarDTO;
 import com.godeltech.mastery.backend.domain.entity.Car;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 
 import java.util.List;
 
 @Mapper(
     componentModel = "spring",
-    uses = {ModelMapper.class, BrandMapper.class})
+    uses = {ModelMapper.class, BrandMapper.class, ClientMapper.class})
 public interface CarMapper {
 
-  @Mappings({
-    @Mapping(target = "year", source = "year"),
-    @Mapping(target = "vin", source = "vin"),
-    @Mapping(target = "mileage", source = "mileage")
-  })
+  @Mapping(target = "year", source = "year")
+  @Mapping(target = "vin", source = "vin")
+  @Mapping(target = "mileage", source = "mileage")
   Car map(CarCreateRequest carCreateRequest);
 
-  @Mappings({
-    @Mapping(target = "id", source = "id"),
-    @Mapping(target = "model", source = "model"),
-    @Mapping(target = "brand", source = "brand"),
-    @Mapping(target = "year", source = "year"),
-    @Mapping(target = "photoUrl", source = "photoUrl"),
-    @Mapping(target = "vin", source = "vin"),
-    @Mapping(target = "mileage", source = "mileage")
-  })
+  @Mapping(target = "id", source = "id")
+  @Mapping(target = "brand", source = "model.brand")
+  @Mapping(target = "model", source = "model")
+  @Mapping(target = "year", source = "year")
+  @Mapping(target = "photoUrl", source = "photoUrl")
+  @Mapping(target = "vin", source = "vin")
+  @Mapping(target = "mileage", source = "mileage")
+  @Mapping(target = "ours", source = "ours")
+  @Mapping(target = "client", source = "client")
   CarDTO map(Car car);
 
   List<CarDTO> map(List<Car> cars);
