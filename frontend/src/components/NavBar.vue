@@ -8,7 +8,11 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item href="/client">Client Application</b-nav-item>
-          <b-nav-item href="/manager">Manager Application</b-nav-item>
+          <b-nav-item-dropdown text="Manager Application" right>
+            <b-dropdown-item href="/manager">List of all cars</b-dropdown-item>
+            <b-dropdown-item href="/manager/client">Add new client</b-dropdown-item>
+            <b-dropdown-item href="/manager/soldcar">Sold car</b-dropdown-item>
+          </b-nav-item-dropdown>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
