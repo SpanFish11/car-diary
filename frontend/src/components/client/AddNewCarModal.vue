@@ -1,5 +1,5 @@
 <template>
-  <div class="py-5 text-center container">
+  <div class="mb-4 text-center container">
     <b-button v-b-modal.modal variant="outline-dark">Add new Car</b-button>
 
     <b-modal id="modal" title="Add new Car 😊" hide-footer>

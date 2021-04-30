@@ -6,13 +6,9 @@ import lombok.Data;
 public class Filter {
 
   private Long modelId;
-
   private String vin;
-
   private String lastname;
-
   private Integer specificYear;
-
   private Integer until;
   private Integer from;
 }

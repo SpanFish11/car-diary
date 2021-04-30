@@ -8,7 +8,8 @@ import {
   ValidationProvider,
 } from "vee-validate";
 import en from "vee-validate/dist/locale/en.json";
-import Meta from 'vue-meta';
+import Meta from "vue-meta";
+import router from "./router";
 
 // Import Bootstrap an BootstrapVue CSS files
 import "bootstrap/dist/css/bootstrap.css";
@@ -34,5 +35,6 @@ Vue.component("ValidationProvider", ValidationProvider);
 Vue.config.productionTip = false;
 
 new Vue({
+  router,
   render: (h) => h(App),
 }).$mount("#app");
