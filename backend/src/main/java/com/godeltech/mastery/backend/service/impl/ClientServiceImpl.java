@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -25,6 +27,7 @@ public class ClientServiceImpl implements ClientService {
   @Override
   public Long createClient(final ClientCreateRequest request) {
     final var client = clientMapper.fromRequest(request);
+    client.setPassword(randomAlphabetic(8));
     return clientRepository.save(client).getId();
   }
 }
