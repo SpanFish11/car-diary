@@ -31,6 +31,15 @@ import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   // 400
+  @ExceptionHandler({IllegalArgumentException.class})
+  protected ResponseEntity<Object> handleIllegalArgumentException(
+      final IllegalArgumentException ex, final WebRequest request) {
+    logging(ex, request);
+    final var exResponse = new ExceptionResponseDTO(BAD_REQUEST);
+    exResponse.setMessage(ex.getMessage());
+    return buildResponseEntity(exResponse);
+  }
+
   @Override
   protected ResponseEntity<Object> handleHttpMessageNotReadable(
       final HttpMessageNotReadableException ex,
