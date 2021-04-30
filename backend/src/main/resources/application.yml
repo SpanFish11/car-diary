@@ -1,6 +1,7 @@
 spring:
   main:
     banner-mode: off
+
   datasource:
     url: ${DATABASE_URLL:jdbc:postgresql://localhost:5432/postgres}
     username: ${DATABASE_USERNAME:postgres}
@@ -15,6 +16,19 @@ spring:
     baseline-on-migrate: true
     baseline-description: <<Flyway Scripts>>
     ignore-missing-migrations: true
+
+  mail:
+    default-encoding: UTF-8
+    host: ${MAIL_HOST:asdadasd}
+    host_address: ${HOST_ADDRESS:asdasdsa}
+    username: ${MAIL_USERNAME:asdada}
+    password: ${MAIL_PASSWORD:asdasd}
+    port: ${MAIL_PORT:asdad}
+    properties:
+      protocol: smtps
+      auth: true
+      starttls.enable: true
+      debug: true
 
 aws:
   s3:
