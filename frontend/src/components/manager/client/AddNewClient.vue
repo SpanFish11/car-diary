@@ -68,6 +68,7 @@
 import {AXIOS} from "@/backend-api"
 
 export default {
+  name: 'addNewClient',
   data: () => ({
     client: {
       email: '',
@@ -89,15 +90,15 @@ export default {
           .then(
               (response) => {
                 this.newClientId = response.data;
-                this.onReset();
                 this.$bvToast.toast('Client added successfully.', {
-                  title: 'Car create successful!',
+                  title: 'Client create successful!',
                   variant: 'success',
                   autoHideDelay: 5000,
                   solid: true,
                   toaster: "b-toaster-top-center",
                   appendToast: false
                 });
+                this.$emit('add-client');
               }
           ).catch((error) => {
         console.log('ERROR: ' + error.response.data);
@@ -110,14 +111,10 @@ export default {
           appendToast: false
         });
       });
+      this.onReset();
       this.getAllEmails();
     },
     onReset() {
-      this.client = {
-        email: '',
-        firstName: '',
-        lastName: ''
-      }
       this.$nextTick(() => {
         this.$refs.observer.reset();
       })
@@ -131,6 +128,9 @@ export default {
       }).catch(error => {
         console.log('ERROR: ' + error.response.data);
       })
+    },
+    setFullName() {
+      return this.client.firstName + ' ' + this.client.lastName + '(' + this.client.email + ')';
     }
   },
   metaInfo: {

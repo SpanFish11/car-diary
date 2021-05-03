@@ -39,6 +39,7 @@ public interface CarMapper {
   @Mapping(target = "client", source = "client")
   @Mapping(target = "equipment", source = "equipment")
   @Mapping(target = "used", source = "used")
+  @Mapping(target = "price", source = "price")
   CarDTO map(Car car);
 
   List<CarDTO> map(List<Car> cars);

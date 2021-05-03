@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,4 +23,6 @@ public class CarDTO {
   private Boolean ours;
   private ClientDTO client;
   private EquipmentDTO equipment;
+  private Boolean used;
+  private BigDecimal price;
 }

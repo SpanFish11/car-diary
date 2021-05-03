@@ -21,7 +21,7 @@ export default new Router({
             component: () => import("./components/client/Main"),
         },
         {
-            path: "/manager/cardetails",
+            path: "/manager/cardetails/:carId",
             name: "manager-cars-details",
             component: () => import("./components/manager/cardetails/CarDetails"),
         },
@@ -33,7 +33,7 @@ export default new Router({
         {
             path: "/manager/soldcar",
             name: "manager-add-sold-car",
-            component: () => import("./components/manager/soldcar/AddSoldCar"),
+            component: () => import("./components/client/AddNewCarModal"),
         }
     ],
 });

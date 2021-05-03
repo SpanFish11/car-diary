@@ -123,9 +123,9 @@
           </template>
 
           <template #cell(actions)="row">
-            <b-button size="sm" @click="row.toggleDetails">
-              {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
-            </b-button>
+            <router-link :to="{ name: 'manager-cars-details', params:{'carId': row.item.id}}" tag="b-button">Show
+              Details
+            </router-link>
           </template>
 
           <template #table-busy>
@@ -147,10 +147,11 @@
 
 import Filters from "@/components/manager/Filters";
 import {AXIOS} from "@/backend-api"
+// import CarDetails from "@/components/manager/cardetails/CarDetails";
 
 export default {
   components: {
-    Filters
+    Filters//, CarDetails
   },
   name: "ListOfAllCars",
   metaInfo: {
@@ -257,6 +258,7 @@ export default {
       const arr = []
       content.forEach(function (item) {
         arr.push({
+          id: item.id,
           brand: item.brand.name,
           model: item.model.name,
           vin: item.vin,
