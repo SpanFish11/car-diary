@@ -2,6 +2,7 @@ package com.godeltech.mastery.backend.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Data
+@Builder(toBuilder = true)
 @Table(name = "m_clients")
 @NoArgsConstructor
 @AllArgsConstructor

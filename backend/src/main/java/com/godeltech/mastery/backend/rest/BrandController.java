@@ -1,8 +1,8 @@
 package com.godeltech.mastery.backend.rest;
 
-import com.godeltech.mastery.backend.domain.dto.BrandDTO;
-import com.godeltech.mastery.backend.domain.dto.ExceptionResponseDTO;
-import com.godeltech.mastery.backend.domain.dto.ModelDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.BrandDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.ModelDTO;
 import com.godeltech.mastery.backend.service.BrandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

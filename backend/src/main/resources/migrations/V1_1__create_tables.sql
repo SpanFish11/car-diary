@@ -7,7 +7,7 @@ create table m_brands
 );
 
 alter table m_brands
-    owner to ctdidtksihqvpb;
+    owner to postgres;
 
 create unique index m_brands_id_uindex
     on m_brands (id);
@@ -28,7 +28,7 @@ create table m_models
 );
 
 alter table m_models
-    owner to ctdidtksihqvpb;
+    owner to postgres;
 
 create unique index m_models_id_uindex
     on m_models (id);
@@ -55,7 +55,7 @@ create table m_cars
 );
 
 alter table m_cars
-    owner to ctdidtksihqvpb;
+    owner to postgres;
 
 create unique index m_cars_id_uindex
     on m_cars (id);

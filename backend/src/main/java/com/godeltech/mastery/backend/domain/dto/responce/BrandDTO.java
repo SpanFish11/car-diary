@@ -1,4 +1,4 @@
-package com.godeltech.mastery.backend.domain.dto;
+package com.godeltech.mastery.backend.domain.dto.responce;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientDTO {
+public class BrandDTO {
 
   private Long id;
-  private String firstName;
-  private String lastName;
-  private String email;
+  private String name;
 }
