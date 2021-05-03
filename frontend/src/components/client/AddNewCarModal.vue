@@ -113,7 +113,7 @@
           </b-form-group>
         </validation-provider>
 
-        <div v-if='$route.path == "/manager/soldcar"'>
+        <div v-if='$route.path === "/manager/soldcar"'>
 
           <validation-provider name="Used" :rules="{ required: true }" v-slot="validationContext">
             <b-form-group v-slot="{ ariaDescribedby }">
@@ -185,14 +185,15 @@
         </validation-provider>
 
         <b-button-toolbar class="float-right mb-1">
-          <b-button-group class="mx-1">
+          <b-button-group class="mx-1" v-if='$route.path !== "/manager/soldcar"'>
             <b-button @click="$bvModal.hide('modal')" variant="danger">Close</b-button>
           </b-button-group>
           <b-button-group class="mx-1">
             <b-button @click="resetForm" variant="warning">Reset</b-button>
           </b-button-group>
           <b-button-group class="mx-1">
-            <b-button type="submit" variant="success" @click="addNewCar">Submit</b-button>
+            <b-button type="submit" variant="success" v-if='$route.path !== "/manager/soldcar"'>Submit</b-button>
+            <b-button type="submit" variant="success" @click="addNewCar" v-else>Submit</b-button>
           </b-button-group>
         </b-button-toolbar>
 
@@ -301,12 +302,11 @@ export default {
     addNewCar() {
       if (this.newCar.mileage == null)
         this.newCar.mileage = 0
-      if (this.$route.path == '/manager/soldcar') {
-        this.newCar.clientId = this.clients.find(client => client.email == this.currentClient.match(/\((.*)\)/).pop()).id;
+      if (this.$route.path === '/manager/soldcar') {
+        this.newCar.clientId = this.clients.find(client => client.email === this.currentClient.match(/\((.*)\)/).pop()).id;
         AXIOS.post('cars', this.newCar)
             .then((response) => {
               this.photoToUpload.photo != null ? this.uploadPhoto(response.data) : this.makeToast(response.status)
-              this.$bvModal.hide('modal')
             }).catch((error) => {
           console.log('ERROR: ' + error.response.data)
           this.makeWarningToast();
@@ -342,9 +342,9 @@ export default {
           appendToast: false
         })
       })
+      this.$emit('upload-photo');
     },
     makeToast(status = Number()) {
-      this.resetForm()
       if (status === 200 || status === 201)
         this.$bvToast.toast(`You're breathtaking! ❤`, {
           title: 'Car create successful!',
@@ -383,7 +383,7 @@ export default {
       })
     },
     disabled() {
-      if (this.newCar.used == 'false') {
+      if (this.newCar.used === 'false') {
         this.newCar.mileage = null;
         return true;
       }
@@ -397,7 +397,7 @@ export default {
       })
     },
     handleClientEvent() {
-      this.newCar.clientId = this.$refs.addClient.setFullName();
+      this.currentClient = this.$refs.addClient.setFullName();
       this.$bvModal.hide('modal');
       this.getAllClients();
     }
