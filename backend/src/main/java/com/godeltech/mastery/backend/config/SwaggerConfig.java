@@ -8,10 +8,9 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
-
 import static io.swagger.v3.oas.models.security.SecurityScheme.In.HEADER;
 import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
+import static java.util.Arrays.asList;
 
 @Configuration
 public class SwaggerConfig {
@@ -39,7 +38,7 @@ public class SwaggerConfig {
 
   @Bean
   public SecurityRequirement securityRequirement() {
-    return new SecurityRequirement().addList("bearer-jwt", Arrays.asList("read", "write"));
+    return new SecurityRequirement().addList("bearer-jwt", asList("read", "write"));
   }
 
   @Bean

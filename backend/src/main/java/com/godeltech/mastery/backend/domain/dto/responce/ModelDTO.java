@@ -1,17 +1,14 @@
-package com.godeltech.mastery.backend.domain.dto;
+package com.godeltech.mastery.backend.domain.dto.responce;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BrandDTO {
+public class ModelDTO {
 
   private Long id;
   private String name;
-  private Set<ModelDTO> models;
 }

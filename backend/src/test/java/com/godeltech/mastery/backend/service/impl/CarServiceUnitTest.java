@@ -1,30 +1,34 @@
 package com.godeltech.mastery.backend.service.impl;
 
-import com.godeltech.mastery.backend.domain.dto.CarCreateRequest;
-import com.godeltech.mastery.backend.domain.dto.CarDTO;
+import com.godeltech.mastery.backend.domain.dto.request.CarCreateRequest;
+import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
 import com.godeltech.mastery.backend.domain.entity.Brand;
 import com.godeltech.mastery.backend.domain.entity.Car;
+import com.godeltech.mastery.backend.domain.entity.Client;
+import com.godeltech.mastery.backend.domain.entity.Equipment;
 import com.godeltech.mastery.backend.domain.entity.Model;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.CarMapper;
 import com.godeltech.mastery.backend.repository.CarRepository;
-import com.godeltech.mastery.backend.repository.ModelRepository;
 import com.godeltech.mastery.backend.service.AwsService;
+import com.godeltech.mastery.backend.service.ClientService;
+import com.godeltech.mastery.backend.service.EquipmentService;
+import com.godeltech.mastery.backend.service.ModelService;
+import com.godeltech.mastery.backend.specification.impl.CarSpecification;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.empty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.refEq;
@@ -32,120 +36,112 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.only;
-import static org.mockito.quality.Strictness.LENIENT;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = LENIENT)
+@ExtendWith(SpringExtension.class)
 class CarServiceUnitTest {
 
-  @Mock CarMapper carMapper;
-  @Mock AwsService awsService;
-  @Mock ModelRepository modelRepository;
-  @Mock CarRepository carRepository;
+  @Mock private CarMapper carMapper;
+  @Mock private CarRepository carRepository;
+  @Mock private AwsService awsService;
+  @Mock private ModelService modelService;
+  @Mock private ClientService clientService;
+  @Mock private EquipmentService equipmentService;
+  @Mock private CarSpecification carSpecification;
 
   @InjectMocks CarServiceImpl carService;
 
   @Test
-  void getAllCars() {
-    final List<Car> carsExpected =
-        List.of(
-            Car.builder().vin("25654985656").build(),
-            Car.builder().vin("1545542").build(),
-            Car.builder().vin("154582654874").build());
-    final List<CarDTO> dtoExpected =
-        List.of(
-            CarDTO.builder().vin("25654985656").build(),
-            CarDTO.builder().vin("1545542").build(),
-            CarDTO.builder().vin("154582654874").build());
-
-    given(carRepository.findAll()).willReturn(carsExpected);
-    given(carMapper.map(carsExpected)).willReturn(dtoExpected);
-
-    final List<CarDTO> actual = carService.getAllCars();
-    assertThatObject(List.class, actual, dtoExpected);
-
-    then(carRepository).should(only()).findAll();
-    then(carMapper).should(only()).map(refEq(carsExpected));
-  }
+  void getAll() {}
 
   @Test
-  void getCarBy_given_CorrectId() {
+  void getCarById_given_id_should_car_found() {
     final Long id = 1L;
-    final Car carExpected = Car.builder().id(id).vin("25654985656").build();
-    final CarDTO dtoExpected = CarDTO.builder().id(id).vin("25654985656").build();
+    final var car = Car.builder().id(id).vin("25654985656").build();
+    final var expected = CarDTO.builder().id(id).vin("25654985656").build();
 
-    given(carRepository.findById(id)).willReturn(Optional.of(carExpected));
-    given(carMapper.map(carExpected)).willReturn(dtoExpected);
+    given(carRepository.findById(id)).willReturn(Optional.of(car));
+    given(carMapper.map(car)).willReturn(expected);
 
-    final CarDTO actual = carService.getCarById(id);
-    assertThatObject(CarDTO.class, actual, dtoExpected);
+    final var actual = carService.getCarById(id);
+    assertThat(actual, is(expected));
 
     then(carRepository).should(only()).findById(argThat(id::equals));
-    then(carMapper).should(only()).map(refEq(carExpected));
+    then(carMapper).should(only()).map(refEq(car));
   }
 
   @Test
-  void getCarBy_given_InvalidId() {
+  void getCarBy_given_id_should_car_notFound() {
     final Long id = 55L;
-    final EntityNotFoundException expected = new EntityNotFoundException("car", id);
-    final String message = expected.getMessage();
+    final var expected = new EntityNotFoundException("car", id);
+    final var message = expected.getMessage();
 
-    given(carRepository.findById(id)).willThrow(expected);
+    given(carRepository.findById(id)).willReturn(empty());
 
-    final EntityNotFoundException actual =
-        assertThrows(EntityNotFoundException.class, () -> carService.getCarById(id));
+    final var actual = assertThrows(EntityNotFoundException.class, () -> carService.getCarById(id));
     assertThat(actual.getMessage(), is(message));
 
     then(carRepository).should(only()).findById(argThat(id::equals));
   }
 
+  // not work
   @Test
   void addNewCar() {
-    final Long id = 2L;
-    final Long expected = 1L;
-    final CarCreateRequest request =
-        CarCreateRequest.builder().modelId(id).vin("5454544848").build();
-    final Model model = new Model(id, "Murano", new Brand());
-    final Car saveCarExpected = Car.builder().vin("5454544848").build();
-    final Car car = saveCarExpected.toBuilder().id(expected).build();
+    final Long clientId = 1L;
+    final Long modelId = 2L;
+    final Long equipmentId = 3L;
+    final Long expected = 5L;
 
-    given(modelRepository.findById(id)).willReturn(Optional.of(model));
-    given(carMapper.map(request)).willReturn(saveCarExpected);
-    given(carRepository.save(saveCarExpected)).willReturn(car);
+    final var request =
+        CarCreateRequest.builder()
+            .modelId(modelId)
+            .year(2020)
+            .vin("12345678901234567")
+            .mileage(20)
+            .price(new BigDecimal("20"))
+            .equipmentId(equipmentId)
+            .build();
+    final var car =
+        Car.builder()
+            .year(request.getYear())
+            .mileage(request.getMileage())
+            .price(request.getPrice())
+            .vin(request.getVin())
+            .build();
+    final var model = new Model(modelId, "Emgrand", new Brand());
+    final var client =
+        Client.builder()
+            .id(clientId)
+            .firstName("Mary")
+            .lastName("Simmons")
+            .email("padiwoh422@gridmire.com")
+            .build();
+    final var equipment = new Equipment(equipmentId, "Luxury", "Petrol", "Manual", 2D, 400);
+    final var carForSave = car.toBuilder().client(client).equipment(equipment).model(model).build();
+    final var savedCar = carForSave.toBuilder().id(expected).build();
 
-    final Long actual = carService.addNewCar(request);
-    assertThatObject(Long.class, actual, expected);
+    given(carMapper.map(request)).willReturn(car);
+    given(modelService.getModelById(modelId)).willReturn(model);
+    given(clientService.getClientById(clientId)).willReturn(client);
+    given(equipmentService.getEquipmentById(equipmentId)).willReturn(equipment);
+    given(carRepository.save(carForSave)).willReturn(savedCar);
 
-    then(modelRepository).should(only()).findById(argThat(id::equals));
+    final var actual = carService.addNewCar(clientId, request);
+    assertThat(actual, is(savedCar.getId()));
+
     then(carMapper).should(only()).map(refEq(request));
-    then(carRepository).should(only()).save(argThat(saveCarExpected::equals));
-  }
-
-  @Test
-  void addNewCar_given_InvalidModelId() {
-    final Long modelId = 99L;
-    final CarCreateRequest request =
-        CarCreateRequest.builder().modelId(modelId).vin("5454544848").build();
-    final EntityNotFoundException expected = new EntityNotFoundException("model", modelId);
-    final String message = expected.getMessage();
-
-    given(modelRepository.findById(modelId)).willThrow(expected);
-
-    final EntityNotFoundException actual =
-        assertThrows(EntityNotFoundException.class, () -> carService.addNewCar(request));
-    assertThat(actual.getMessage(), is(message));
-
-    then(modelRepository).should(only()).findById(argThat(modelId::equals));
+    then(modelService).should(only()).getModelById(argThat(modelId::equals));
+    then(clientService).should(only()).getClientById(argThat(clientId::equals));
+    then(equipmentService).should(only()).getEquipmentById(argThat(equipmentId::equals));
+    then(carRepository).should(only()).save(argThat(carForSave::equals));
   }
 
   @Test
   void updateCarPhoto() {
     final Long id = 1L;
-    final MultipartFile multipartFile =
-        new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
-    final String url = "some url";
-    final Car carExpected = Car.builder().id(id).vin("25654985656").build();
-    final Car car = Car.builder().id(id).photoUrl(url).vin("5454544848").build();
+    final var multipartFile = new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
+    final var url = "some url";
+    final var carExpected = Car.builder().id(id).vin("25654985656").build();
+    final var car = Car.builder().id(id).photoUrl(url).vin("5454544848").build();
 
     given(awsService.uploadImage(multipartFile, id)).willReturn(url);
     given(carRepository.findById(id)).willReturn(Optional.of(carExpected));
@@ -161,18 +157,17 @@ class CarServiceUnitTest {
   }
 
   @Test
-  void updateCarPhoto_given_invalidId() {
+  void updateCarPhoto_given_id_should_car_notFound() {
     final Long id = 60L;
-    final MultipartFile multipartFile =
-        new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
-    final String url = "some url";
-    final EntityNotFoundException expected = new EntityNotFoundException("car", id);
+    final var multipartFile = new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
+    final var url = "some url";
+    final var expected = new EntityNotFoundException("car", id);
     final String message = expected.getMessage();
 
-    given(carRepository.findById(id)).willThrow(expected);
+    given(carRepository.findById(id)).willReturn(empty());
     given(awsService.uploadImage(multipartFile, id)).willReturn(url);
 
-    final EntityNotFoundException actual =
+    final var actual =
         assertThrows(
             EntityNotFoundException.class, () -> carService.updateCarPhoto(id, multipartFile));
     assertThat(actual.getMessage(), is(message));
@@ -183,17 +178,15 @@ class CarServiceUnitTest {
   @Test
   void updateCarPhoto_given_imageButAwsThrowException() {
     final Long id = 1L;
-    final Car car = Car.builder().id(id).build();
-    final MultipartFile multipartFile =
-        new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
-    final RuntimeException expected =
-        new RuntimeException("Something went wrong while uploading a picture");
-    final String message = expected.getMessage();
+    final var car = Car.builder().id(id).build();
+    final var multipartFile = new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
+    final var expected = new RuntimeException("Something went wrong while uploading a picture");
+    final var message = expected.getMessage();
 
     given(carRepository.findById(id)).willReturn(Optional.of(car));
     given(awsService.uploadImage(multipartFile, id)).willThrow(expected);
 
-    final RuntimeException actual =
+    final var actual =
         assertThrows(RuntimeException.class, () -> carService.updateCarPhoto(id, multipartFile));
     assertThat(actual.getMessage(), is(message));
 
@@ -202,8 +195,48 @@ class CarServiceUnitTest {
         .uploadImage(argThat(multipartFile::equals), argThat(id::equals));
   }
 
-  private <T> void assertThatObject(final Class<T> clazz, final T actual, final T expected) {
-    assertThat(actual, isA(clazz));
+  @Test
+  void getAllCarsByClientId_givenId_shouldReturnAllClientCars() {
+    final Long id = 1L;
+    final var client =
+        Client.builder()
+            .id(id)
+            .firstName("John")
+            .lastName("Snow")
+            .email("snow324@mail.com")
+            .build();
+    final var cars =
+        List.of(
+            Car.builder().client(client).vin("25654985656").build(),
+            Car.builder().client(client).vin("1545542").build());
+    final var expected =
+        List.of(
+            CarDTO.builder().vin("25654985656").build(), CarDTO.builder().vin("1545542").build());
+
+    given(clientService.getClientById(id)).willReturn(client);
+    given(carRepository.getAllByClient(client)).willReturn(cars);
+    given(carMapper.map(cars)).willReturn(expected);
+
+    final var actual = carService.getAllCarsByClientId(id);
     assertThat(actual, is(expected));
+
+    then(clientService).should(only()).getClientById(argThat(id::equals));
+    then(carRepository).should(only()).getAllByClient(argThat(client::equals));
+    then(carMapper).should(only()).map(refEq(cars));
+  }
+
+  @Test
+  void getAllCarsByClientId_givenId_should_clientNotFound() {
+    final Long id = 48L;
+    final var expected = new EntityNotFoundException("client", id);
+    final var message = expected.getMessage();
+
+    given(clientService.getClientById(id)).willThrow(expected);
+
+    final var actual =
+        assertThrows(EntityNotFoundException.class, () -> carService.getAllCarsByClientId(id));
+    assertThat(actual.getMessage(), is(message));
+
+    then(clientService).should(only()).getClientById(argThat(id::equals));
   }
 }
