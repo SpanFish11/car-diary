@@ -1,9 +1,9 @@
 package com.godeltech.mastery.backend.rest;
 
-import com.godeltech.mastery.backend.domain.dto.CarCreateRequest;
-import com.godeltech.mastery.backend.domain.dto.CarDTO;
-import com.godeltech.mastery.backend.domain.dto.ExceptionResponseDTO;
-import com.godeltech.mastery.backend.domain.dto.Filter;
+import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
+import com.godeltech.mastery.backend.domain.dto.request.Filter;
+import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
 import java.util.Objects;
 
 import static java.util.List.of;
@@ -62,17 +61,12 @@ public class CarController {
             description = "Internal Server Error",
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
-  @GetMapping(params = {"page", "size"})
+  @GetMapping
   public ResponseEntity<Page<CarDTO>> getAllCars(
       @RequestParam(value = "page", defaultValue = "0", required = false) final Integer page,
       @RequestParam(value = "size", defaultValue = "5", required = false) final Integer size,
       @Valid final Filter filter) {
     return ok(carService.getAllCarsOrFindByFilter(filter, page, size));
-  }
-
-  @GetMapping
-  public ResponseEntity<List<CarDTO>> getAllCars() {
-    return ok(carService.getAllCars());
   }
 
   @Operation(
@@ -100,9 +94,9 @@ public class CarController {
 
   @Operation(
       summary = "Add new car",
-      description = "Endpoint for added new car",
+      description = "Endpoint for added new car for client",
       responses = {
-        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "201", description = "Created"),
         @ApiResponse(
             responseCode = "400",
             description = "Bad Request",
@@ -121,7 +115,7 @@ public class CarController {
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @PostMapping
-  public ResponseEntity<Long> createCar(@RequestBody @Valid final CarCreateRequest request) {
+  public ResponseEntity<Long> createCar(@RequestBody @Valid final CarCreateManagerRequest request) {
     return new ResponseEntity<>(carService.addNewCar(request), CREATED);
   }
 

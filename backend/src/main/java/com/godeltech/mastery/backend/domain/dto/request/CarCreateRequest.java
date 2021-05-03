@@ -1,4 +1,4 @@
-package com.godeltech.mastery.backend.domain.dto;
+package com.godeltech.mastery.backend.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -33,4 +34,11 @@ public class CarCreateRequest {
   @NotNull(message = "Mileage is mandatory")
   @Min(value = 0, message = "Value should be greater then or equal to 0")
   private Integer mileage;
+
+  @NotNull(message = "Price is mandatory")
+  private BigDecimal price;
+
+  @NotNull(message = "Equipment is mandatory")
+  @Min(value = 1, message = "Value should be greater then or equal to 1")
+  private Long equipmentId;
 }

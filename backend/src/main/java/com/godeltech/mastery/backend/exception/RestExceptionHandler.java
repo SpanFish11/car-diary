@@ -1,6 +1,6 @@
 package com.godeltech.mastery.backend.exception;
 
-import com.godeltech.mastery.backend.domain.dto.ExceptionResponseDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;

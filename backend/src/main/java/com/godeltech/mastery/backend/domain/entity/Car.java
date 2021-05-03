@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -56,4 +57,14 @@ public class Car implements Serializable {
   @JoinColumn(name = "client_id")
   @JsonBackReference
   private Client client;
+
+  @ManyToOne(fetch = EAGER)
+  @JoinColumn(name = "equipment_id")
+  private Equipment equipment;
+
+  @Column(name = "price", nullable = false)
+  private BigDecimal price;
+
+  @Column(name = "used")
+  private Boolean used;
 }
