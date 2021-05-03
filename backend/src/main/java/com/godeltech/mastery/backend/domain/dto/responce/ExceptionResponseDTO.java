@@ -1,4 +1,4 @@
-package com.godeltech.mastery.backend.domain.dto;
+package com.godeltech.mastery.backend.domain.dto.responce;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

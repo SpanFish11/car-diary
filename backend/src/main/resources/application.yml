@@ -1,6 +1,9 @@
 spring:
   main:
     banner-mode: off
+  servlet:
+    multipart:
+      max-file-size: 10MB
 
   datasource:
     url: ${DATABASE_URLL:jdbc:postgresql://localhost:5432/postgres}
@@ -19,16 +22,11 @@ spring:
 
   mail:
     default-encoding: UTF-8
-    host: ${MAIL_HOST:asdadasd}
-    host_address: ${HOST_ADDRESS:asdasdsa}
-    username: ${MAIL_USERNAME:asdada}
-    password: ${MAIL_PASSWORD:asdasd}
-    port: ${MAIL_PORT:asdad}
-    properties:
-      protocol: smtps
-      auth: true
-      starttls.enable: true
-      debug: true
+    host: ${MAIL_HOST:host}
+    host_address: ${HOST_ADDRESS:address}
+    username: ${MAIL_USERNAME:username}
+    password: ${MAIL_PASSWORD:password}
+    port: ${MAIL_PORT:545454884}
 
 aws:
   s3:
