@@ -1,4 +1,4 @@
-package com.godeltech.mastery.backend.domain.dto;
+package com.godeltech.mastery.backend.domain.dto.responce;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +20,5 @@ public class CarDTO {
   private Integer mileage;
   private Boolean ours;
   private ClientDTO client;
+  private EquipmentDTO equipment;
 }

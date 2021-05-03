@@ -1,8 +1,10 @@
 package com.godeltech.mastery.backend.service.impl;
 
-import com.godeltech.mastery.backend.domain.dto.ClientCreateRequest;
-import com.godeltech.mastery.backend.domain.dto.ClientDTO;
+import com.godeltech.mastery.backend.domain.dto.request.ClientCreateRequest;
+import com.godeltech.mastery.backend.domain.dto.responce.ClientDTO;
+import com.godeltech.mastery.backend.domain.entity.Client;
 import com.godeltech.mastery.backend.domain.event.ClientCreateEvent;
+import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.ClientMapper;
 import com.godeltech.mastery.backend.repository.ClientRepository;
 import com.godeltech.mastery.backend.service.ClientService;
@@ -23,6 +25,13 @@ public class ClientServiceImpl implements ClientService {
   private final SimpleApplicationEventMulticaster simpleApplicationEventMulticaster;
   private final ClientRepository clientRepository;
   private final ClientMapper clientMapper;
+
+  @Override
+  public Client getClientById(Long id) {
+    return clientRepository
+        .findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("client", id));
+  }
 
   @Override
   public List<ClientDTO> getAllClients() {
