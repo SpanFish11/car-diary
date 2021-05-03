@@ -27,7 +27,7 @@ public class ClientServiceImpl implements ClientService {
   private final ClientMapper clientMapper;
 
   @Override
-  public Client getClientById(Long id) {
+  public Client getClientById(final Long id) {
     return clientRepository
         .findById(id)
         .orElseThrow(() -> new EntityNotFoundException("client", id));

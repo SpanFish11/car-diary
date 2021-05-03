@@ -1,6 +1,9 @@
 package com.godeltech.mastery.backend.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +17,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @Table(name = "m_equipments")
 public class Equipment implements Serializable {
 
