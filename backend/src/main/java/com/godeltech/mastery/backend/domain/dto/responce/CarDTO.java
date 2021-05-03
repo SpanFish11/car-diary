@@ -1,9 +1,11 @@
-package com.godeltech.mastery.backend.domain.dto;
+package com.godeltech.mastery.backend.domain.dto.responce;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @Builder
@@ -20,4 +22,7 @@ public class CarDTO {
   private Integer mileage;
   private Boolean ours;
   private ClientDTO client;
+  private EquipmentDTO equipment;
+  private Boolean used;
+  private BigDecimal price;
 }

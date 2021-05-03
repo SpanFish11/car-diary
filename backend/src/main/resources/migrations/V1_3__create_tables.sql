@@ -10,7 +10,7 @@ create table if not exists m_clients
 );
 
 alter table m_clients
-    owner to ctdidtksihqvpb;
+    owner to postgres;
 
 create unique index m_clients_email_uindex
     on m_clients (email);

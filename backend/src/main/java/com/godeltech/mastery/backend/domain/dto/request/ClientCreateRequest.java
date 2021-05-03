@@ -1,4 +1,4 @@
-package com.godeltech.mastery.backend.domain.dto;
+package com.godeltech.mastery.backend.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
