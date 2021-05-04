@@ -14,6 +14,7 @@ import com.godeltech.mastery.backend.service.AwsService;
 import com.godeltech.mastery.backend.service.ClientService;
 import com.godeltech.mastery.backend.service.EquipmentService;
 import com.godeltech.mastery.backend.service.ModelService;
+import com.godeltech.mastery.backend.specification.impl.CarSpecification;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +29,6 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.Is.isA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.refEq;
@@ -46,8 +46,12 @@ class CarServiceUnitTest {
   @Mock private ModelService modelService;
   @Mock private ClientService clientService;
   @Mock private EquipmentService equipmentService;
+  @Mock private CarSpecification carSpecification;
 
   @InjectMocks CarServiceImpl carService;
+
+  @Test
+  void getAll() {}
 
   @Test
   void getCarById_given_id_should_car_found() {
@@ -79,50 +83,57 @@ class CarServiceUnitTest {
     then(carRepository).should(only()).findById(argThat(id::equals));
   }
 
-//  @Test
-//  void addNewCar() {
-//    final Long clientId = 1L;
-//    final Long modelId = 2L;
-//    final Long equipmentId = 3L;
-//    final Long expected = 5L;
-//
-//    final var request =
-//        CarCreateRequest.builder()
-//            .modelId(modelId)
-//            .year(2020)
-//            .vin("12345678901234567")
-//            .mileage(20)
-//            .price(new BigDecimal("20"))
-//            .equipmentId(equipmentId)
-//            .build();
-//    final var car = new Car();
-//    final var model = new Model(modelId, "Emgrand", new Brand());
-//    final var client =
-//        Client.builder()
-//            .id(clientId)
-//            .firstName("Mary")
-//            .lastName("Simmons")
-//            .email("padiwoh422@gridmire.com")
-//            .build();
-//    final var equipment = new Equipment(equipmentId, "Luxury", "Petrol", "Manual", 2D, 400);
-//    final var carForSave = car.toBuilder().client(client).equipment(equipment).model(model).build();
-//    final var savedCar = carForSave.toBuilder().id(expected).build();
-//
-//    given(carMapper.map(request)).willReturn(car);
-//    given(modelService.getModelById(modelId)).willReturn(model);
-//    given(clientService.getClientById(clientId)).willReturn(client);
-//    given(equipmentService.getEquipmentById(equipmentId)).willReturn(equipment);
-//    given(carRepository.save(carForSave)).willReturn(savedCar);
-//
-//    final var actual = carService.addNewCar(clientId, request);
-//    assertThat(actual, is(savedCar.getId()));
-//
-//    then(carMapper).should(only()).map(refEq(request));
-//    then(modelService).should(only()).getModelById(argThat(modelId::equals));
-//    then(clientService).should(only()).getClientById(argThat(clientId::equals));
-//    then(equipmentService).should(only()).getEquipmentById(argThat(equipmentId::equals));
-//    then(carRepository).should(only()).save(argThat(carForSave::equals));
-//  }
+  // not work
+  @Test
+  void addNewCar() {
+    final Long clientId = 1L;
+    final Long modelId = 2L;
+    final Long equipmentId = 3L;
+    final Long expected = 5L;
+
+    final var request =
+        CarCreateRequest.builder()
+            .modelId(modelId)
+            .year(2020)
+            .vin("12345678901234567")
+            .mileage(20)
+            .price(new BigDecimal("20"))
+            .equipmentId(equipmentId)
+            .build();
+    final var car =
+        Car.builder()
+            .year(request.getYear())
+            .mileage(request.getMileage())
+            .price(request.getPrice())
+            .vin(request.getVin())
+            .build();
+    final var model = new Model(modelId, "Emgrand", new Brand());
+    final var client =
+        Client.builder()
+            .id(clientId)
+            .firstName("Mary")
+            .lastName("Simmons")
+            .email("padiwoh422@gridmire.com")
+            .build();
+    final var equipment = new Equipment(equipmentId, "Luxury", "Petrol", "Manual", 2D, 400);
+    final var carForSave = car.toBuilder().client(client).equipment(equipment).model(model).build();
+    final var savedCar = carForSave.toBuilder().id(expected).build();
+
+    given(carMapper.map(request)).willReturn(car);
+    given(modelService.getModelById(modelId)).willReturn(model);
+    given(clientService.getClientById(clientId)).willReturn(client);
+    given(equipmentService.getEquipmentById(equipmentId)).willReturn(equipment);
+    given(carRepository.save(carForSave)).willReturn(savedCar);
+
+    final var actual = carService.addNewCar(clientId, request);
+    assertThat(actual, is(savedCar.getId()));
+
+    then(carMapper).should(only()).map(refEq(request));
+    then(modelService).should(only()).getModelById(argThat(modelId::equals));
+    then(clientService).should(only()).getClientById(argThat(clientId::equals));
+    then(equipmentService).should(only()).getEquipmentById(argThat(equipmentId::equals));
+    then(carRepository).should(only()).save(argThat(carForSave::equals));
+  }
 
   @Test
   void updateCarPhoto() {
@@ -227,10 +238,5 @@ class CarServiceUnitTest {
     assertThat(actual.getMessage(), is(message));
 
     then(clientService).should(only()).getClientById(argThat(id::equals));
-  }
-
-  private <T> void assertThatObject(final Class<T> clazz, final T actual, final T expected) {
-    assertThat(actual, isA(clazz));
-    assertThat(actual, is(expected));
   }
 }
