@@ -12,7 +12,6 @@
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.11.0",
-    "mdbvue": "^6.7.2",
     "vee-validate": "^3.4.5",
     "vue": "^2.6.12",
     "vue-meta": "^2.4.0",
