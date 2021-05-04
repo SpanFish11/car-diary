@@ -1,9 +1,12 @@
 package com.godeltech.mastery.backend.service.impl;
 
-import com.godeltech.mastery.backend.domain.dto.BrandDTO;
-import com.godeltech.mastery.backend.domain.dto.ModelDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.BrandDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.ModelDTO;
+import com.godeltech.mastery.backend.domain.entity.Brand;
+import com.godeltech.mastery.backend.domain.entity.Model;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.BrandMapper;
+import com.godeltech.mastery.backend.mapper.ModelMapper;
 import com.godeltech.mastery.backend.repository.BrandRepository;
 import com.godeltech.mastery.backend.service.BrandService;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,22 +30,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class BrandServiceIntegrationTest {
 
   @Autowired private BrandMapper brandMapper;
+  @Autowired private ModelMapper modelMapper;
   @Autowired private BrandRepository brandRepository;
 
   private BrandService brandService;
 
   @BeforeEach
   void setUp() {
-    brandService = new BrandServiceImpl(brandRepository, brandMapper);
+    brandService = new BrandServiceImpl(brandRepository, brandMapper, modelMapper);
   }
 
   @Test
   void getAllBrands() {
     final List<BrandDTO> expected =
         List.of(
-            new BrandDTO(1L, "Nissan", Set.of(new ModelDTO(2L, "Terrano"))),
+            new BrandDTO(1L, "Nissan"),
             new BrandDTO(
-                2L, "Geely", Set.of(new ModelDTO(1L, "Coolray"), new ModelDTO(3L, "Emgrand"))));
+                2L, "Geely"));
 
     final List<BrandDTO> actual = brandService.getAllBrands();
     assertThat(actual, is(expected));
@@ -66,4 +70,24 @@ class BrandServiceIntegrationTest {
 
     assertThat(actual.getMessage(), is(message));
   }
+
+  @Test
+    void getBrandByCorrectId() {
+      final Brand expected = new Brand(2L, "Geely", Set.of(new Model()));
+
+      final Brand actual = brandService.getById(2L);
+
+      assertThat(actual.getId(), is(expected.getId()));
+      assertThat(actual.getName(), is(expected.getName()));
+  }
+
+    @Test
+    void getBrandsByIncorrectId() {
+      final Long id = 56L;
+      final var message = format("Could not find any brand with the ID %d.", id);
+
+      final EntityNotFoundException actual = assertThrows(EntityNotFoundException.class, () -> brandService.getById(id));
+
+      assertThat(actual.getMessage(), is(message));
+    }
 }

@@ -1,6 +1,12 @@
 <template>
   <main>
-    <AddNewCarModal/>
+    <div class="mb-4 text-center container">
+      <b-button v-b-modal.modal variant="outline-dark">Add new Car</b-button>
+
+      <b-modal id="modal" title="Add new Car 😊" hide-footer>
+        <AddNewCarModal @add-car='handleAddCarEvent' @upload-photo='handleAddCarEvent'/>
+      </b-modal>
+    </div>
 
     <div class="album bg-light">
       <div class="container">
@@ -58,11 +64,19 @@ export default {
   },
   methods: {
     loadAllCars() {
-      AXIOS.get('cars').then(response => {
+      AXIOS.get('clients/1/cars').then(response => {
         this.cars = response.data;
       }).catch(error => {
         console.log('ERROR: ' + error.response.data)
       })
+    },
+    handleAddCarEvent() {
+      this.$bvToast.toast(`You're breathtaking! ❤`, {
+        title: 'Car create successful!',
+        variant: "success",
+        toaster: "b-toaster-top-center"
+      });
+      window.location.reload();
     }
   }
 }
