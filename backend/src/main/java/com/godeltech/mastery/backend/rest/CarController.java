@@ -96,7 +96,7 @@ public class CarController {
       summary = "Add new car",
       description = "Endpoint for added new car for client",
       responses = {
-        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "201", description = "Created"),
         @ApiResponse(
             responseCode = "400",
             description = "Bad Request",

@@ -67,13 +67,15 @@ public class CarServiceImpl implements CarService {
   @Override
   public Long addNewCar(final Long clientId, final CarCreateRequest request) {
     final var car = carMapper.map(request);
-    return saveCar(clientId, request, car);
+    final var savedCar = saveCar(clientId, request, car);
+    return savedCar.getId();
   }
 
   @Override
   public Long addNewCar(final CarCreateManagerRequest request) {
     final var car = carMapper.map(request);
-    return saveCar(request.getClientId(), request, car);
+    final var savedCar = saveCar(request.getClientId(), request, car);
+    return savedCar.getId();
   }
 
   @Override
@@ -94,10 +96,10 @@ public class CarServiceImpl implements CarService {
     return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("car", id));
   }
 
-  private <T extends CarCreateRequest> Long saveCar(
+  private <T extends CarCreateRequest> Car saveCar(
       final Long clientId, final T request, final Car car) {
-    final var model = modelService.getModelById(request.getModelId());
     final var client = clientService.getClientById(clientId);
+    final var model = modelService.getModelById(request.getModelId());
     final var equipment = equipmentService.getEquipmentById(request.getEquipmentId());
     final var carForSave =
         car.toBuilder()
@@ -112,6 +114,6 @@ public class CarServiceImpl implements CarService {
     if (null == carForSave.getUsed()) {
       carForSave.setUsed(TRUE);
     }
-    return carRepository.save(carForSave).getId();
+    return carRepository.save(carForSave);
   }
 }

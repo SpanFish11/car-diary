@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Tag(name = "Client Controller", description = "Operations about client")
@@ -62,7 +63,7 @@ public class ClientController {
               he will receive an email with a username and password.
               """,
       responses = {
-        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "201", description = "Created"),
         @ApiResponse(
             responseCode = "400",
             description = "Bad Request",
@@ -82,7 +83,7 @@ public class ClientController {
       })
   @PostMapping
   public ResponseEntity<Long> createClient(@RequestBody @Valid final ClientCreateRequest request) {
-    return ok(clientService.createClient(request));
+    return new ResponseEntity<>(clientService.createClient(request), CREATED);
   }
 
   @Operation(
@@ -113,7 +114,7 @@ public class ClientController {
       summary = "Add new car client",
       description = "Endpoint for added new client car",
       responses = {
-        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "201", description = "Created"),
         @ApiResponse(
             responseCode = "400",
             description = "Bad Request",
@@ -135,6 +136,6 @@ public class ClientController {
   public ResponseEntity<Long> addCar(
       @PathVariable("client_id") @Min(1) final Long id,
       @RequestBody @Valid final CarCreateRequest request) {
-    return ok(carService.addNewCar(id, request));
+    return new ResponseEntity<>(carService.addNewCar(id, request), CREATED);
   }
 }
