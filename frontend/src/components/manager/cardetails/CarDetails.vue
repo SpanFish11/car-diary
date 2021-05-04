@@ -92,7 +92,7 @@ export default {
       })
     },
     handleAddCarEvent() {
-      window.location.reload();
+      this.$router.go(0);
     }
   },
   metaInfo: {

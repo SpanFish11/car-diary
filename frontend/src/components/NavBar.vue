@@ -7,11 +7,11 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="/client">Client Application</b-nav-item>
+          <router-link to="/client" tag="b-nav-item">Client Application</router-link>
           <b-nav-item-dropdown text="Manager Application" right>
-            <b-dropdown-item href="/manager">List of all cars</b-dropdown-item>
-            <b-dropdown-item href="/manager/client">Add new client</b-dropdown-item>
-            <b-dropdown-item href="/manager/soldcar">Sold car</b-dropdown-item>
+            <router-link to="/manager" tag="b-dropdown-item">List of all cars</router-link>
+            <router-link to="/manager/client" tag="b-dropdown-item">Add new client</router-link>
+            <router-link to="/manager/soldcar" tag="b-dropdown-item">Sold car</router-link>
           </b-nav-item-dropdown>
         </b-navbar-nav>
 

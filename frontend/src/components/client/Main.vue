@@ -76,7 +76,7 @@ export default {
         variant: "success",
         toaster: "b-toaster-top-center"
       });
-      window.location.reload();
+      this.$router.go(0)
     }
   }
 }
