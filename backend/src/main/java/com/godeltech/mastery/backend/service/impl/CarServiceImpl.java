@@ -13,6 +13,7 @@ import com.godeltech.mastery.backend.service.CarService;
 import com.godeltech.mastery.backend.service.ClientService;
 import com.godeltech.mastery.backend.service.EquipmentService;
 import com.godeltech.mastery.backend.service.ModelService;
+import com.godeltech.mastery.backend.specification.impl.CarSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -21,16 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.godeltech.mastery.backend.specification.CarSpecification.greaterOrEqualYear;
-import static com.godeltech.mastery.backend.specification.CarSpecification.lessOrEqualYear;
-import static com.godeltech.mastery.backend.specification.CarSpecification.withModel;
-import static com.godeltech.mastery.backend.specification.CarSpecification.withOwnerLastname;
-import static com.godeltech.mastery.backend.specification.CarSpecification.withVin;
-import static com.godeltech.mastery.backend.specification.CarSpecification.withYear;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.springframework.data.domain.PageRequest.of;
-import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +36,7 @@ public class CarServiceImpl implements CarService {
   private final AwsService awsService;
   private final ModelService modelService;
   private final CarMapper carMapper;
+  private final CarSpecification carSpecification;
 
   @Value(value = "${aws.s3.images.defaultCarImage}")
   private String defaultCarImage;
@@ -49,14 +44,7 @@ public class CarServiceImpl implements CarService {
   @Override
   public Page<CarDTO> getAllCarsOrFindByFilter(
       final Filter filter, final Integer page, final Integer pageSize) {
-    final var carSpecification =
-        where(withVin(filter.getVin()))
-            .and(withOwnerLastname(filter.getLastname()))
-            .and(withYear(filter.getSpecificYear()))
-            .and(greaterOrEqualYear(filter.getFrom()))
-            .and(withModel(filter.getModelId()))
-            .and(lessOrEqualYear(filter.getUntil()));
-    return carRepository.findAll(carSpecification, of(page, pageSize)).map(carMapper::map);
+    return carRepository.findAll(carSpecification.getFilter(filter), of(page, pageSize)).map(carMapper::map);
   }
 
   @Override
