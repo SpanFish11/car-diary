@@ -87,7 +87,6 @@ export default {
     getCarById() {
       AXIOS.get('/cars/' + this.$route.params.carId).then(response => {
         this.car = response.data;
-        console.log(this.car);
       }).catch(error => {
         console.log('ERROR: ' + error.response.data)
       })

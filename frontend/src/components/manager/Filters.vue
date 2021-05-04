@@ -83,10 +83,8 @@
 
 function processResponse(data) {
   let arr = []
-  data.forEach(function (brands)  {
-    brands.models.forEach(function (models) {
-      arr.push({id: models.id, text: models.name})
-    })
+  data.forEach(function (model) {
+    arr.push({id: model.id, text: model.name})
   })
   return arr
 }
@@ -112,7 +110,7 @@ export default {
     }
   },
   mounted() {
-    this.loadAllModels()
+    this.loadAllModels();
   },
   methods: {
     onReset() {
@@ -125,10 +123,19 @@ export default {
     },
     loadAllModels() {
       AXIOS.get('brands').then(response => {
-        this.options = processResponse(response.data);
+        response.data.forEach(brand => {
+          this.loadModelByBrandId(brand.id);
+        });
       }).catch(error => {
         console.log('ERROR: ' + error.response.data)
       })
+    },
+    loadModelByBrandId(id) {
+      AXIOS.get(`brands/${id}/models`).then(response => {
+        this.options.push.apply(this.options, processResponse(response.data));
+      }).catch(error => {
+        console.log('ERROR: ' + error.response.data)
+      });
     },
     onClose() {
       this.popoverShow = false

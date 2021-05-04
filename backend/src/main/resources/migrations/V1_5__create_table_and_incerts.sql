@@ -11,7 +11,7 @@ create table m_equipments
 );
 
 alter table m_equipments
-    owner to postgres;
+    owner to ctdidtksihqvpb;
 
 create unique index table_name_id_uindex
     on m_equipments (id);

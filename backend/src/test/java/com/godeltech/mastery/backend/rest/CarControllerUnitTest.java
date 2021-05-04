@@ -8,17 +8,22 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -38,7 +43,21 @@ class CarControllerUnitTest {
   @InjectMocks CarController carController;
 
   @Test
-  void getAllCars() {}
+  void getAllCars() {
+    final Page<CarDTO> expected =
+        new PageImpl<>(
+            List.of(
+                CarDTO.builder().vin("4445488552").build(),
+                CarDTO.builder().vin("5694523346554").build(),
+                CarDTO.builder().vin("56985421655").build()));
+
+    given(carService.getAllCarsOrFindByFilter(null, 0, 3)).willReturn(expected);
+
+    final ResponseEntity<Page<CarDTO>> actual = carController.getAllCars(0, 3, null);
+    assertThat(actual, is(ok(expected)));
+
+    then(carService).should(only()).getAllCarsOrFindByFilter(eq(null), eq(0), eq(3));
+  }
 
   @Test
   void getCarById_givenId_shouldReturn_Car() {

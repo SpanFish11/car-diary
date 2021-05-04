@@ -48,7 +48,7 @@
 
                 <template #append>
                   <b-button variant="success" @click="retrieveCars">Search</b-button>
-                  <b-button variant="danger" :disabled="!filterOn" @click="clearSearch">Clear</b-button>
+                  <b-button variant="danger" :disabled="!filterOn" @click="clearSearch(null)">Clear</b-button>
                 </template>
               </b-input-group>
             </b-form-group>
@@ -67,6 +67,7 @@
                   v-model="filterOn"
                   :aria-describedby="ariaDescribedby"
                   class="mt-1"
+                  @change="clearSearch"
               >
                 <b-form-checkbox value="vin">VIN</b-form-checkbox>
                 <b-form-checkbox value="lastname">Last Name</b-form-checkbox>
@@ -147,11 +148,10 @@
 
 import Filters from "@/components/manager/Filters";
 import {AXIOS} from "@/backend-api"
-// import CarDetails from "@/components/manager/cardetails/CarDetails";
 
 export default {
   components: {
-    Filters//, CarDetails
+    Filters
   },
   name: "ListOfAllCars",
   metaInfo: {
@@ -192,7 +192,6 @@ export default {
     from: null,
     until: null
   }),
-  computed: {},
   mounted() {
     this.retrieveCars()
   },
@@ -212,10 +211,12 @@ export default {
       console.log(data)
       this.retrieveCars()
     },
-    clearSearch() {
-      this.filter = ''
-      this.filterOn = null
-      this.retrieveCars()
+    clearSearch(searchValue) {
+      if (searchValue === null) {
+        this.filterOn = searchValue;
+      }
+      this.filter = '';
+      this.retrieveCars();
     },
     getRequestParams(page, pageSize, modelId, filterOn, specificYear, from, until) {
       let params = {params: {}};
