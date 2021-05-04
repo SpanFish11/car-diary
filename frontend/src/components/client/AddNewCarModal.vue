@@ -64,7 +64,19 @@
                 :options="equipments"
                 :state="getValidationState(validationContext)"
                 aria-describedby="input-7"
+                @change="loadEquipmentInfo"
             ></b-form-select>
+            <div v-if="newCar.equipmentId !== null">
+              <b-button id="button-1" variant="success">
+                Equipment information
+              </b-button>
+              <b-tooltip target="button-1">
+                <h3>Engine size: {{equipmentInfo.engineSize}}</h3>
+                <h3>Fuel type: {{equipmentInfo.engineType}}</h3>
+                <h3>Transmission type: {{equipmentInfo.transmissionType}}</h3>
+                <h3>Power: {{equipmentInfo.horsePower}}hp</h3>
+              </b-tooltip>
+            </div>
             <b-form-invalid-feedback id="input-7">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
           </b-form-group>
         </validation-provider>
@@ -237,6 +249,12 @@ export default {
       ours: null
     },
     currentClient: null,
+    equipmentInfo: {
+      engineSize: null,
+      engineType: null,
+      horsePower: null,
+      transmissionType: null
+    },
     currentYear: new Date().getFullYear(),
     vin_numbers: [],
     clients: [],
@@ -292,11 +310,24 @@ export default {
         equipmentId: null
       }
       this.currentClient = null;
+      this.equipmentInfo = {
+        engineSize: null,
+            engineType: null,
+            horsePower: null,
+            transmissionType: null
+      }
       this.photoToUpload = {
         photo: null
       }
       this.$nextTick(() => {
         this.$refs.observer.reset();
+      })
+    },
+    loadEquipmentInfo() {
+      AXIOS.get('equipments').then(response => {
+        this.equipmentInfo = response.data.find(equipment => equipment.id === this.newCar.equipmentId);
+      }).catch(error => {
+        console.log('ERROR: ' + error.response.data)
       })
     },
     addNewCar() {
@@ -306,7 +337,8 @@ export default {
         this.newCar.clientId = this.clients.find(client => client.email === this.currentClient.match(/\((.*)\)/).pop()).id;
         AXIOS.post('cars', this.newCar)
             .then((response) => {
-              this.photoToUpload.photo != null ? this.uploadPhoto(response.data) : this.makeToast(response.status)
+              this.photoToUpload.photo != null ? this.uploadPhoto(response.data) : this.makeToast(response.status);
+              this.resetForm();
             }).catch((error) => {
           console.log('ERROR: ' + error.response.data)
           this.makeWarningToast();
