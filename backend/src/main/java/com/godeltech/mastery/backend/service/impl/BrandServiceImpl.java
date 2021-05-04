@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @RequiredArgsConstructor
 public class BrandServiceImpl implements BrandService {
@@ -33,7 +35,6 @@ public class BrandServiceImpl implements BrandService {
 
   @Override
   public List<ModelDTO> getModelsByBrandId(final Long id) {
-    final var models = getById(id).getModels().stream().toList();
-    return modelMapper.map(models);
+    return getById(id).getModels().stream().map(modelMapper::map).collect(toList());
   }
 }

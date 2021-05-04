@@ -6,7 +6,7 @@ import com.godeltech.mastery.backend.domain.entity.Client_;
 import com.godeltech.mastery.backend.domain.entity.Model_;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Objects;
+import static java.util.Objects.isNull;
 
 public class CarSpecification {
 
@@ -14,35 +14,33 @@ public class CarSpecification {
 
   public static Specification<Car> withModel(final Long modelId) {
     return (root, criteriaQuery, criteriaBuilder) ->
-        Objects.isNull(modelId)
+        isNull(modelId)
             ? criteriaBuilder.and()
             : criteriaBuilder.equal(root.get(Car_.MODEL).get(Model_.ID), modelId);
   }
 
   public static Specification<Car> withYear(final Integer year) {
     return (root, criteriaQuery, criteriaBuilder) ->
-        Objects.isNull(year)
-            ? criteriaBuilder.and()
-            : criteriaBuilder.equal(root.get(Car_.YEAR), year);
+        isNull(year) ? criteriaBuilder.and() : criteriaBuilder.equal(root.get(Car_.YEAR), year);
   }
 
   public static Specification<Car> greaterOrEqualYear(final Integer year) {
     return (root, criteriaQuery, criteriaBuilder) ->
-        Objects.isNull(year)
+        isNull(year)
             ? criteriaBuilder.and()
             : criteriaBuilder.greaterThanOrEqualTo(root.get(Car_.YEAR), year);
   }
 
   public static Specification<Car> lessOrEqualYear(final Integer year) {
     return (root, criteriaQuery, criteriaBuilder) ->
-        Objects.isNull(year)
+        isNull(year)
             ? criteriaBuilder.and()
             : criteriaBuilder.lessThanOrEqualTo(root.get(Car_.YEAR), year);
   }
 
   public static Specification<Car> withVin(final String vin) {
     return (root, criteriaQuery, criteriaBuilder) ->
-        Objects.isNull(vin)
+        isNull(vin)
             ? criteriaBuilder.and()
             : criteriaBuilder.like(
                 criteriaBuilder.lower(root.get(Car_.VIN)), "%" + vin.toLowerCase() + "%");
@@ -50,7 +48,7 @@ public class CarSpecification {
 
   public static Specification<Car> withOwnerLastname(final String lastname) {
     return (root, criteriaQuery, criteriaBuilder) ->
-        Objects.isNull(lastname)
+        isNull(lastname)
             ? criteriaBuilder.and()
             : criteriaBuilder.like(
                 criteriaBuilder.lower(root.get(Car_.CLIENT).get(Client_.LAST_NAME)),
