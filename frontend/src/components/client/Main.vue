@@ -4,7 +4,7 @@
       <b-button v-b-modal.modal variant="outline-dark">Add new Car</b-button>
 
       <b-modal id="modal" title="Add new Car 😊" hide-footer>
-        <AddNewCarModal @add-car='handleAddCarEvent' @upload-photo='handleAddCarEvent'/>
+        <AddNewCarModal/>
       </b-modal>
     </div>
 
@@ -69,14 +69,6 @@ export default {
       }).catch(error => {
         console.log('ERROR: ' + error.response.data)
       })
-    },
-    handleAddCarEvent() {
-      this.$bvToast.toast(`You're breathtaking! ❤`, {
-        title: 'Car create successful!',
-        variant: "success",
-        toaster: "b-toaster-top-center"
-      });
-      window.location.reload();
     }
   }
 }

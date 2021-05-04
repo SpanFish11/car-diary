@@ -10,7 +10,7 @@
       </b-jumbotron>
     </div>
     <b-overlay :show="show" rounded="sm">
-      <router-view/>
+      <router-view :key="$route.fullPath"/>
     </b-overlay>
   </div>
 </template>

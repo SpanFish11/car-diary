@@ -2,7 +2,6 @@ package com.godeltech.mastery.backend.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
-import com.godeltech.mastery.backend.service.BrandService;
 import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ class BrandControllerIntegrationTest {
     final var jsonString =
         objectMapper.writeValueAsString(
             objectMapper.readValue(
-                new File("src/main/resources/tests/brands/allBrands.json"), JSONArray.class));
+                new File("src/test/resources/tests/brands/allBrands.json"), JSONArray.class));
 
     mockMvc
         .perform(get("/api/v1/brands"))
@@ -51,7 +50,7 @@ class BrandControllerIntegrationTest {
     final var jsonString =
         objectMapper.writeValueAsString(
             objectMapper.readValue(
-                new File("src/main/resources/tests/brands/modelsById.json"), JSONArray.class));
+                new File("src/test/resources/tests/brands/modelsById.json"), JSONArray.class));
 
     mockMvc
         .perform(get("/api/v1/brands/{brand_id}/models", 2))

@@ -71,10 +71,10 @@
                 Equipment information
               </b-button>
               <b-tooltip target="button-1">
-                <h3>Engine size: {{equipmentInfo.engineSize}}</h3>
-                <h3>Fuel type: {{equipmentInfo.engineType}}</h3>
-                <h3>Transmission type: {{equipmentInfo.transmissionType}}</h3>
-                <h3>Power: {{equipmentInfo.horsePower}}hp</h3>
+                <h3>Engine size: {{ equipmentInfo.engineSize }}</h3>
+                <h3>Fuel type: {{ equipmentInfo.engineType }}</h3>
+                <h3>Transmission type: {{ equipmentInfo.transmissionType }}</h3>
+                <h3>Power: {{ equipmentInfo.horsePower }}hp</h3>
               </b-tooltip>
             </div>
             <b-form-invalid-feedback id="input-7">{{ validationContext.errors[0] }}</b-form-invalid-feedback>
@@ -312,9 +312,9 @@ export default {
       this.currentClient = null;
       this.equipmentInfo = {
         engineSize: null,
-            engineType: null,
-            horsePower: null,
-            transmissionType: null
+        engineType: null,
+        horsePower: null,
+        transmissionType: null
       }
       this.photoToUpload = {
         photo: null
@@ -348,23 +348,27 @@ export default {
             .then((response) => {
               this.photoToUpload.photo != null ? this.uploadPhoto(response.data) : this.makeToast(response.status)
               this.$bvModal.hide('modal')
+              if (this.photoToUpload.photo === null) {
+                setTimeout(() => this.$router.go(0), 2000);
+              }
             }).catch((error) => {
           console.log('ERROR: ' + error.response.data)
           this.makeWarningToast();
         })
       }
     },
-    uploadPhoto(data) {
+    async uploadPhoto(data) {
       const formData = new FormData()
       Object.keys(this.photoToUpload).forEach((key) => {
         formData.append(key, this.photoToUpload[key])
       })
-      AXIOS.patch(`cars/${data}/photos`, formData, {headers: {'Content-Type': 'multipart/form-data'}})
-          .then((response) => {
-            console.log(response.status)
-            this.makeToast(response.status)
-          }).catch(error => {
-        console.log('ERROR: ' + error.response.data)
+      const promise = await AXIOS.patch(`cars/${data}/photos`, formData, {headers: {'Content-Type': 'multipart/form-data'}});
+      console.log(promise.status);
+      this.makeToast(promise.status);
+      if (promise.status === 200) {
+        this.$router.go(0);
+      } else {
+        console.log('ERROR: ' + promise.data)
         this.$bvToast.toast(`Sorry, but something went wrong with the image upload. Try again while editing the car.`, {
           title: 'Car create successful!',
           variant: "warning",
@@ -373,11 +377,10 @@ export default {
           toaster: "b-toaster-top-center",
           appendToast: false
         })
-      })
-      this.$emit('upload-photo');
+      }
     },
     makeToast(status = Number()) {
-      if (status === 200 || status === 201)
+      if (status === 200 || status === 201) {
         this.$bvToast.toast(`You're breathtaking! ❤`, {
           title: 'Car create successful!',
           variant: "success",
@@ -386,7 +389,7 @@ export default {
           toaster: "b-toaster-top-center",
           appendToast: false
         });
-      this.$emit('add-car');
+      }
     },
     makeWarningToast() {
       this.$bvToast.toast(`Sorry, but the car has not been added. Try again.!`, {
