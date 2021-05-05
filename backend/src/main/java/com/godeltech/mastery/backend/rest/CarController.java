@@ -2,9 +2,11 @@ package com.godeltech.mastery.backend.rest;
 
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
 import com.godeltech.mastery.backend.domain.dto.request.Filter;
+import com.godeltech.mastery.backend.domain.dto.request.OperationCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.service.CarService;
+import com.godeltech.mastery.backend.service.OperationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,6 +48,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class CarController {
 
   private final CarService carService;
+  private final OperationService operationService;
 
   @Operation(
       summary = "Get all cars or search by filter",
@@ -149,6 +152,14 @@ public class CarController {
     checkImageMediaType(photo.getContentType());
     carService.updateCarPhoto(id, photo);
     return ok().build();
+  }
+
+  @PostMapping("/{car_id}/operation")
+  public ResponseEntity<Long> saveOperation(
+      @PathVariable("car_id") @Min(1) final Long id,
+      @RequestBody @Valid OperationCreateRequest operationCreateRequest) {
+    return new ResponseEntity<Long>(
+        operationService.createOperation(id, operationCreateRequest), CREATED);
   }
 
   private void checkImageMediaType(final String type) throws HttpMediaTypeNotSupportedException {
