@@ -27,8 +27,4 @@ public class OperationCreateRequest {
   private List<ServiceWorkCreateRequest> serviceWorks;
 
   private List<ChangePartCreateRequest> changableParts;
-
-  @NotNull(message = "Car is mandatory")
-  @Min(value = 1, message = "Value should be greater then or equal to 1")
-  private Long carId;
 }

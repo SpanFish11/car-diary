@@ -4,5 +4,5 @@ import com.godeltech.mastery.backend.domain.dto.request.OperationCreateRequest;
 
 public interface OperationService {
 
-  Long createOperation(OperationCreateRequest operation);
+  Long createOperation(Long carId, OperationCreateRequest operation);
 }

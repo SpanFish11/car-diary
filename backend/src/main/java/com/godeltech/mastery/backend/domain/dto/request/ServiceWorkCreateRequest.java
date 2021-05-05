@@ -14,6 +14,5 @@ public class ServiceWorkCreateRequest {
 
   private BigDecimal price;
 
-  @NotNull
-  private Boolean guarantee;
+  @NotNull private Boolean guarantee;
 }

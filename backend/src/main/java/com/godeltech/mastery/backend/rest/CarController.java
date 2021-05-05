@@ -6,13 +6,13 @@ import com.godeltech.mastery.backend.domain.dto.request.OperationCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.service.CarService;
+import com.godeltech.mastery.backend.service.OperationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +45,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/api/v1/cars")
 @RequiredArgsConstructor
-@Slf4j
 public class CarController {
 
   private final CarService carService;
+  private final OperationService operationService;
 
   @Operation(
       summary = "Get all cars or search by filter",
@@ -154,9 +154,12 @@ public class CarController {
     return ok().build();
   }
 
-  @PostMapping("/service")
-  public void asdasdasd(@RequestBody OperationCreateRequest request) {
-    System.out.println(request.toString());
+  @PostMapping("/{car_id}/operation")
+  public ResponseEntity<Long> saveOperation(
+      @PathVariable("car_id") @Min(1) final Long id,
+      @RequestBody @Valid OperationCreateRequest operationCreateRequest) {
+    return new ResponseEntity<Long>(
+        operationService.createOperation(id, operationCreateRequest), CREATED);
   }
 
   private void checkImageMediaType(final String type) throws HttpMediaTypeNotSupportedException {
