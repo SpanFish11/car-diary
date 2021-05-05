@@ -225,7 +225,7 @@ export default {
         serviceWorks: this.serviceWorks,
         changableParts: this.serviceParts,
       };
-      AXIOS.post(`cars/service`, data)
+      AXIOS.post(`cars/${1}/operation`, data)
         .then((response) => {
           console.log(response.data);
         })

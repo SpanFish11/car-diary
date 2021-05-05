@@ -35,7 +35,7 @@ VALUES (6, 'Extra TO-3', 120000, 96);
 create table m_operations
 (
     id             bigserial      not null
-        constraint m_operations
+        constraint m_operations_pk
             primary key,
     name           varchar        not null,
     price          numeric(10, 2) not null,
