@@ -7,17 +7,27 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <router-link to="/client" tag="b-nav-item">Client Application</router-link>
+          <router-link to="/client" tag="b-nav-item"
+            >Client Application</router-link
+          >
           <b-nav-item-dropdown text="Manager Application" right>
-            <router-link to="/manager" tag="b-dropdown-item">List of all cars</router-link>
-            <router-link to="/manager/client" tag="b-dropdown-item">Add new client</router-link>
-            <router-link to="/manager/soldcar" tag="b-dropdown-item">Sold car</router-link>
+            <router-link to="/manager" tag="b-dropdown-item"
+              >List of all cars</router-link
+            >
+            <router-link to="/manager/client" tag="b-dropdown-item"
+              >Add new client</router-link
+            >
+            <router-link to="/manager/soldcar" tag="b-dropdown-item"
+              >Sold car</router-link
+            >
+            <router-link to="/manager/addServiceRecord" tag="b-dropdown-item"
+              >Add Service Record</router-link
+            >
           </b-nav-item-dropdown>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template #button-content>
@@ -33,8 +43,7 @@
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -4,21 +4,22 @@
       <b-button v-b-modal.modal variant="outline-dark">Add new Car</b-button>
 
       <b-modal id="modal" title="Add new Car 😊" hide-footer>
-        <AddNewCarModal/>
+        <AddNewCarModal />
       </b-modal>
     </div>
 
     <div class="album bg-light">
       <div class="container">
-
         <b-card-group columns v-if="cars.length !== 0">
-
-          <b-card v-for="car in cars" v-bind:key="car.text"
-                  v-bind:title="`${car.brand.name} ${car.model.name}, ${car.year}`"
-                  v-bind:img-src="car.photoUrl"
-                  img-alt="Image" img-top>
-            <b-card-text>
-            </b-card-text>
+          <b-card
+            v-for="car in cars"
+            v-bind:key="car.text"
+            v-bind:title="`${car.brand.name} ${car.model.name}, ${car.year}`"
+            v-bind:img-src="car.photoUrl"
+            img-alt="Image"
+            img-top
+          >
+            <b-card-text> </b-card-text>
             <b-button-toolbar>
               <b-button-group size="sm">
                 <b-button variant="outline-secondary">Details</b-button>
@@ -32,7 +33,6 @@
               <small class="text-muted">Mileage {{ car.mileage }} km</small>
             </template>
           </b-card>
-
         </b-card-group>
 
         <div class="text-center" v-else>
@@ -45,34 +45,35 @@
 
 <script>
 import AddNewCarModal from "@/components/client/AddNewCarModal";
-import {AXIOS} from "@/backend-api"
+import { AXIOS } from "@/backend-api";
 
 export default {
   name: "Main",
   metaInfo: {
-    title: 'All Cars',
-    titleTemplate: '%s | Client Application'
+    title: "All Cars",
+    titleTemplate: "%s | Client Application",
   },
   components: {
-    AddNewCarModal
+    AddNewCarModal,
   },
   data: () => ({
-    cars: []
+    cars: [],
   }),
   mounted() {
-    this.loadAllCars()
+    this.loadAllCars();
   },
   methods: {
     loadAllCars() {
-      AXIOS.get('clients/1/cars').then(response => {
-        this.cars = response.data;
-      }).catch(error => {
-        console.log('ERROR: ' + error.response.data)
-      })
-    }
-  }
-}
+      AXIOS.get("clients/1/cars")
+        .then((response) => {
+          this.cars = response.data;
+        })
+        .catch((error) => {
+          console.log("ERROR: " + error.response.data);
+        });
+    },
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
