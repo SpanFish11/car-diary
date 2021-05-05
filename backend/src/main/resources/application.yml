@@ -22,11 +22,11 @@ spring:
 
   mail:
     default-encoding: UTF-8
-    host: ${MAIL_HOST}
-    host_address: ${HOST_ADDRESS}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
-    port: ${MAIL_PORT}
+    host: ${MAIL_HOST:host}
+    host_address: ${HOST_ADDRESS:address}
+    username: ${MAIL_USERNAME:username}
+    password: ${MAIL_PASSWORD:password}
+    port: ${MAIL_PORT:545454884}
 
 aws:
   s3:
