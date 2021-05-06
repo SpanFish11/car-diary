@@ -8,6 +8,8 @@ import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Utilities;
 
@@ -16,7 +18,7 @@ import static software.amazon.awssdk.regions.Region.of;
 
 @Slf4j
 @Configuration
-public class ApplicationConfig {
+public class ApplicationBeans {
 
   @Bean
   public S3AsyncClient s3AsyncClient(final S3ClientConfigurationProperties properties) {
@@ -55,5 +57,10 @@ public class ApplicationConfig {
     eventMulticaster.setTaskExecutor(asyncTaskExecutor);
     eventMulticaster.setErrorHandler(t -> log.error("Error calling ApplicationEventListener", t));
     return eventMulticaster;
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 }

@@ -95,7 +95,7 @@ class CarMapperUnitTest {
   void testMapCarDTO() {
     final var brand = new Brand(1L, "Nissan", null);
     final var model = new Model(3L, "Curdden", brand);
-    final var client = new Client(2L, "John", "Snow", "shon344@mail.com", "sdsdsd", null);
+    final var client = new Client(2L, "John", "Snow", "shon344@mail.com", "sdsdsd", null, null);
     final var equipment = new Equipment(1L, "Luxury", "Petrol", "Manual", 2D, 400);
     final var modelDTO = new ModelDTO(3L, "Curdden");
     final var brandDTO = new BrandDTO(1L, "Nissan");
@@ -139,7 +139,7 @@ class CarMapperUnitTest {
   void testMapListOfCar() {
     final var brand = new Brand(1L, "Nissan", null);
     final var model = new Model(3L, "Curdden", brand);
-    final var client = new Client(2L, "John", "Snow", "shon344@mail.com", "sdsdsd", null);
+    final var client = new Client(2L, "John", "Snow", "shon344@mail.com", "sdsdsd", null, null);
     final var equipment = new Equipment(1L, "Luxury", "Petrol", "Manual", 2D, 400);
     final var modelDTO = new ModelDTO(3L, "Curdden");
     final var brandDTO = new BrandDTO(1L, "Nissan");

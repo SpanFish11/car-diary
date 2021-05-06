@@ -46,11 +46,11 @@ public class ClientCreateListener implements ApplicationListener<ClientCreateEve
     final var message = new SimpleMailMessage();
     message.setSubject(SUBJECT);
     message.setTo(event.getClient().getEmail());
-    message.setText(makeMessageText(event.getClient()));
+    message.setText(makeMessageText(event.getClient(), event.getPassword()));
     return message;
   }
 
-  private String makeMessageText(final Client client) {
-    return format(TEXT, client.getFirstName(), client.getLastName(), client.getEmail(), client.getPassword());
+  private String makeMessageText(final Client client, final String password) {
+    return format(TEXT, client.getFirstName(), client.getLastName(), client.getEmail(), password);
   }
 }

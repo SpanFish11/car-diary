@@ -23,6 +23,7 @@
         <lombok.version>1.18.20</lombok.version>
         <flyway.version>7.8.2</flyway.version>
         <hibernate-orm.version>6.0.0.Alpha6</hibernate-orm.version>
+        <jjwt.version>0.11.2</jjwt.version>
     </properties>
 
     <dependencies>
@@ -141,6 +142,32 @@
             <artifactId>mockito-inline</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
 
     </dependencies>
 

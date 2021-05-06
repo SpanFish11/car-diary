@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.List;
 import java.util.Objects;
 
 import static java.util.List.of;
@@ -158,8 +160,13 @@ public class CarController {
   public ResponseEntity<Long> saveOperation(
       @PathVariable("car_id") @Min(1) final Long id,
       @RequestBody @Valid OperationCreateRequest operationCreateRequest) {
-    return new ResponseEntity<Long>(
+    return new ResponseEntity<>(
         operationService.createOperation(id, operationCreateRequest), CREATED);
+  }
+
+  @GetMapping("/my")
+  public ResponseEntity<List<CarDTO>> getMyCars(final Authentication principal) {
+    return ok(carService.getCurrentClientCars(principal));
   }
 
   private void checkImageMediaType(final String type) throws HttpMediaTypeNotSupportedException {

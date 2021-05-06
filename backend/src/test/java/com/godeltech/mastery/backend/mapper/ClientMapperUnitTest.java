@@ -20,7 +20,7 @@ class ClientMapperUnitTest {
 
   @Test
   void testToDto() {
-    final var client = new Client(2L, "John", "Snow", "snow324@mail.com", "dsfsdfs", Set.of());
+    final var client = new Client(2L, "John", "Snow", "snow324@mail.com", "dsfsdfs", Set.of(), null);
     final var expected = new ClientDTO(2L, "John", "Snow", "snow324@mail.com");
 
     final var actual = clientMapper.toDto(client);

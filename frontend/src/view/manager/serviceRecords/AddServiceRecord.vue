@@ -1,22 +1,57 @@
 <template>
   <validation-observer ref="observer" v-slot="{ invalid }">
     <v-container>
+      <v-snackbar
+        color="error"
+        top
+        :multi-line="true"
+        v-model="snackbarError"
+        :timeout="10000"
+      >
+        <span>{{ message }}</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbarError = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
+      <v-snackbar
+        color="success"
+        top
+        :multi-line="true"
+        v-model="snackbarSuccess"
+        :timeout="10000"
+      >
+        <span>{{ message }}</span>
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbarSuccess = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
+      <v-overlay :value="overlay">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
+
       <v-card elevation="24">
         <v-card-title>Add new dervice record</v-card-title>
 
         <v-container fluid>
-          <form @submit.prevent="submit">
+          <form ref="form" @submit.stop.prevent="submit">
             <v-row align="center">
               <v-col cols="12">
                 <v-autocomplete
                   clearable
                   v-model="serviceOperationName"
-                  :items="items"
+                  :items="maintenances"
                   dense
                   filled
                   label="Maintenance"
                   hint="Select maintenance if it is, otherwise, leave it blank"
                   persistent-hint
+                  @change="someMethod(serviceOperationName)"
                 ></v-autocomplete>
               </v-col>
 
@@ -24,14 +59,17 @@
                 <validation-provider
                   v-slot="{ errors }"
                   name="Mileage"
-                  :rules="{ required: true, numeric: true, max: 7 }"
+                  :rules="{
+                    required: true,
+                    numeric: true,
+                    max: 7,
+                    min_value: 0,
+                  }"
                 >
                   <v-text-field
-                    min="0"
                     :counter="7"
                     v-model="mileage"
                     label="Mileage"
-                    type="number"
                     :error-messages="errors"
                     filled
                     dense
@@ -129,97 +167,80 @@
                             }}</span>
                           </v-card-title>
 
-                          <validation-observer
-                            ref="observer"
-                            v-slot="{ invalid }"
+                          <v-form
+                            ref="serviceOperationForm"
+                            v-model="serviceServiceOperationFormValid"
                           >
-                            <form @submit.prevent="saveServiceOperation">
-                              <v-card-text>
-                                <v-container>
-                                  <v-row align="center">
-                                    <v-col cols="12">
-                                      <validation-provider
-                                        v-slot="{ errors }"
-                                        name="Guarantee"
-                                        :rules="{ required: true }"
-                                      >
-                                        <v-select
-                                          v-model="
-                                            editedServiceOperationItem.guarantee
-                                          "
-                                          :items="serviceVariable"
-                                          label="Guarantee"
-                                          :error-messages="errors"
-                                          clearable
-                                          dense
-                                        ></v-select>
-                                      </validation-provider>
-                                    </v-col>
-                                    <v-col cols="12">
-                                      <validation-provider
-                                        v-slot="{ errors }"
-                                        name="Name"
-                                        :rules="{ required: true }"
-                                      >
-                                        <v-text-field
-                                          v-model="
-                                            editedServiceOperationItem.name
-                                          "
-                                          label="Name"
-                                          type="text"
-                                          clearable
-                                          :error-messages="errors"
-                                          dense
-                                        ></v-text-field>
-                                      </validation-provider>
-                                    </v-col>
+                            <v-card-text>
+                              <v-container>
+                                <v-row align="center">
+                                  <v-col cols="12">
+                                    <v-select
+                                      v-model="
+                                        editedServiceOperationItem.guarantee
+                                      "
+                                      :items="serviceVariable"
+                                      label="Guarantee"
+                                      :rules="[
+                                        (v) => v !== null || 'Item is required',
+                                      ]"
+                                      clearable
+                                      dense
+                                    ></v-select>
+                                  </v-col>
+                                  <v-col cols="12">
+                                    <v-text-field
+                                      v-model="editedServiceOperationItem.name"
+                                      label="Name"
+                                      type="text"
+                                      :rules="[
+                                        (v) => v !== null || 'Item is required',
+                                      ]"
+                                      clearable
+                                      dense
+                                    ></v-text-field>
+                                  </v-col>
 
-                                    <v-col cols="12">
-                                      <validation-provider
-                                        v-slot="{ errors }"
-                                        name="Price"
-                                        :rules="{
-                                          required: true,
-                                          numeric: true,
-                                        }"
-                                      >
-                                        <v-text-field
-                                          v-model="
-                                            editedServiceOperationItem.price
-                                          "
-                                          dense
-                                          clearable
-                                          label="Price"
-                                          :error-messages="errors"
-                                        ></v-text-field>
-                                      </validation-provider>
-                                    </v-col>
-                                  </v-row>
-                                </v-container>
-                              </v-card-text>
+                                  <v-col cols="12">
+                                    <v-text-field
+                                      v-model="editedServiceOperationItem.price"
+                                      dense
+                                      clearable
+                                      :rules="[
+                                        (v) => v !== null || 'Item is required',
+                                        (v) =>
+                                          /^(?:0|[1-9][0-9]*)\.?[0-9]+$/.test(
+                                            v
+                                          ) || 'Only numbers',
+                                      ]"
+                                      label="Price"
+                                    ></v-text-field>
+                                  </v-col>
+                                </v-row>
+                              </v-container>
+                            </v-card-text>
 
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                  elevation="10"
-                                  color="red darken-1"
-                                  text
-                                  @click="closeServiceOperation"
-                                >
-                                  Cancel
-                                </v-btn>
-                                <v-btn
-                                  :disabled="invalid"
-                                  elevation="10"
-                                  color="green darken-1"
-                                  text
-                                  @click="saveServiceOperation"
-                                >
-                                  Save
-                                </v-btn>
-                              </v-card-actions>
-                            </form>
-                          </validation-observer>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                elevation="10"
+                                color="red darken-1"
+                                text
+                                @click="closeServiceOperation"
+                              >
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                elevation="10"
+                                color="green darken-1"
+                                text
+                                :disabled="!serviceServiceOperationFormValid"
+                                @click="saveServiceOperation"
+                              >
+                                Save
+                              </v-btn>
+                            </v-card-actions>
+                          </v-form>
                         </v-card>
                       </v-dialog>
                       <v-dialog
@@ -263,6 +284,7 @@
 
                   <template v-slot:[`item.actions`]="{ item }">
                     <v-icon
+                      :disabled="item.disabled === true"
                       color="green"
                       class="mr-2"
                       @click="editServiceOperationItem(item)"
@@ -270,6 +292,7 @@
                       mdi-pencil
                     </v-icon>
                     <v-icon
+                      :disabled="item.disabled === true"
                       color="red"
                       @click="deleteServiceOperationItem(item)"
                       >mdi-delete
@@ -312,93 +335,78 @@
                             }}</span>
                           </v-card-title>
 
-                          <validation-observer
-                            ref="observer"
-                            v-slot="{ invalid }"
+                          <v-form
+                            ref="servicePartItemForm"
+                            v-model="servicePartItemFormValid"
                           >
-                            <form @submit.prevent="saveServicePart">
-                              <v-card-text>
-                                <v-container>
-                                  <v-row align="center">
-                                    <v-col cols="12">
-                                      <validation-provider
-                                        v-slot="{ errors }"
-                                        name="Replaced"
-                                        :rules="{ required: true }"
-                                      >
-                                        <v-select
-                                          v-model="
-                                            editedServicePartItem.replaced
-                                          "
-                                          :items="serviceVariable"
-                                          label="Replaced"
-                                          clearable
-                                          :error-messages="errors"
-                                          dense
-                                        ></v-select>
-                                      </validation-provider>
-                                    </v-col>
-                                    <v-col cols="12">
-                                      <validation-provider
-                                        v-slot="{ errors }"
-                                        name="Model"
-                                        :rules="{ required: true }"
-                                      >
-                                        <v-text-field
-                                          v-model="editedServicePartItem.name"
-                                          label="Model"
-                                          type="text"
-                                          :error-messages="errors"
-                                          clearable
-                                          dense
-                                        ></v-text-field>
-                                      </validation-provider>
-                                    </v-col>
+                            <v-card-text>
+                              <v-container>
+                                <v-row align="center">
+                                  <v-col cols="12">
+                                    <v-select
+                                      v-model="editedServicePartItem.replaced"
+                                      :items="serviceVariable"
+                                      label="Replaced"
+                                      :rules="[
+                                        (v) => v !== null || 'Item is required',
+                                      ]"
+                                      clearable
+                                      dense
+                                    ></v-select>
+                                  </v-col>
+                                  <v-col cols="12">
+                                    <v-text-field
+                                      v-model="editedServicePartItem.model"
+                                      label="Model"
+                                      type="text"
+                                      :rules="[
+                                        (v) => v !== null || 'Item is required',
+                                      ]"
+                                      clearable
+                                      dense
+                                    ></v-text-field>
+                                  </v-col>
 
-                                    <v-col cols="12">
-                                      <validation-provider
-                                        v-slot="{ errors }"
-                                        name="Price"
-                                        :rules="{
-                                          required: true,
-                                          numeric: true,
-                                        }"
-                                      >
-                                        <v-text-field
-                                          v-model="editedServicePartItem.price"
-                                          dense
-                                          :error-messages="errors"
-                                          clearable
-                                          label="Price"
-                                        ></v-text-field>
-                                      </validation-provider>
-                                    </v-col>
-                                  </v-row>
-                                </v-container>
-                              </v-card-text>
+                                  <v-col cols="12">
+                                    <v-text-field
+                                      v-model="editedServicePartItem.price"
+                                      dense
+                                      clearable
+                                      :rules="[
+                                        (v) => v !== null || 'Item is required',
+                                        (v) =>
+                                          /^(?:0|[1-9][0-9]*)\.?[0-9]+$/.test(
+                                            v
+                                          ) || 'Only numbers',
+                                      ]"
+                                      label="Price"
+                                    ></v-text-field>
+                                  </v-col>
+                                </v-row>
+                              </v-container>
+                            </v-card-text>
 
-                              <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                  elevation="10"
-                                  color="red darken-1"
-                                  text
-                                  @click="closeServicePart"
-                                >
-                                  Cancel
-                                </v-btn>
-                                <v-btn
-                                  elevation="10"
-                                  color="green darken-1"
-                                  text
-                                  :disabled="invalid"
-                                  @click="saveServicePart"
-                                >
-                                  Save
-                                </v-btn>
-                              </v-card-actions>
-                            </form>
-                          </validation-observer>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                elevation="10"
+                                color="red darken-1"
+                                text
+                                @click="closeServicePart"
+                              >
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                elevation="10"
+                                color="green darken-1"
+                                text
+                                :disabled="!servicePartItemFormValid"
+                                @click="saveServicePart"
+                              >
+                                Save
+                              </v-btn>
+                            </v-card-actions>
+                          </v-form>
                         </v-card>
                       </v-dialog>
                       <v-dialog
@@ -442,13 +450,17 @@
 
                   <template v-slot:[`item.actions`]="{ item }">
                     <v-icon
+                      :disabled="item.disabled === true"
                       color="green"
                       class="mr-2"
                       @click="editServicePartItem(item)"
                     >
                       mdi-pencil
                     </v-icon>
-                    <v-icon color="red" @click="deleteServicePartItem(item)"
+                    <v-icon
+                      :disabled="item.disabled === true"
+                      color="red"
+                      @click="deleteServicePartItem(item)"
                       >mdi-delete
                     </v-icon>
                   </template>
@@ -471,12 +483,6 @@
                   clear
                 </v-btn>
               </v-row>
-              <v-overlay :value="overlay">
-                <v-progress-circular
-                  indeterminate
-                  size="64"
-                ></v-progress-circular>
-              </v-overlay>
             </v-container>
           </form>
         </v-container>
@@ -495,22 +501,24 @@ export default {
     titleTemplate: "%s | Manager Application",
   },
   data: () => ({
+    servicePartItemFormValid: true,
+    serviceServiceOperationFormValid: true,
+
+    snackbarSuccess: false,
+    snackbarError: false,
+    message: "",
+
     overlay: false,
+
     dialogServiceOperation: false,
     dialogServiceOperationDelete: false,
     dialogServicePart: false,
     dialogServicePartDelete: false,
     date: null,
     carId: 1,
-    items: [
-      { id: "1", text: "TO-0" },
-      { id: "2", text: "TO-1 (промежуточное)" },
-      { id: "3", text: "TO-2 (полное)" },
-      { id: "4", text: "Доп. TO-1" },
-      { id: "5", text: "Доп. TO-2" },
-      { id: "6", text: "Доп. TO-3" },
-    ],
+    maintenances: [],
     serviceOperationName: null,
+    tempServiceOperationName: null,
     mileage: null,
     serviceOperationDate: false,
     serviceWorksHeaders: [
@@ -568,7 +576,11 @@ export default {
       { text: "Yes", value: true },
       { text: "No", value: false },
     ],
+    responceData: [],
   }),
+  mounted() {
+    this.loadMaintenances();
+  },
   computed: {
     formServiceOperationTitle() {
       return this.editedServiceOperationIndex === -1 ? "New Item" : "Edit Item";
@@ -592,6 +604,63 @@ export default {
     },
   },
   methods: {
+    async loadMaintenances() {
+      try {
+        const res = await CarDiaryDataService.getAllMaintenances();
+        this.responceData = res.data;
+        const arr = [];
+        res.data.forEach(function (item) {
+          arr.push({ id: item.id, text: item.operationNumber });
+        });
+        this.maintenances = arr;
+      } catch (error) {
+        console.log(error.response);
+      }
+    },
+    someMethod(serviceOperationName) {
+      const self = this;
+
+      if (serviceOperationName !== null) {
+        const s = self.responceData.filter(
+          (d) => d.operationNumber === serviceOperationName
+        );
+        s.forEach(function (item) {
+          item.operations.forEach(function (item) {
+            self.serviceWorks.push({
+              guarantee: true,
+              name: item.name,
+              price: item.price,
+              disabled: true,
+            });
+          });
+          item.details.forEach(function (item) {
+            self.serviceParts.push({
+              replaced: true,
+              model: item.name,
+              price: item.price,
+              disabled: true,
+            });
+          });
+        });
+      } else if (serviceOperationName === null) {
+        const s = self.responceData.filter(
+          (d) => d.operationNumber === self.tempServiceOperationName
+        );
+        s.forEach(function (item) {
+          item.operations.forEach(function (value) {
+            self.serviceWorks = self.serviceWorks.filter(
+              (item) => item.name !== value.name
+            );
+          });
+          item.details.forEach(function (value) {
+            self.serviceParts = self.serviceParts.filter(
+              (item) => item.model !== value.name
+            );
+          });
+        });
+      }
+      this.tempServiceOperationName = serviceOperationName;
+    },
     submit() {
       this.validate();
       this.saveServiceRecord();
@@ -601,10 +670,13 @@ export default {
       this.serviceOperationName = null;
       this.mileage = null;
       this.date = null;
+      this.serviceParts = [];
+      this.serviceWorks = [];
       this.resetValidation();
     },
     async saveServiceRecord() {
-      // todo overlay
+      this.overlay = !this.overlay;
+
       const data = {
         serviceOperationNumber: this.serviceOperationName,
         date: this.date,
@@ -612,16 +684,30 @@ export default {
         serviceWorks: this.serviceWorks,
         changableParts: this.serviceParts,
       };
+
+      // todo сделать красиво
+      await new Promise((resolve) => {
+        setTimeout(resolve, 2000);
+      });
+
       try {
         const res = await CarDiaryDataService.createServiceRecord(
           this.carId,
           data
         );
-        const { status } = res.data;
-        console.log(status);
+
+        this.overlay = false;
+        this.message = `Record successfully created`;
+        this.snackbarSuccess = true;
+        console.log(res);
+
+        this.clear();
       } catch (error) {
+        // todo распарсить детаилс
         console.log(error.response);
-        // handle error
+        this.overlay = false;
+        this.message = `${error.response.data.message}`;
+        this.snackbarError = true;
       }
     },
     editServiceOperationItem(item) {
@@ -656,10 +742,12 @@ export default {
           this.defaultServiceOperationItem
         );
         this.editedIndex = -1;
+        this.$refs.serviceOperationForm.reset();
+        this.$refs.serviceOperationForm.resetValidation();
       });
     },
     saveServiceOperation() {
-      this.validate();
+      this.$refs.serviceOperationForm.validate();
       if (this.editedServiceOperationIndex > -1) {
         Object.assign(
           this.serviceWorks[this.editedServiceOperationIndex],
@@ -702,10 +790,12 @@ export default {
           this.defaultServicePartItem
         );
         this.editedIndex = -1;
+        this.$refs.servicePartItemForm.reset();
+        this.$refs.servicePartItemForm.resetValidation();
       });
     },
     saveServicePart() {
-      this.validate();
+      this.$refs.servicePartItemForm.validate();
       if (this.editedServicePartIndex > -1) {
         Object.assign(
           this.serviceParts[this.editedServicePartIndex],
@@ -716,7 +806,6 @@ export default {
       }
       this.closeServicePart();
     },
-    // todo сбрасывается валидация после использоваания диалоговых окон !!!!!!
     validate() {
       this.$refs.observer.validate();
     },

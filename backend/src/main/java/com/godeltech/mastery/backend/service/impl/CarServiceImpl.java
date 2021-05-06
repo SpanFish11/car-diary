@@ -17,6 +17,7 @@ import com.godeltech.mastery.backend.specification.impl.CarSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +45,9 @@ public class CarServiceImpl implements CarService {
   @Override
   public Page<CarDTO> getAllCarsOrFindByFilter(
       final Filter filter, final Integer page, final Integer pageSize) {
-    return carRepository.findAll(carSpecification.getFilter(filter), of(page, pageSize)).map(carMapper::map);
+    return carRepository
+        .findAll(carSpecification.getFilter(filter), of(page, pageSize))
+        .map(carMapper::map);
   }
 
   @Override
@@ -77,6 +80,12 @@ public class CarServiceImpl implements CarService {
   @Override
   public List<CarDTO> getAllCarsByClientId(final Long clientId) {
     final var client = clientService.getClientById(clientId);
+    return carMapper.map(carRepository.getAllByClient(client));
+  }
+
+  @Override
+  public List<CarDTO> getCurrentClientCars(final Authentication principal) {
+    final var client = clientService.getClient(principal);
     return carMapper.map(carRepository.getAllByClient(client));
   }
 
