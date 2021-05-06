@@ -158,7 +158,7 @@ public class CarController {
   public ResponseEntity<Long> saveOperation(
       @PathVariable("car_id") @Min(1) final Long id,
       @RequestBody @Valid OperationCreateRequest operationCreateRequest) {
-    return new ResponseEntity<>(
+    return new ResponseEntity<Long>(
         operationService.createOperation(id, operationCreateRequest), CREATED);
   }
 
