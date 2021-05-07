@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -36,6 +38,8 @@ public class CarCreateRequest {
   private Integer mileage;
 
   @NotNull(message = "Price is mandatory")
+  @DecimalMin(value = "0.00")
+  @Digits(integer = 10, fraction = 2)
   private BigDecimal price;
 
   @NotNull(message = "Equipment is mandatory")

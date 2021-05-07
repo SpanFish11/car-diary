@@ -1,6 +1,7 @@
 package com.godeltech.mastery.backend.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +13,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -67,4 +71,12 @@ public class Car implements Serializable {
 
   @Column(name = "used")
   private Boolean used;
+
+  @OneToOne(mappedBy = "car")
+  @JsonManagedReference
+  private Guarantee guarantee;
+
+  @OneToMany(mappedBy = "car", fetch = EAGER)
+  @JsonManagedReference
+  private List<ServiceOperationRecord> serviceOperations;
 }
