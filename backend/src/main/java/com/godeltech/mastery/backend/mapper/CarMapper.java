@@ -11,7 +11,14 @@ import java.util.List;
 
 @Mapper(
     componentModel = "spring",
-    uses = {ModelMapper.class, BrandMapper.class, ClientMapper.class, EquipmentMapper.class})
+    uses = {
+      ModelMapper.class,
+      BrandMapper.class,
+      ClientMapper.class,
+      EquipmentMapper.class,
+      OperationMapper.class,
+      GuaranteeMapper.class
+    })
 public interface CarMapper {
 
   @Mapping(target = "year", source = "year")
@@ -40,6 +47,8 @@ public interface CarMapper {
   @Mapping(target = "equipment", source = "equipment")
   @Mapping(target = "used", source = "used")
   @Mapping(target = "price", source = "price")
+  @Mapping(target = "guarantee", source = "guarantee")
+  @Mapping(target = "serviceOperations", source = "serviceOperations")
   CarDTO map(Car car);
 
   List<CarDTO> map(List<Car> cars);

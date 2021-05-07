@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
@@ -70,6 +71,10 @@ public class Car implements Serializable {
 
   @Column(name = "used")
   private Boolean used;
+
+  @OneToOne(mappedBy = "car")
+  @JsonManagedReference
+  private Guarantee guarantee;
 
   @OneToMany(mappedBy = "car", fetch = EAGER)
   @JsonManagedReference

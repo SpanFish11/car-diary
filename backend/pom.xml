@@ -23,6 +23,7 @@
         <lombok.version>1.18.20</lombok.version>
         <flyway.version>7.8.2</flyway.version>
         <hibernate-orm.version>6.0.0.Alpha6</hibernate-orm.version>
+        <jasper.version>6.11.0</jasper.version>
         <jjwt.version>0.11.2</jjwt.version>
     </properties>
 
@@ -141,6 +142,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>${jasper.version}</version>
         </dependency>
 
         <dependency>

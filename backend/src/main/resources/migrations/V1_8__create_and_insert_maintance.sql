@@ -52,13 +52,13 @@ create
     on m_operations (id);
 
 INSERT INTO m_operations (id, name, price, maintenance_id)
-VALUES (1, 'Changing the oil and oil filter', 75.09, 1);
+VALUES (1, 'Oil and oil filter replacement', 75.09, 1);
 INSERT INTO m_operations (id, name, price, maintenance_id)
-VALUES (2, 'Changing the oil and oil filter', 65.15, 2);
+VALUES (2, 'Oil and oil filter replacement', 65.15, 2);
 INSERT INTO m_operations (id, name, price, maintenance_id)
 VALUES (3, 'Air filter replacement', 56.34, 2);
 INSERT INTO m_operations (id, name, price, maintenance_id)
-VALUES (4, 'Replacing the cabin filter', 37.55, 2);
+VALUES (4, 'Cabin filter replacement', 37.55, 2);
 INSERT INTO m_operations (id, name, price, maintenance_id)
 VALUES (5, 'Brake fluid replacement', 89.99, 3);
 INSERT INTO m_operations (id, name, price, maintenance_id)
