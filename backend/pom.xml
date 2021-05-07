@@ -23,7 +23,7 @@
         <lombok.version>1.18.20</lombok.version>
         <flyway.version>7.8.2</flyway.version>
         <hibernate-orm.version>6.0.0.Alpha6</hibernate-orm.version>
-        <jasper.version>6.11.0</jasper.version>
+        <jasper.version>6.17.0</jasper.version>
         <jjwt.version>0.11.2</jjwt.version>
     </properties>
 
