@@ -50,7 +50,6 @@ import static org.springframework.http.ResponseEntity.ok;
 public class CarController {
 
   private final CarService carService;
-  private final OperationService operationService;
 
   @Operation(
       summary = "Get all cars or search by filter",
@@ -154,14 +153,6 @@ public class CarController {
     checkImageMediaType(photo.getContentType());
     carService.updateCarPhoto(id, photo);
     return ok().build();
-  }
-
-  @PostMapping("/{car_id}/operation")
-  public ResponseEntity<Long> saveOperation(
-      @PathVariable("car_id") @Min(1) final Long id,
-      @RequestBody @Valid OperationCreateRequest operationCreateRequest) {
-    return new ResponseEntity<>(
-        operationService.createOperation(id, operationCreateRequest), CREATED);
   }
 
   @GetMapping("/my")

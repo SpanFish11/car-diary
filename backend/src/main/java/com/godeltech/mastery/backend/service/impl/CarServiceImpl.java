@@ -51,8 +51,13 @@ public class CarServiceImpl implements CarService {
   }
 
   @Override
+  public Car findCarById(Long id) {
+    return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("car", id));
+  }
+
+  @Override
   public CarDTO getCarById(final Long id) {
-    return carMapper.map(getCar(id));
+    return carMapper.map(findCarById(id));
   }
 
   @Override
@@ -71,7 +76,7 @@ public class CarServiceImpl implements CarService {
 
   @Override
   public void updateCarPhoto(final Long id, final MultipartFile multipartFile) {
-    final var car = getCar(id);
+    final var car = findCarById(id);
     final var photoUrl = awsService.uploadImage(multipartFile, id);
     car.setPhotoUrl(photoUrl);
     carRepository.save(car);
@@ -87,10 +92,6 @@ public class CarServiceImpl implements CarService {
   public List<CarDTO> getCurrentClientCars(final Authentication principal) {
     final var client = clientService.getClient(principal);
     return carMapper.map(carRepository.getAllByClient(client));
-  }
-
-  private Car getCar(final Long id) {
-    return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("car", id));
   }
 
   private <T extends CarCreateRequest> Car saveCar(

@@ -2,12 +2,11 @@ package com.godeltech.mastery.backend.service.impl;
 
 import com.godeltech.mastery.backend.domain.dto.request.GuaranteeCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.GuaranteeDTO;
-import com.godeltech.mastery.backend.domain.entity.Car;
 import com.godeltech.mastery.backend.domain.entity.Guarantee;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.GuaranteeMapper;
-import com.godeltech.mastery.backend.repository.CarRepository;
 import com.godeltech.mastery.backend.repository.GuaranteeRepository;
+import com.godeltech.mastery.backend.service.CarService;
 import com.godeltech.mastery.backend.service.GuaranteeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class GuaranteeServiceImpl implements GuaranteeService {
 
   private final GuaranteeRepository guaranteeRepository;
-  private final CarRepository carRepository;
+  private final CarService carService;
   private final GuaranteeMapper guaranteeMapper;
 
   private static final Integer EXTENDED_YEAR = 5;
@@ -26,7 +25,7 @@ public class GuaranteeServiceImpl implements GuaranteeService {
   @Override
   public Long createGuarantee(
       final Long carId, final GuaranteeCreateRequest guaranteeCreateRequest) {
-    final var car = getCarById(carId);
+    final var car = carService.findCarById(carId);
     final Guarantee guarantee = guaranteeMapper.toEntity(guaranteeCreateRequest);
     if (guarantee.getExtended()) {
       guarantee.setEnd(guarantee.getStart().plusYears(EXTENDED_YEAR));
@@ -39,17 +38,14 @@ public class GuaranteeServiceImpl implements GuaranteeService {
 
   @Override
   public GuaranteeDTO getGuarantee(final Long carId) {
-    Guarantee guarantee =
+    final var car = carService.findCarById(carId);
+    final Guarantee guarantee =
         guaranteeRepository
-            .findByCar(getCarById(carId))
+            .findByCar(car)
             .orElseThrow(
                 () ->
                     new EntityNotFoundException(
                         "Could not find any guarantee with car id = " + carId));
     return guaranteeMapper.toDTO(guarantee);
-  }
-
-  private Car getCarById(final Long id) {
-    return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("car", id));
   }
 }
