@@ -1,43 +1,49 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import AddServiceRecord from "@/view/manager/serviceRecords/AddServiceRecord";
-import Login from "@/view/Login";
 
 Vue.use(VueRouter);
 
 const routes = [
-  { path: "/", name: "homepage" },
-  { path: "/service", component: AddServiceRecord },
-  { path: "/login", component: Login },
   {
-    path: "/manager",
-    name: "manager-cars",
-    component: () => import("../view/manager/ListOfAllCars"),
-  },
-  {
-    path: "/client",
-    name: "client-cars",
-    component: () => import("../view/client/Main"),
-  },
-  {
-    path: "/manager/cardetails/:carId",
-    name: "manager-cars-details",
-    component: () => import("../view/manager/cardetails/CarDetails"),
-  },
-  {
-    path: "/manager/client",
-    name: "manager-add-client",
-    component: () => import("../view/manager/client/AddNewClient"),
-  },
-  {
-    path: "/manager/soldcar",
-    name: "manager-add-sold-car",
-    component: () => import("../view/client/AddNewCarModal"),
-  },
-  {
-    path: "/manager/addServiceRecord",
-    name: "manager-add-service-record",
-    component: () => import("../view/manager/serviceRecords/AddServiceRecord"),
+    path: "/",
+    name: "THIS IS CAR DIARY",
+    component: () => import("@/view/Index"),
+    children: [
+      {
+        name: "Login",
+        path: "/login",
+        component: () => import("@/view/pages/LoginPage"),
+      },
+      {
+        name: "Client Cars",
+        path: "/client",
+        component: () => import("@/view/pages/client/ClientCars"),
+      },
+      {
+        name: "Cars",
+        path: "/manager",
+        component: () => import("@/view/pages/manager/CarsTable"),
+      },
+      {
+        name: "Add New Service Record",
+        path: "/manager/service/add",
+        component: () => import("@/view/pages/manager/CreateServiceRecord"),
+      },
+      {
+        name: "Sold Car",
+        path: "/manager/car/add",
+        component: () => import("@/view/pages/manager/SoldCar"),
+      },
+      {
+        name: "Add New Client",
+        path: "/manager/client/add",
+        component: () => import("@/view/pages/manager/CreateNewClient"),
+      },
+      {
+        path: "*",
+        component: () => import("@/view/pages/NotFound"),
+      },
+    ],
   },
 ];
 
@@ -48,3 +54,17 @@ const router = new VueRouter({
 });
 
 export default router;
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ["/login"];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem("user");
+
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+    next("/login");
+  } else {
+    next();
+  }
+});

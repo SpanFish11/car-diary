@@ -1,29 +1,13 @@
 <template>
-  <v-app>
-    <NavBar/>
-    <v-main>
-      <v-container fluid>
-        <router-view/>
-      </v-container>
-    </v-main>
-    <Footer/>
-  </v-app>
+  <router-view />
 </template>
 
 <script>
-import Footer from "@/components/Footer";
-import NavBar from "@/components/NavBar";
-
 export default {
   name: "App",
-  components: {
-    NavBar,
-    Footer,
-  },
   metaInfo: {
-    title: "Hello",
+    title: "Car Diary",
     titleTemplate: "%s | Car Diary",
   },
-  data: () => ({}),
 };
 </script>

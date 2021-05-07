@@ -1,36 +1,6 @@
 <template>
   <validation-observer ref="observer" v-slot="{ invalid }">
     <v-container>
-      <v-snackbar
-        color="error"
-        top
-        :multi-line="true"
-        v-model="snackbarError"
-        :timeout="10000"
-      >
-        <span>{{ message }}</span>
-        <template v-slot:action="{ attrs }">
-          <v-btn text v-bind="attrs" @click="snackbarError = false">
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
-
-      <v-snackbar
-        color="success"
-        top
-        :multi-line="true"
-        v-model="snackbarSuccess"
-        :timeout="10000"
-      >
-        <span>{{ message }}</span>
-        <template v-slot:action="{ attrs }">
-          <v-btn text v-bind="attrs" @click="snackbarSuccess = false">
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
-
       <v-overlay :value="overlay">
         <v-progress-circular indeterminate size="64"></v-progress-circular>
       </v-overlay>
@@ -493,23 +463,16 @@
 
 <script>
 import CarDiaryDataService from "@/services/CarDiaryDataService";
+import { mapMutations, mapState } from "vuex";
 
 export default {
-  name: "AddServiceRecord",
-  metaInfo: {
-    title: "Add Service Record",
-    titleTemplate: "%s | Manager Application",
-  },
+  name: "CreateServiceRecord.vue",
+
   data: () => ({
     servicePartItemFormValid: true,
     serviceServiceOperationFormValid: true,
-
-    snackbarSuccess: false,
-    snackbarError: false,
     message: "",
-
     overlay: false,
-
     dialogServiceOperation: false,
     dialogServiceOperationDelete: false,
     dialogServicePart: false,
@@ -588,6 +551,8 @@ export default {
     formServiceOperationPart() {
       return this.editedServicePartIndex === -1 ? "New Item" : "Edit Item";
     },
+    ...mapState(["snackbarSuccess"]),
+    ...mapState(["snackbarError"]),
   },
   watch: {
     dialogServiceOperation(val) {
@@ -604,6 +569,10 @@ export default {
     },
   },
   methods: {
+    ...mapMutations({
+      setSnackbarSuccess: "SET_SNACKBARSUCCESS",
+      setSnackbarError: "SET_SNACKBARERROR",
+    }),
     async loadMaintenances() {
       try {
         const res = await CarDiaryDataService.getAllMaintenances();
@@ -619,7 +588,6 @@ export default {
     },
     someMethod(serviceOperationName) {
       const self = this;
-
       if (serviceOperationName !== null) {
         const s = self.responceData.filter(
           (d) => d.operationNumber === serviceOperationName
@@ -676,7 +644,7 @@ export default {
     },
     async saveServiceRecord() {
       this.overlay = !this.overlay;
-
+      // todo создать класс
       const data = {
         serviceOperationNumber: this.serviceOperationName,
         date: this.date,
@@ -684,30 +652,26 @@ export default {
         serviceWorks: this.serviceWorks,
         changableParts: this.serviceParts,
       };
-
       // todo сделать красиво
       await new Promise((resolve) => {
         setTimeout(resolve, 2000);
       });
-
       try {
         const res = await CarDiaryDataService.createServiceRecord(
           this.carId,
           data
         );
-
         this.overlay = false;
         this.message = `Record successfully created`;
-        this.snackbarSuccess = true;
+        this.setSnackbarSuccess(!this.snackbarSuccess);
         console.log(res);
-
         this.clear();
       } catch (error) {
         // todo распарсить детаилс
         console.log(error.response);
         this.overlay = false;
         this.message = `${error.response.data.message}`;
-        this.snackbarError = true;
+        this.setSnackbarError(!this.snackbarError);
       }
     },
     editServiceOperationItem(item) {
@@ -817,5 +781,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
