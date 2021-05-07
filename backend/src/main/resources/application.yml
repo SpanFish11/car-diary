@@ -47,3 +47,24 @@ springdoc:
     tags-sorter: alpha
     operations-sorter: alpha
     disable-swagger-default-url: true
+
+jwt:
+  token:
+    secret: TOKjUGMU2g8CtpW2hOImR2u021i93PI9TICf/ytmmswjOGug9+RhGNlg2hgQx/uFv2McSS97fCfgbbxnrQS2Vw==
+    expiration: 864_000_000
+    issuer: security-mastery-api
+    audience: security-mastery-app
+
+security:
+  auth:
+    whitelist: >
+      /,
+      /api-docs
+      /v3/api-docs,
+      /swagger-ui.html,
+      /swagger-ui/**,
+      /swagger-resources/**,
+      /static/**,
+      /api-docs/**,
+      /templates/**,
+      /swagger-resources/**

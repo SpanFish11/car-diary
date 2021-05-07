@@ -1,40 +1,92 @@
 <template>
-  <header>
-    <b-navbar toggleable="lg" type="dark" variant="dark">
-      <b-navbar-brand href="/">CAR DIARY</b-navbar-brand>
+  <v-app-bar
+    app
+    absolute
+    color="#fcb69f"
+    dark
+    shrink-on-scroll
+    src="@/assets/Logo.jpg"
+  >
+    <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <v-app-bar-title>THIS IS CAR DIARY</v-app-bar-title>
 
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav>
-          <router-link to="/client" tag="b-nav-item">Client Application</router-link>
-          <b-nav-item-dropdown text="Manager Application" right>
-            <router-link to="/manager" tag="b-dropdown-item">List of all cars</router-link>
-            <router-link to="/manager/client" tag="b-dropdown-item">Add new client</router-link>
-            <router-link to="/manager/soldcar" tag="b-dropdown-item">Sold car</router-link>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
+    <v-spacer></v-spacer>
 
-        <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
+    <v-btn icon>
+      <v-icon>mdi-magnify</v-icon>
+    </v-btn>
 
-          <b-nav-item-dropdown right>
-            <!-- Using 'button-content' slot -->
-            <template #button-content>
-              <em>User</em>
-            </template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
-            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-          </b-nav-item-dropdown>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-  </header>
+    <v-btn icon>
+      <v-icon>mdi-heart</v-icon>
+    </v-btn>
+
+    <v-btn icon>
+      <v-icon>mdi-dots-vertical</v-icon>
+    </v-btn>
+
+    <template v-slot:extension>
+      <v-tabs align-with-title>
+        <router-link to="/" custom v-slot="{ navigate }">
+          <v-tab @click="navigate" @keypress.enter="navigate" role="link"
+            >Main</v-tab
+          >
+        </router-link>
+
+        <router-link to="/login" custom v-slot="{ navigate }">
+          <v-tab @click="navigate" @keypress.enter="navigate" role="link"
+            >Login</v-tab
+          >
+        </router-link>
+
+        <v-tab @click="logOut()">Sign out</v-tab>
+
+        <router-link to="/client" custom v-slot="{ navigate }">
+          <v-tab @click="navigate" @keypress.enter="navigate" role="link"
+            >client</v-tab
+          >
+        </router-link>
+
+        <router-link to="/manager" custom v-slot="{ navigate }">
+          <v-tab @click="navigate" @keypress.enter="navigate" role="link"
+            >Manager</v-tab
+          >
+        </router-link>
+
+        <router-link to="/manager/client" custom v-slot="{ navigate }">
+          <v-tab @click="navigate" @keypress.enter="navigate" role="link"
+            >Manager client</v-tab
+          >
+        </router-link>
+
+        <router-link to="/manager/soldcar" custom v-slot="{ navigate }">
+          <v-tab @click="navigate" @keypress.enter="navigate" role="link"
+            >Manager Sold Car</v-tab
+          >
+        </router-link>
+
+        <router-link to="/service" custom v-slot="{ navigate }">
+          <v-tab @click="navigate" @keypress.enter="navigate" role="link"
+            >Service Record</v-tab
+          >
+        </router-link>
+      </v-tabs>
+    </template>
+  </v-app-bar>
 </template>
 
 <script>
-export default {}
+export default {
+  name: "NavBar",
+  data: () => ({}),
+  methods: {
+    logOut() {
+      this.$store.dispatch("auth/logout");
+      this.$router.go(0);
+      this.$router.push("/");
+    },
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

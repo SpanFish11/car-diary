@@ -126,7 +126,7 @@ class ClientServiceUnitTest {
     given(clientRepository.save(client)).willReturn(expected);
     willDoNothing()
         .given(simpleApplicationEventMulticaster)
-        .multicastEvent(new ClientCreateEvent(this, client));
+        .multicastEvent(new ClientCreateEvent(this, client, null));
 
     final var actual = clientService.createClient(request);
     assertThat(actual, is(expected.getId()));

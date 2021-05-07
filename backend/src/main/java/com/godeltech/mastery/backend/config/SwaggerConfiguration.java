@@ -13,7 +13,7 @@ import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
 import static java.util.Arrays.asList;
 
 @Configuration
-public class SwaggerConfig {
+public class SwaggerConfiguration {
 
   @Bean
   public OpenAPI customOpenAPI(

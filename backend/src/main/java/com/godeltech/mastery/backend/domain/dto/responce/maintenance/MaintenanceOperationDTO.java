@@ -12,8 +12,6 @@ import java.math.BigDecimal;
 public class MaintenanceOperationDTO {
 
   private Long id;
-
   private String name;
-
   private BigDecimal price;
 }

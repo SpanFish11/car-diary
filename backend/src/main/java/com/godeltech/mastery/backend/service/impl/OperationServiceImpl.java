@@ -2,17 +2,13 @@ package com.godeltech.mastery.backend.service.impl;
 
 import com.godeltech.mastery.backend.domain.dto.request.OperationCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.ServiceOperationRecordDTO;
-import com.godeltech.mastery.backend.domain.entity.Car;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.OperationMapper;
-import com.godeltech.mastery.backend.repository.CarRepository;
 import com.godeltech.mastery.backend.repository.OperationRepository;
+import com.godeltech.mastery.backend.service.CarService;
 import com.godeltech.mastery.backend.service.OperationService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -28,18 +24,23 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
+import static net.sf.jasperreports.engine.JasperCompileManager.compileReport;
+import static net.sf.jasperreports.engine.JasperExportManager.exportReportToHtmlFile;
+import static net.sf.jasperreports.engine.JasperExportManager.exportReportToPdfFile;
+import static net.sf.jasperreports.engine.JasperFillManager.fillReport;
+
 @Service
 @RequiredArgsConstructor
 public class OperationServiceImpl implements OperationService {
 
   private final OperationRepository operationRepository;
-  private final CarRepository carRepository;
+  private final CarService carService;
   private final OperationMapper operationMapper;
 
   @Override
   public Long createOperation(final Long carId, final OperationCreateRequest operation) {
     final var serviceOperationRecord = operationMapper.toEntity(operation);
-    final var car = getCarById(carId);
+    final var car = carService.findCarById(carId);
     car.setMileage(operation.getMileage());
     serviceOperationRecord.setCar(car);
     return operationRepository.save(serviceOperationRecord).getId();
@@ -47,18 +48,18 @@ public class OperationServiceImpl implements OperationService {
 
   @Override
   public List<ServiceOperationRecordDTO> getAllRecordsByCarId(final Long carId) {
-    final var car = getCarById(carId);
+    final var car = carService.findCarById(carId);
     return operationMapper.toDTOList(operationRepository.getAllByCar(car).orElseThrow(() -> new EntityNotFoundException("Could not find any operation records by car id = " + carId)));
   }
 
   @Override
   public void createReport(final Long carId, final String pathName, final String fileFormat) {
-    final var car = getCarById(carId);
+    final var car = carService.findCarById(carId);
     final InputStream stream = this.getClass().getResourceAsStream("/generateReport/report.jrxml");
     try {
-      final JasperReport report = JasperCompileManager.compileReport(stream);
+      final JasperReport report = compileReport(stream);
       final var source = new JRBeanCollectionDataSource(List.of(car));
-      final JasperPrint print = JasperFillManager.fillReport(report, new HashMap<>(), source);
+      final JasperPrint print = fillReport(report, new HashMap<>(), source);
       switch (fileFormat == null ? "pdf" : fileFormat.toLowerCase()) {
         case "csv" -> {
           final var exporterCsv = new JRCsvExporter();
@@ -74,16 +75,12 @@ public class OperationServiceImpl implements OperationService {
                   new SimpleOutputStreamExporterOutput(new File(pathName + "/carOperations.docx")));
           exporterDocx.exportReport();
         }
-        case "html" -> JasperExportManager.exportReportToHtmlFile(print, pathName + "/carOperations.html");
-        case "pdf" -> JasperExportManager.exportReportToPdfFile(print, pathName + "/carOperations.pdf");
+        case "html" -> exportReportToHtmlFile(print, pathName + "/carOperations.html");
+        case "pdf" -> exportReportToPdfFile(print, pathName + "/carOperations.pdf");
         default -> throw new IllegalArgumentException("Not supported type to print. Type = " + fileFormat);
       }
-    } catch (JRException ex) {
+    } catch (final JRException ex) {
       ex.printStackTrace();
     }
-  }
-
-  private Car getCarById(final Long id) {
-    return carRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("car", id));
   }
 }

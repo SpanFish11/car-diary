@@ -12,14 +12,9 @@ import java.util.List;
 public class MaintenanceDTO {
 
   private Long id;
-
   private String operationNumber;
-
   private Integer mileage;
-
   private Integer timeInterval;
-
   private List<MaintenanceOperationDTO> operations;
-
   private List<DetailDTO> details;
 }

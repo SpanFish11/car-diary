@@ -1,44 +1,29 @@
 <template>
-  <div id="app">
+  <v-app>
     <NavBar/>
-    <div> <!--    v-if='this.$route.path == "/"'-->
-      <b-jumbotron id="jumbo" header="THIS IS CAR DIARY" class="text-center container-fluid">
-
-        <template #lead>
-          The unique and free car management system
-        </template>
-      </b-jumbotron>
-    </div>
-    <b-overlay :show="show" rounded="sm">
-      <router-view :key="$route.fullPath"/>
-    </b-overlay>
-  </div>
+    <v-main>
+      <v-container fluid>
+        <router-view/>
+      </v-container>
+    </v-main>
+    <Footer/>
+  </v-app>
 </template>
 
 <script>
-
-import NavBar from '@/components/NavBar'
+import Footer from "@/components/Footer";
+import NavBar from "@/components/NavBar";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    NavBar
+    NavBar,
+    Footer,
   },
   metaInfo: {
-    title: 'Hello',
-    titleTemplate: '%s | Car Diary'
+    title: "Hello",
+    titleTemplate: "%s | Car Diary",
   },
-  data: () => ({
-    show: false
-  })
-}
+  data: () => ({}),
+};
 </script>
-
-<style>
-#jumbo {
-  color: white;
-  text-shadow: 1px 1px 2px black, 0 0 1em black;
-  background-image: url('https://i.ibb.co/0B6VGBj/wallhaven-5w33q3ff-1.jpg');
-  -webkit-background-size: cover;
-}
-</style>

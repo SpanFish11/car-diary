@@ -2,9 +2,11 @@ package com.godeltech.mastery.backend.rest;
 
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
 import com.godeltech.mastery.backend.domain.dto.request.Filter;
+import com.godeltech.mastery.backend.domain.dto.request.OperationCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.service.CarService;
+import com.godeltech.mastery.backend.service.OperationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.List;
 import java.util.Objects;
 
 import static java.util.List.of;
@@ -149,6 +153,11 @@ public class CarController {
     checkImageMediaType(photo.getContentType());
     carService.updateCarPhoto(id, photo);
     return ok().build();
+  }
+
+  @GetMapping("/my")
+  public ResponseEntity<List<CarDTO>> getMyCars(final Authentication principal) {
+    return ok(carService.getCurrentClientCars(principal));
   }
 
   private void checkImageMediaType(final String type) throws HttpMediaTypeNotSupportedException {
