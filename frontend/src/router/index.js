@@ -21,13 +21,23 @@ const routes = [
       },
       {
         name: "Add New Service Record",
-        path: "/cars/service/add",
+        path: "/cars/service/add/:id",
         component: () => import("@/view/pages/manager/CreateServiceRecord"),
       },
       {
         name: "Client Cars",
         path: "/client",
         component: () => import("@/view/pages/client/ClientCars"),
+      },
+      {
+        name: "Car details",
+        path: "/cardetails/:carId",
+        component: () => import("@/view/pages/cardetails/CarDetails"),
+      },
+      {
+        name: "Add Car guarantee",
+        path: "/manager/guarantee",
+        component: () => import("@/view/pages/manager/CreateGuarantee"),
       },
       {
         path: "*",

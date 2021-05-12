@@ -166,19 +166,36 @@
         <template v-slot:[`item.actions`]="{ item }">
           <router-link
             :to="{
-              name: 'manager-cars-details',
+              name: 'Car details',
               params: { carId: item.id },
             }"
             custom
             v-slot="{ navigate }"
           >
             <v-btn
-              color="primary"
               @click="navigate"
               @keypress.enter="navigate"
               role="link"
+              color="primary"
             >
               Details
+            </v-btn>
+          </router-link>
+          <router-link
+            :to="{
+              name: 'Add New Service Record',
+              params: { id: item.id },
+            }"
+            custom
+            v-slot="{ navigate }"
+          >
+            <v-btn
+              @click="navigate"
+              @keypress.enter="navigate"
+              role="link"
+              color="primary"
+            >
+              Add Service Record
             </v-btn>
           </router-link>
         </template>

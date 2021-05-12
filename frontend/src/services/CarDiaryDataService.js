@@ -3,7 +3,7 @@ import authHeader from "@/services/auth-header";
 
 class CarDiaryDataService {
   createServiceRecord(carId, serviceRecord) {
-    return AXIOS.post(`cars/${carId}/operation`, serviceRecord, {
+    return AXIOS.post(`/operations/${carId}`, serviceRecord, {
       headers: authHeader(),
     });
   }
@@ -32,6 +32,29 @@ class CarDiaryDataService {
 
   getLastAddedClientCar(carId) {
     return AXIOS.get(`clients/cars/${carId}`, { headers: authHeader() });
+  }
+
+  createGuarantee(carId, request) {
+    return AXIOS.post(`guarantee/${carId}`, request, { headers: authHeader() });
+  }
+
+  getCarById(carId) {
+    return AXIOS.get(`/cars/${carId}`, { headers: authHeader() });
+  }
+
+  getGuaranteeByCarId(carId) {
+    return AXIOS.get(`/guarantee/${carId}`, { headers: authHeader() });
+  }
+
+  getServiceRecordsByCarId(carId) {
+    return AXIOS.get(`/operations/${carId}`, { headers: authHeader() });
+  }
+
+  printHistoryOfServiceRecord(carId) {
+    return AXIOS.get(`/operations/${carId}/print`, {
+      headers: authHeader(),
+      responseType: "arraybuffer",
+    });
   }
 }
 

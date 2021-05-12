@@ -467,7 +467,7 @@ import { mapMutations, mapState } from "vuex";
 
 export default {
   name: "CreateServiceRecord.vue",
-
+  props: ["id"],
   data: () => ({
     servicePartItemFormValid: true,
     serviceServiceOperationFormValid: true,
@@ -543,6 +543,7 @@ export default {
   }),
   mounted() {
     this.loadMaintenances();
+    this.carId = this.$route.params.id;
   },
   computed: {
     formServiceOperationTitle() {
@@ -632,7 +633,6 @@ export default {
     submit() {
       this.validate();
       this.saveServiceRecord();
-      // todo перекинуть ли обратно на машину
     },
     clear() {
       this.serviceOperationName = null;
@@ -666,6 +666,11 @@ export default {
         this.setSnackbarSuccess(!this.snackbarSuccess);
         console.log(res);
         this.clear();
+        await this.$router.push({
+          name: "Car details",
+          params: { carId: this.carId.toString() },
+        });
+        this.$router.go(1);
       } catch (error) {
         // todo распарсить детаилс
         console.log(error.response);
