@@ -7,8 +7,8 @@ class AuthService {
     return AXIOS.post("auth", user).then((response) => {
       const token = response.data.token;
       if (token) {
-        const { roles } = jwt_decode(token);
-        const user = new User(token, roles);
+        const { roles, sub_id } = jwt_decode(token);
+        const user = new User(token, roles, sub_id);
         localStorage.setItem("user", JSON.stringify(user));
       }
       return response.data;
