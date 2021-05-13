@@ -15,11 +15,6 @@ const routes = [
     component: () => import("@/view/Index"),
     children: [
       {
-        name: "Login",
-        path: "/login",
-        component: () => import("@/view/pages/LoginPage"),
-      },
-      {
         name: "Client Cars",
         path: "/client",
         component: () => import("@/view/pages/client/ClientCars"),
