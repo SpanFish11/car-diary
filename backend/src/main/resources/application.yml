@@ -50,7 +50,7 @@ springdoc:
 
 jwt:
   token:
-    secret: ${JWT_SECRET:BpqseAejxv28Nh8+iul828gsjd9DqxveaiORzz0PqseiqqYSMen4Sl3QzY8QovI2V1il+urCaaqaK7JD4ZR8Aw==}
+    secret: ${JWT_SECRET:seckret}
     expiration: ${JWT_EXPIRATION:86000000}
     issuer: ${JWT_ISSUER:api}
     audience: ${JWT_AUDIENCE:app}
@@ -68,8 +68,7 @@ security:
       /api-docs/**,
       /templates/**,
       /swagger-resources/**,
-      /index.html,
-      /favicon.ico
+      /index.html
 
 tinify:
-  key: Fgl9cqV6ZJb13302cwfSBRMDF7lDSL6t
+  key: ${TINIFY_SECRET_KEY:key}

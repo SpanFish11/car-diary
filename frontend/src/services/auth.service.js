@@ -8,8 +8,8 @@ class AuthService {
       const token = response.data.token;
       if (token) {
         const { roles, sub_id } = jwt_decode(token);
-        const user = new User(token, roles, sub_id);
-        localStorage.setItem("user", JSON.stringify(user));
+        const newUser = new User(token, roles, sub_id);
+        localStorage.setItem("user", JSON.stringify(newUser));
       }
       return response.data;
     });
