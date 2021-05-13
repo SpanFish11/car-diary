@@ -1,14 +1,7 @@
 package com.godeltech.mastery.backend.service.impl;
 
-import static java.lang.String.format;
-import static java.nio.ByteBuffer.wrap;
-import static java.util.UUID.randomUUID;
-import static software.amazon.awssdk.core.async.AsyncRequestBody.fromByteBuffer;
-import static software.amazon.awssdk.services.s3.model.ObjectCannedACL.PUBLIC_READ;
-
 import com.godeltech.mastery.backend.service.AwsService;
 import com.tinify.Tinify;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +12,14 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Utilities;
 import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+
+import java.io.IOException;
+
+import static java.lang.String.format;
+import static java.nio.ByteBuffer.wrap;
+import static java.util.UUID.randomUUID;
+import static software.amazon.awssdk.core.async.AsyncRequestBody.fromByteBuffer;
+import static software.amazon.awssdk.services.s3.model.ObjectCannedACL.PUBLIC_READ;
 
 @Slf4j
 @Service
