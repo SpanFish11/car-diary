@@ -10,24 +10,29 @@ const routes = [
     component: () => import("@/view/Index"),
     children: [
       {
-        name: "Cars",
-        path: "/cars",
-        component: () => import("@/view/pages/manager/CarsTable"),
-      },
-      {
         name: "Login",
         path: "/login",
         component: () => import("@/view/pages/LoginPage"),
       },
       {
-        name: "Add New Service Record",
-        path: "/cars/service/add/:id",
-        component: () => import("@/view/pages/manager/CreateServiceRecord"),
-      },
-      {
         name: "Client Cars",
         path: "/client",
         component: () => import("@/view/pages/client/ClientCars"),
+      },
+      {
+        name: "Cars",
+        path: "/manager",
+        component: () => import("@/view/pages/manager/CarsTable"),
+      },
+      {
+        name: "Add New Service Record",
+        path: "/manager/service/add",
+        component: () => import("@/view/pages/manager/CreateServiceRecord"),
+      },
+      {
+        name: "Sold Car",
+        path: "/manager/car/add",
+        component: () => import("@/view/pages/manager/SoldCar"),
       },
       {
         name: "Car details",

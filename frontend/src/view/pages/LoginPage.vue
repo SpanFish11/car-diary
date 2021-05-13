@@ -67,7 +67,7 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
-import AuthRequest from "@/models/auth.request";
+import AuthRequest from "@/models/auth_request";
 
 // TODO доделать логин и в принципе авторизацию
 
@@ -97,7 +97,7 @@ export default {
       try {
         await this.$store.dispatch("auth/login", this.user).then(() => {
           this.setSnackbarSuccess(!this.snackbarSuccess);
-          this.$router.push("/client");
+          // TODO !!!!!!!!!!!!!!!!!!!! редирект настроить
         });
       } catch (error) {
         this.inProgress = false;

@@ -2,8 +2,8 @@
   <v-container style="text-align: center" fluid class="NotFound">
     <v-layout row wrap>
       <v-flex xs12>
-        <v-card height="400" color="transparent" flat>
-          <div class="display-3 mt-5">Page not found.</div>
+        <v-card class="mt-16" height="400" color="transparent" flat>
+          <div class="text-h1">Page not found.</div>
           <div class="grey--text lighten-5">
             The page you are trying to get to never existed in this reality, or
             has migrated to a parallel universe.

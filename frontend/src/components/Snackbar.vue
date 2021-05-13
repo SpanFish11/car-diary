@@ -42,15 +42,6 @@
 import { mapMutations } from "vuex";
 
 // todo сделать передучу сообщения
-
-// computed: {
-// ...mapState(["snackbarSuccess"]),
-// },
-
-// ...mapMutations({
-//   setSnackbarSuccess: "SET_SNACKBARSUCCESS",
-// }),
-
 export default {
   name: "Snackbar",
   data: () => ({}),

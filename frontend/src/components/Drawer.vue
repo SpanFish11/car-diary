@@ -76,12 +76,18 @@ export default {
       {
         title: "Home",
         icon: "mdi-home-city",
-        to: "/cars",
+        to: "/manager",
       },
       {
         title: "Add Service Record",
         icon: "mdi-clipboard-outline",
         to: "/cars/service/add",
+        to: "/manager/service/add",
+      },
+      {
+        title: "Sold Car",
+        icon: "mdi-car",
+        to: "/manager/car/add",
       },
     ],
   }),

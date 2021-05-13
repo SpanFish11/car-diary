@@ -1,5 +1,5 @@
 <template>
-  <v-footer dark>
+  <v-footer app class="justify-center pt-0" inset dark>
     <v-container>
       <v-row flat align="center" no-gutters>
         <v-spacer class="hidden-sm-and-down" />

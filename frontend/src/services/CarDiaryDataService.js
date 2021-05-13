@@ -1,5 +1,4 @@
 import { AXIOS } from "@/http-common";
-import authHeader from "@/services/auth-header";
 
 class CarDiaryDataService {
   createServiceRecord(carId, serviceRecord) {
@@ -31,7 +30,32 @@ class CarDiaryDataService {
   }
 
   getLastAddedClientCar(carId) {
-    return AXIOS.get(`clients/cars/${carId}`, { headers: authHeader() });
+    return AXIOS.get(`/cars/${carId}`, { headers: authHeader() });
+  }
+
+  saveNewCar(car) {
+    return AXIOS.post(`clients/1/cars`, car, { headers: authHeader() });
+  }
+
+  saveCarImage(carId, photo) {
+    let header = authHeader();
+    Object.assign(header, { "Content-Type": "multipart/form-data" });
+    return AXIOS.patch(`cars/${carId}/photos`, photo, { headers: header });
+  }
+
+  getAllClients() {
+    return AXIOS.get(`/clients`, { headers: authHeader() });
+  }
+
+  getAllClientsCars(clientId) {
+    return AXIOS.get(`/clients/${clientId}/cars`, { headers: authHeader() });
+  }
+
+  getAllEquipments() {
+    return AXIOS.get(`equipments`, { headers: authHeader() });
+    return AXIOS.get(`maintenances`, {
+      headers: authHeader(),
+    });
   }
 
   createGuarantee(carId, request) {
