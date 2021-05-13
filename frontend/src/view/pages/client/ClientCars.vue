@@ -455,14 +455,16 @@ export default {
     },
     async getLastAddedCar(carId) {
       try {
-        const res = await CarDiaryDataService.getLastAddedClientCar(carId);
+        const res = await CarDiaryDataService.getAllClientsCars(this.currentUser.userId);
+        const cars = res.data;
+        const car = cars.find((c) => c.id === carId)
         this.cars.push({
-          id: res.data.id,
-          brand: res.data.brand.name,
-          model: res.data.model.name,
-          photo: res.data.photoUrl,
-          year: res.data.year,
-          mileage: res.data.mileage,
+          id: car.id,
+          brand: car.brand.name,
+          model: car.model.name,
+          photo: car.photoUrl,
+          year: car.year,
+          mileage: car.mileage,
         });
       } catch (error) {
         console.log(error.response);

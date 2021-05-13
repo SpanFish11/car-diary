@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface MaintenanceService {
 
-    List<MaintenanceDTO> getAllMaintenance();
+  List<MaintenanceDTO> getAllMaintenance();
 }
