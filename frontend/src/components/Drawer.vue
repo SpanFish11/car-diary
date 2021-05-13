@@ -1,13 +1,14 @@
 <template>
   <v-navigation-drawer
-      app
-      v-model="drawer"
-      dark
-      flat
-      :expand-on-hover="expandOnHover"
-      mobile-breakpoint="960"
-      width="260">
-    <v-divider class="mb-1"/>
+    app
+    v-model="drawer"
+    dark
+    flat
+    :expand-on-hover="expandOnHover"
+    mobile-breakpoint="960"
+    width="260"
+  >
+    <v-divider class="mb-1" />
 
     <v-list dense nav>
       <v-list-item>
@@ -24,7 +25,7 @@
       </v-list-item>
     </v-list>
 
-    <v-divider class="mb-2"/>
+    <v-divider class="mb-2" />
 
     <v-list expand nav>
       <div />
@@ -37,17 +38,17 @@
           <v-list-item-content>
             <router-link :to="item.to" custom v-slot="{ navigate }">
               <v-list-item-title
-                  @click="navigate"
-                  @keypress.enter="navigate"
-                  role="link"
-                  v-text="item.title"
+                @click="navigate"
+                @keypress.enter="navigate"
+                role="link"
+                v-text="item.title"
               >
               </v-list-item-title>
             </router-link>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
-      <div/>
+      <div />
     </v-list>
   </v-navigation-drawer>
 </template>

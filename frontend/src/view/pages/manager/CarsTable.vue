@@ -6,19 +6,19 @@
           <v-toolbar-title>All Cars</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-menu
-              v-model="menu"
-              :nudge-width="200"
-              offset-x
-              :close-on-content-click="false"
-              transition="scale-transition"
+            v-model="menu"
+            :nudge-width="200"
+            offset-x
+            :close-on-content-click="false"
+            transition="scale-transition"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-badge
-                  :content="apply_filters"
-                  :value="apply_filters"
-                  bordered
-                  color="red"
-                  overlap
+                :content="apply_filters"
+                :value="apply_filters"
+                bordered
+                color="red"
+                overlap
               >
                 <v-btn color="primary" v-bind="attrs" v-on="on"> Filters</v-btn>
               </v-badge>
@@ -33,59 +33,59 @@
                 <v-row align="center">
                   <v-col cols="5">
                     <v-select
-                        v-model="filter.modelId"
-                        :items="models"
-                        menu-props="auto"
-                        clearable
-                        label="Model"
-                        hide-details
-                        prepend-icon="mdi-car"
-                        single-line
+                      v-model="filter.modelId"
+                      :items="models"
+                      menu-props="auto"
+                      clearable
+                      label="Model"
+                      hide-details
+                      prepend-icon="mdi-car"
+                      single-line
                     ></v-select>
                   </v-col>
                 </v-row>
                 <v-row align="center">
                   <v-col cols="5">
                     <v-select
-                        v-model="filter.specificYear"
-                        :items="years"
-                        menu-props="auto"
-                        clearable
-                        label="Specific Year"
-                        :disabled="filter.from || filter.until"
-                        hide-details
-                        prepend-icon="mdi-calendar"
-                        single-line
+                      v-model="filter.specificYear"
+                      :items="years"
+                      menu-props="auto"
+                      clearable
+                      label="Specific Year"
+                      :disabled="filter.from || filter.until"
+                      hide-details
+                      prepend-icon="mdi-calendar"
+                      single-line
                     ></v-select>
                   </v-col>
                 </v-row>
                 <v-row align="center">
                   <v-col cols="5">
                     <v-select
-                        v-model="filter.from"
-                        :items="years"
-                        menu-props="auto"
-                        :disabled="filter.specificYear"
-                        clearable
-                        label="From"
-                        hide-details
-                        prepend-icon="mdi-calendar"
-                        single-line
-                        @change="generateYears"
+                      v-model="filter.from"
+                      :items="years"
+                      menu-props="auto"
+                      :disabled="filter.specificYear"
+                      clearable
+                      label="From"
+                      hide-details
+                      prepend-icon="mdi-calendar"
+                      single-line
+                      @change="generateYears"
                     ></v-select>
                   </v-col>
                   <v-col cols="5">
                     <v-select
-                        :disabled="filter.specificYear"
-                        v-model="filter.until"
-                        :items="years"
-                        menu-props="auto"
-                        clearable
-                        label="Until"
-                        hide-details
-                        prepend-icon="mdi-calendar"
-                        single-line
-                        @change="generateYears"
+                      :disabled="filter.specificYear"
+                      v-model="filter.until"
+                      :items="years"
+                      menu-props="auto"
+                      clearable
+                      label="Until"
+                      hide-details
+                      prepend-icon="mdi-calendar"
+                      single-line
+                      @change="generateYears"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -103,28 +103,26 @@
           </v-menu>
 
           <v-spacer></v-spacer>
-          <router-link
-              :to="{name: 'Sold Car'}"
-              custom
-              v-slot="{ navigate }">
+          <router-link :to="{ name: 'Sold Car' }" custom v-slot="{ navigate }">
             <v-btn
-                color="primary"
-                @click="navigate"
-                @keypress.enter="navigate"
-                role="link">
+              color="primary"
+              @click="navigate"
+              @keypress.enter="navigate"
+              role="link"
+            >
               New Car
             </v-btn>
           </router-link>
         </v-toolbar>
       </v-card-title>
       <v-data-table
-          :headers="headers"
-          :items="cars"
-          :options.sync="options"
-          :server-items-length="totalCars"
-          :loading="loading"
-          elevation="1"
-          :footer-props="{
+        :headers="headers"
+        :items="cars"
+        :options.sync="options"
+        :server-items-length="totalCars"
+        :loading="loading"
+        elevation="1"
+        :footer-props="{
           showFirstLastPage: true,
           firstIcon: 'mdi-arrow-collapse-left',
           lastIcon: 'mdi-arrow-collapse-right',
@@ -137,25 +135,25 @@
             <v-row>
               <v-col cols="7" sm="6">
                 <v-text-field
-                    dense
-                    clearable
-                    append-icon="mdi-magnify"
-                    label="Search"
-                    single-line
-                    hide-details
-                    :disabled="!filter.filterOn"
-                    v-model="filter.search"
-                    @change="getDataFromApi"
+                  dense
+                  clearable
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
+                  :disabled="!filter.filterOn"
+                  v-model="filter.search"
+                  @change="getDataFromApi"
                 ></v-text-field>
               </v-col>
               <v-col cols="5" sm="3">
                 <v-autocomplete
-                    :items="searchBy"
-                    v-model="filter.filterOn"
-                    clearable
-                    dense
-                    @change="changeSearchBy"
-                    label="Search By"
+                  :items="searchBy"
+                  v-model="filter.filterOn"
+                  clearable
+                  dense
+                  @change="changeSearchBy"
+                  label="Search By"
                 ></v-autocomplete>
               </v-col>
             </v-row>
@@ -168,43 +166,44 @@
 
         <template v-slot:[`item.our`]="{ item }">
           <v-icon v-if="item.our === true" color="green"
-          >mdi-checkbox-marked
+            >mdi-checkbox-marked
           </v-icon>
           <v-icon v-if="item.our === false" color="red">mdi-minus-box</v-icon>
         </template>
 
         <template v-slot:[`item.actions`]="{ item }">
           <router-link
-              :to="{
+            :to="{
               name: 'Car details',
               params: { carId: item.id },
             }"
-              custom
-              v-slot="{ navigate }"
+            custom
+            v-slot="{ navigate }"
           >
             <v-btn
-                @click="navigate"
-                @keypress.enter="navigate"
-                role="link"
-                color="primary"
+              @click="navigate"
+              @keypress.enter="navigate"
+              role="link"
+              color="primary"
             >
               Details
             </v-btn>
           </router-link>
           <router-link
-              :to="{
+            :to="{
               name: 'Add New Service Record',
               params: { id: item.id },
             }"
-              custom
-              v-slot="{ navigate }"
+            custom
+            v-slot="{ navigate }"
           >
             <v-btn
-                @click="navigate"
-                @keypress.enter="navigate"
-                role="link"
-                color="primary"
-                class="ml-1">
+              @click="navigate"
+              @keypress.enter="navigate"
+              role="link"
+              color="primary"
+              class="ml-1"
+            >
               Add Service Record
             </v-btn>
           </router-link>
@@ -223,8 +222,8 @@ export default {
   data: () => ({
     filter: new Filter(),
     searchBy: [
-      {id: 0, text: "VIN"},
-      {id: 1, text: "Last Name"},
+      { id: 0, text: "VIN" },
+      { id: 1, text: "Last Name" },
     ],
     models: [],
     apply_filters: 0,
@@ -237,14 +236,14 @@ export default {
     loading: true,
     options: {},
     headers: [
-      {text: "Brand", value: "brand", sortable: false},
-      {text: "Model", value: "model", sortable: false},
-      {text: "VIN", value: "vin", sortable: false},
-      {text: "Year", value: "year", sortable: false},
-      {text: "Mileage", value: "mileage", sortable: false},
-      {text: "Client full name", value: "client", sortable: false},
-      {text: "Our", value: "our", sortable: false},
-      {text: "Actions", value: "actions", sortable: false},
+      { text: "Brand", value: "brand", sortable: false },
+      { text: "Model", value: "model", sortable: false },
+      { text: "VIN", value: "vin", sortable: false },
+      { text: "Year", value: "year", sortable: false },
+      { text: "Mileage", value: "mileage", sortable: false },
+      { text: "Client full name", value: "client", sortable: false },
+      { text: "Our", value: "our", sortable: false },
+      { text: "Actions", value: "actions", sortable: false },
     ],
   }),
   watch: {
@@ -262,7 +261,7 @@ export default {
   },
   methods: {
     requestParams() {
-      const {page, itemsPerPage} = this.options;
+      const { page, itemsPerPage } = this.options;
       this.filter.page = page;
       this.filter.pageSize = itemsPerPage;
     },
@@ -271,7 +270,7 @@ export default {
       this.requestParams();
       try {
         const res = await CarDiaryDataService.getAllCars(this.filter.setUp());
-        const {content, totalElements} = res.data;
+        const { content, totalElements } = res.data;
         this.cars = this.resolveResponse(content);
         this.totalCars = totalElements;
         this.loading = false;
@@ -290,7 +289,7 @@ export default {
           vin: item.vin,
           year: item.year,
           mileage: item.mileage,
-          client: {first: item.client.firstName, last: item.client.lastName},
+          client: { first: item.client.firstName, last: item.client.lastName },
           our: item.ours,
         });
       });
@@ -303,7 +302,7 @@ export default {
         for (const brand of response.data) {
           const res = await CarDiaryDataService.getBrandModels(brand.id);
           res.data.forEach(function (model) {
-            self.models.push({value: model.id, text: model.name});
+            self.models.push({ value: model.id, text: model.name });
           });
         }
       } catch (error) {
@@ -313,8 +312,8 @@ export default {
     generateYears() {
       const min = this.filter.from ? this.filter.from : 1900;
       const max = this.filter.until
-          ? this.filter.until
-          : new Date().getFullYear().valueOf();
+        ? this.filter.until
+        : new Date().getFullYear().valueOf();
       const arr = [];
       for (let i = min; i <= max; i++) {
         arr.push(i);

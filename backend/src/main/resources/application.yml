@@ -50,10 +50,10 @@ springdoc:
 
 jwt:
   token:
-    secret: TOKjUGMU2g8CtpW2hOImR2u021i93PI9TICf/ytmmswjOGug9+RhGNlg2hgQx/uFv2McSS97fCfgbbxnrQS2Vw==
-    expiration: 864_000_000
-    issuer: security-mastery-api
-    audience: security-mastery-app
+    secret: ${JWT_SECRET:BpqseAejxv28Nh8+iul828gsjd9DqxveaiORzz0PqseiqqYSMen4Sl3QzY8QovI2V1il+urCaaqaK7JD4ZR8Aw==}
+    expiration: ${JWT_EXPIRATION:86000000}
+    issuer: ${JWT_ISSUER:api}
+    audience: ${JWT_AUDIENCE:app}
 
 security:
   auth:
