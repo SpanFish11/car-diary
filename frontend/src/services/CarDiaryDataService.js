@@ -56,6 +56,14 @@ class CarDiaryDataService {
     return AXIOS.get(`equipments`, { headers: authHeader() });
   }
 
+  saveNewClient(client) {
+    return AXIOS.post(`/clients`, client, { headers: authHeader() });
+  }
+
+  saveCar(car) {
+    return AXIOS.post(`/cars`, car, { headers: authHeader() });
+  }
+
   createGuarantee(carId, request) {
     return AXIOS.post(`guarantee/${carId}`, request, { headers: authHeader() });
   }
@@ -78,6 +86,7 @@ class CarDiaryDataService {
       responseType: "arraybuffer",
     });
   }
+
 }
 
 export default new CarDiaryDataService();

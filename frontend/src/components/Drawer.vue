@@ -13,8 +13,8 @@
       <v-list-item>
         <v-list-item-avatar class="align-self-center" color="white" contain>
           <v-img
-              src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-              max-height="30"
+            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
+            max-height="30"
           />
         </v-list-item-avatar>
 
@@ -27,7 +27,7 @@
     <v-divider class="mb-2"/>
 
     <v-list expand nav>
-      <div/>
+      <div />
       <v-list-item-group v-model="model">
         <v-list-item v-for="(item, i) in items" :key="i">
           <v-list-item-icon>
@@ -80,13 +80,17 @@ export default {
       {
         title: "Add Service Record",
         icon: "mdi-clipboard-outline",
-        // to: "/cars/service/add",
         to: "/manager/service/add",
       },
       {
         title: "Sold Car",
         icon: "mdi-car",
         to: "/manager/car/add",
+      },
+      {
+        title: "Add New Client",
+        icon: "mdi-account",
+        to: "/manager/client/add",
       },
     ],
   }),
@@ -106,7 +110,7 @@ export default {
   // TODO костыль
   methods: {
     resolveRole() {
-      const {roles} = this.currentUser;
+      const { roles } = this.currentUser;
       if (roles.includes("user") && roles.length === 1) {
         this.items = this.user_role;
       } else {

@@ -35,6 +35,11 @@ const routes = [
         component: () => import("@/view/pages/manager/SoldCar"),
       },
       {
+        name: "Add New Client",
+        path: "/manager/client/add",
+        component: () => import("@/view/pages/manager/CreateNewClient"),
+      },
+      {
         name: "Car details",
         path: "/cardetails/:carId",
         component: () => import("@/view/pages/cardetails/CarDetails"),
