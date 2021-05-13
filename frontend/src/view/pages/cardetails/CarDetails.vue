@@ -34,13 +34,15 @@
             No guarantee
             <v-icon color="red" medium>mdi-alert-octagram-outline</v-icon>
           </h3>
-          <v-dialog max-width="350">
+          <v-dialog max-width="350"
+                    v-model="dialogGuarantee"
+                    v-if="!this.$store.state.auth.user.roles.includes('user') && this.$store.state.auth.user.roles.length === 1">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark v-bind="attrs" v-on="on">
                 Add Guarantee
               </v-btn>
             </template>
-            <CreateGuarantee v-on:event_create="$router.go(0)"/>
+            <CreateGuarantee v-on:event_create="eventHandler"/>
           </v-dialog>
         </div>
       </v-col>
@@ -55,7 +57,8 @@
           Download
         </v-btn>
       </v-col>
-      <v-col v-if="!this.$store.state.auth.user.roles.includes('user')">
+      <v-col
+          v-if="!this.$store.state.auth.user.roles.includes('user') && this.$store.state.auth.user.roles.length === 1">
         <router-link
             :to="{
             name: 'Add New Service Record',
@@ -223,6 +226,7 @@ export default {
       guarantee: [],
       dialogWorks: false,
       dialogDetails: false,
+      dialogGuarantee: false,
       serviceRecord: [],
       details: [],
       serviceWorks: [],
@@ -249,6 +253,10 @@ export default {
     },
     editServiceWorks(value) {
       this.serviceWorks = value;
+    },
+    eventHandler() {
+      this.dialogGuarantee = false;
+      this.getGuaranteeById();
     },
     async printHistoryRecords() {
       try {
