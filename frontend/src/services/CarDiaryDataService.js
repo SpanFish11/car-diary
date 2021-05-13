@@ -1,4 +1,5 @@
 import { AXIOS } from "@/http-common";
+import authHeader from "@/services/auth-header";
 
 class CarDiaryDataService {
   createServiceRecord(carId, serviceRecord) {
@@ -53,9 +54,6 @@ class CarDiaryDataService {
 
   getAllEquipments() {
     return AXIOS.get(`equipments`, { headers: authHeader() });
-    return AXIOS.get(`maintenances`, {
-      headers: authHeader(),
-    });
   }
 
   createGuarantee(carId, request) {

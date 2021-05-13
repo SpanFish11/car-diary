@@ -68,3 +68,6 @@ security:
       /api-docs/**,
       /templates/**,
       /swagger-resources/**
+
+tinify:
+  key: Fgl9cqV6ZJb13302cwfSBRMDF7lDSL6t

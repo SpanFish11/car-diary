@@ -55,7 +55,7 @@
           Download
         </v-btn>
       </v-col>
-      <v-col>
+      <v-col v-if="!this.$store.state.auth.user.roles.includes('user')">
         <router-link
             :to="{
             name: 'Add New Service Record',
@@ -255,7 +255,6 @@ export default {
         const response = await CarDiaryDataService.printHistoryOfServiceRecord(
             this.$route.params.carId
         );
-        console.log(response);
         let blob = new Blob([response.data], {type: "application/pdf"});
         let link = document.createElement('a')
         link.href = window.URL.createObjectURL(blob);

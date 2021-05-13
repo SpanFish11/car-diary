@@ -5,10 +5,6 @@
         <v-toolbar flat>
           <v-toolbar-title>All Cars</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
-<<<<<<< HEAD
-          <!--          open-on-hover-->
-=======
->>>>>>> origin/alter-front
           <v-menu
             v-model="menu"
             :nudge-width="200"

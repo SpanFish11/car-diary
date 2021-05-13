@@ -1,9 +1,9 @@
 <template>
   <div class="fill-height">
     <v-progress-linear
-      :active="inLoading"
-      :indeterminate="inLoading"
-      absolute
+        :active="inLoading"
+        :indeterminate="inLoading"
+        absolute
     ></v-progress-linear>
 
     <v-container fill-height fluid>
@@ -14,44 +14,44 @@
               <validation-observer ref="observer" v-slot="{ invalid }">
                 <v-form @submit.prevent="submit">
                   <validation-provider
-                    v-slot="{ errors }"
-                    name="Email"
-                    :rules="{ required: true, email: true }"
+                      v-slot="{ errors }"
+                      name="Email"
+                      :rules="{ required: true, email: true }"
                   >
                     <v-text-field
-                      ref="email"
-                      label="Email"
-                      name="Email"
-                      v-model="user.email"
-                      type="text"
-                      :error-messages="errors"
-                      outlined
-                      required
+                        ref="email"
+                        label="Email"
+                        name="Email"
+                        v-model="user.email"
+                        type="text"
+                        :error-messages="errors"
+                        outlined
+                        required
                     ></v-text-field>
                   </validation-provider>
                   <validation-provider
-                    v-slot="{ errors }"
-                    name="Email"
-                    :rules="{ required: true }"
+                      v-slot="{ errors }"
+                      name="Email"
+                      :rules="{ required: true }"
                   >
                     <v-text-field
-                      ref="password"
-                      v-model="user.password"
-                      label="Password"
-                      name="Password"
-                      :error-messages="errors"
-                      type="password"
-                      outlined
-                      required
+                        ref="password"
+                        v-model="user.password"
+                        label="Password"
+                        name="Password"
+                        :error-messages="errors"
+                        type="password"
+                        outlined
+                        required
                     ></v-text-field>
                   </validation-provider>
 
                   <v-btn
-                    type="submit"
-                    :disabled="invalid"
-                    color="success"
-                    style="min-height: 50px"
-                    class="v-btn--block"
+                      type="submit"
+                      :disabled="invalid"
+                      color="success"
+                      style="min-height: 50px"
+                      class="v-btn--block"
                   >
                     Sign in
                   </v-btn>
@@ -66,8 +66,9 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import {mapMutations, mapState} from "vuex";
 import AuthRequest from "@/models/auth_request";
+import jwt_decode from "jwt-decode";
 
 // TODO доделать логин и в принципе авторизацию
 
@@ -97,7 +98,14 @@ export default {
       try {
         await this.$store.dispatch("auth/login", this.user).then(() => {
           this.setSnackbarSuccess(!this.snackbarSuccess);
-          // TODO !!!!!!!!!!!!!!!!!!!! редирект настроить
+          const {roles} = jwt_decode(this.$store.state.auth.user.token);
+          if (roles.includes("user")) {
+            this.$router.push({name: "Client Cars"});
+            this.$router.go(1);
+          } else {
+            this.$router.push({name: "Cars"});
+            this.$router.go(1);
+          }
         });
       } catch (error) {
         this.inProgress = false;
