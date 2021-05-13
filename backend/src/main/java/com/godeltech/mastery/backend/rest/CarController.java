@@ -155,11 +155,6 @@ public class CarController {
     return ok().build();
   }
 
-  @GetMapping("/my")
-  public ResponseEntity<List<CarDTO>> getMyCars(final Authentication principal) {
-    return ok(carService.getCurrentClientCars(principal));
-  }
-
   private void checkImageMediaType(final String type) throws HttpMediaTypeNotSupportedException {
     if (!Objects.equals(type, IMAGE_JPEG_VALUE) && !Objects.equals(type, IMAGE_PNG_VALUE)) {
       throw new HttpMediaTypeNotSupportedException(parseMediaType(type), of(IMAGE_JPEG, IMAGE_PNG));

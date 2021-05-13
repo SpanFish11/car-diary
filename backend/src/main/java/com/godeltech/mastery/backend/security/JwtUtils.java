@@ -1,9 +1,9 @@
 package com.godeltech.mastery.backend.security;
 
 import com.godeltech.mastery.backend.config.JwtConfiguration;
+import com.godeltech.mastery.backend.domain.entity.Client;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -35,14 +35,16 @@ public class JwtUtils {
 
   private static final String TOKEN_TYPE = "JWT";
   private static final String ROLES = "roles";
+  private static final String SUBJECT_ID = "sub_id";
 
   private final JwtConfiguration jwtConfiguration;
 
-  public String generateToken(final UserDetails userDetails) {
+  public String generateToken(final Client client) {
     final var claims = new HashMap<String, Object>();
     claims.put(ISSUER, jwtConfiguration.getIssuer());
-    claims.put(SUBJECT, userDetails.getUsername());
-    claims.put(ROLES, getEncryptedRoles(userDetails));
+    claims.put(SUBJECT, client.getEmail());
+    claims.put(SUBJECT_ID, client.getId());
+    claims.put(ROLES, getEncryptedRoles(client));
     claims.put(AUDIENCE, jwtConfiguration.getAudience());
     claims.put(EXPIRATION, generateExpirationDate());
     claims.put(ISSUED_AT, generateCurrentDate());
@@ -98,10 +100,9 @@ public class JwtUtils {
     return expiration.before(this.generateCurrentDate());
   }
 
-  private List<String> getEncryptedRoles(final UserDetails userDetails) {
-    return userDetails.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .map(s -> s.replace("ROLE_", ""))
+  private List<String> getEncryptedRoles(final Client client) {
+    return client.getRoles().stream()
+        .map(role -> role.getRoleName().replace("ROLE_", ""))
         .map(String::toLowerCase)
         .collect(toList());
   }

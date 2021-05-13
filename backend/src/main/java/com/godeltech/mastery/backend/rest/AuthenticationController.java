@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +22,6 @@ import static org.springframework.http.ResponseEntity.ok;
 public class AuthenticationController {
 
   private final AuthenticationManager authenticationManager;
-  private final UserDetailsService clientDetailServiceImpl;
   private final ClientService clientService;
   private final JwtUtils jwtUtils;
 
@@ -37,9 +35,8 @@ public class AuthenticationController {
     } catch (final BadCredentialsException e) {
       throw new BadCredentialsException("Incorrect email or password", e);
     }
-    final var customer = clientDetailServiceImpl.loadUserByUsername(authRequest.getEmail());
-    //    final var customer = clientService.getClientByEmail(authRequest.getEmail());
-    final var jwtToken = jwtUtils.generateToken(customer);
+    final var client = clientService.getClientByEmail(authRequest.getEmail());
+    final var jwtToken = jwtUtils.generateToken(client);
     return ok(AuthResponseDTO.builder().token(jwtToken).build());
   }
 }
