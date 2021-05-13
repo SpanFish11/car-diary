@@ -4,16 +4,16 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
-   {
-        name: "Login",
-        path: "/login",
-        component: () => import("@/view/pages/LoginPage"),
-  },
   {
     path: "/",
     name: "THIS IS CAR DIARY",
     component: () => import("@/view/Index"),
     children: [
+      {
+        name: "Login",
+        path: "/login",
+        component: () => import("@/view/pages/LoginPage"),
+      },
       {
         name: "Client Cars",
         path: "/client",
