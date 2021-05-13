@@ -19,6 +19,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -55,13 +58,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.cors(CorsConfigurer::disable)
         .csrf(CsrfConfigurer::disable)
         .authorizeRequests(
-            auth -> auth
-                    .antMatchers(API + "/auth").permitAll()
-                    .antMatchers(API + "/maintenances").access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(API + "/equipments").access(ALL_ROLES)
+            auth ->
+                auth.antMatchers(API + "/auth").permitAll()
                     .antMatchers(API + "/brands").access(ALL_ROLES)
-                    .antMatchers(API + "/operations").access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(API + "/guarantee").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(PATCH, API + "/cars/{\\d+}/photos").access(ALL_ROLES)
+                    .antMatchers(API + "/cars/**").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/clients/{\\d+}/cars").access(ALL_ROLES)
+                    .antMatchers(API + "/clients").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/equipments").access(ALL_ROLES)
+                    .antMatchers(GET, API + "/guarantee/{\\d+}").access(ALL_ROLES)
+                    .antMatchers(API + "/guarantee/**").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/maintenances").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(GET, API + "/operations/{\\d+}").access(ALL_ROLES)
+                    .antMatchers(POST, API + "/operations/**").access(MANAGER_ADMIN_ROLES)
                     .anyRequest().authenticated())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

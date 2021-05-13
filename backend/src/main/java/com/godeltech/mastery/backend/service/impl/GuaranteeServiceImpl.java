@@ -11,23 +11,28 @@ import com.godeltech.mastery.backend.service.GuaranteeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static java.lang.Boolean.TRUE;
+
 @Service
 @RequiredArgsConstructor
 public class GuaranteeServiceImpl implements GuaranteeService {
+
+  private static final Integer EXTENDED_YEAR = 5;
+  private static final Integer REGULAR_YEAR = 3;
 
   private final GuaranteeRepository guaranteeRepository;
   private final CarService carService;
   private final GuaranteeMapper guaranteeMapper;
 
-  private static final Integer EXTENDED_YEAR = 5;
-  private static final Integer REGULAR_YEAR = 3;
-
   @Override
   public Long createGuarantee(
       final Long carId, final GuaranteeCreateRequest guaranteeCreateRequest) {
     final var car = carService.findCarById(carId);
-    final Guarantee guarantee = guaranteeMapper.toEntity(guaranteeCreateRequest);
-    if (guarantee.getExtended()) {
+    if (car.getGuarantee() != null) {
+      throw new IllegalArgumentException("Guarantee already exist");
+    }
+    final var guarantee = guaranteeMapper.toEntity(guaranteeCreateRequest);
+    if (TRUE.equals(guarantee.getExtended())) {
       guarantee.setEnd(guarantee.getStart().plusYears(EXTENDED_YEAR));
     } else {
       guarantee.setEnd(guarantee.getStart().plusYears(REGULAR_YEAR));
