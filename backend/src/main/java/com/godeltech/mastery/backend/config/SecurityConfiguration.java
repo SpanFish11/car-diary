@@ -71,7 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(API + "/maintenances").access(MANAGER_ADMIN_ROLES)
                     .antMatchers(GET, API + "/operations/{\\d+}").access(ALL_ROLES)
                     .antMatchers(POST, API + "/operations/**").access(MANAGER_ADMIN_ROLES)
-                    .anyRequest().authenticated())
+                    .anyRequest().permitAll())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
         .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

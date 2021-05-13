@@ -112,10 +112,12 @@ export default {
   methods: {
     resolveRole() {
       const { roles } = this.currentUser;
-      if (roles.includes("user") && roles.length === 1) {
-        this.items = this.user_role;
-      } else {
-        this.items = this.other;
+      if (roles !== null) {
+        if (roles.includes("user") && roles.length === 1) {
+          this.items = this.user_role;
+        } else {
+          this.items = this.other;
+        }
       }
     },
   },

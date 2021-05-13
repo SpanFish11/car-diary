@@ -6,12 +6,15 @@ class AuthService {
   login(user) {
     return AXIOS.post("auth", user).then((response) => {
       const token = response.data.token;
+      const newUser = new User();
       if (token) {
         const { roles, sub_id } = jwt_decode(token);
-        const user = new User(token, roles, sub_id);
-        localStorage.setItem("user", JSON.stringify(user));
+        newUser.token = token
+        newUser.userId = sub_id
+        newUser.roles = roles
+        localStorage.setItem("user", JSON.stringify(newUser));
       }
-      return response.data;
+      return newUser;
     });
   }
 
