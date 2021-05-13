@@ -5,8 +5,22 @@ import { auth } from "./auth.module";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    drawer: null,
+    snackbarSuccess: null,
+    snackbarError: null,
+  },
+  mutations: {
+    SET_DRAWER(state, payload) {
+      state.drawer = payload;
+    },
+    SET_SNACKBARSUCCESS(state, payload) {
+      state.snackbarSuccess = payload;
+    },
+    SET_SNACKBARERROR(state, payload) {
+      state.snackbarError = payload;
+    },
+  },
   actions: {},
   modules: { auth },
 });

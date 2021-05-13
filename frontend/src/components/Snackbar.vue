@@ -1,0 +1,72 @@
+<template>
+  <div>
+    <v-snackbar
+      v-model="snackbarSuccess"
+      color="success"
+      :multi-line="true"
+      :timeout="10000"
+      top
+    >
+      Welcome to
+      <span class="font-weight-bold">&nbsp;MATERIAL DASHBOARD&nbsp;</span> — a
+      beautiful admin panel for every web developer.
+
+      <template v-slot:action="{ attrs }">
+        <v-icon v-bind="attrs" @click="setSnackbarSuccess(false)"
+          >mdi-close-circle
+        </v-icon>
+      </template>
+    </v-snackbar>
+
+    <v-snackbar
+      v-model="snackbarError"
+      color="error"
+      :multi-line="true"
+      :timeout="10000"
+      top
+    >
+      Welcome to
+      <span class="font-weight-bold">&nbsp;MATERIAL DASHBOARD&nbsp;</span> — a
+      beautiful admin panel for every web developer.
+
+      <template v-slot:action="{ attrs }">
+        <v-icon v-bind="attrs" @click="setSnackbarError(false)"
+          >mdi-close-circle
+        </v-icon>
+      </template>
+    </v-snackbar>
+  </div>
+</template>
+
+<script>
+import { mapMutations } from "vuex";
+// todo сделать передучу сообщения
+export default {
+  name: "Snackbar",
+  data: () => ({}),
+  computed: {
+    snackbarSuccess: {
+      get() {
+        return this.$store.state.snackbarSuccess;
+      },
+      set(val) {
+        this.$store.commit("SET_SNACKBARSUCCESS", val);
+      },
+    },
+    snackbarError: {
+      get() {
+        return this.$store.state.snackbarError;
+      },
+      set(val) {
+        this.$store.commit("SET_SNACKBARERROR", val);
+      },
+    },
+  },
+  methods: {
+    ...mapMutations({
+      setSnackbarSuccess: "SET_SNACKBARSUCCESS",
+      setSnackbarError: "SET_SNACKBARERROR",
+    }),
+  },
+};
+</script>

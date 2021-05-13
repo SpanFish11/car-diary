@@ -14,9 +14,6 @@ import {
   ValidationProvider,
 } from "vee-validate";
 import * as rules from "vee-validate/dist/rules";
-import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 
 Object.keys(rules).forEach((rule) => {
   extend(rule, rules[rule]);
@@ -24,8 +21,6 @@ Object.keys(rules).forEach((rule) => {
 
 localize("en", en);
 
-Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
 Vue.use(Meta);
 Vue.component("ValidationObserver", ValidationObserver);
 Vue.component("ValidationProvider", ValidationProvider);

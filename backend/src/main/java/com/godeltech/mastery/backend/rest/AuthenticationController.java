@@ -3,6 +3,7 @@ package com.godeltech.mastery.backend.rest;
 import com.godeltech.mastery.backend.domain.dto.request.AuthRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.AuthResponseDTO;
 import com.godeltech.mastery.backend.security.JwtUtils;
+import com.godeltech.mastery.backend.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ public class AuthenticationController {
 
   private final AuthenticationManager authenticationManager;
   private final UserDetailsService clientDetailServiceImpl;
+  private final ClientService clientService;
   private final JwtUtils jwtUtils;
 
   @PostMapping
@@ -36,6 +38,7 @@ public class AuthenticationController {
       throw new BadCredentialsException("Incorrect email or password", e);
     }
     final var customer = clientDetailServiceImpl.loadUserByUsername(authRequest.getEmail());
+    //    final var customer = clientService.getClientByEmail(authRequest.getEmail());
     final var jwtToken = jwtUtils.generateToken(customer);
     return ok(AuthResponseDTO.builder().token(jwtToken).build());
   }

@@ -1,6 +1,14 @@
 package com.godeltech.mastery.backend.service.impl;
 
+import static java.lang.String.format;
+import static java.nio.ByteBuffer.wrap;
+import static java.util.UUID.randomUUID;
+import static software.amazon.awssdk.core.async.AsyncRequestBody.fromByteBuffer;
+import static software.amazon.awssdk.services.s3.model.ObjectCannedACL.PUBLIC_READ;
+
 import com.godeltech.mastery.backend.service.AwsService;
+import com.tinify.Tinify;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,14 +19,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Utilities;
 import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-
-import java.io.IOException;
-
-import static java.lang.String.format;
-import static java.nio.ByteBuffer.wrap;
-import static java.util.UUID.randomUUID;
-import static software.amazon.awssdk.core.async.AsyncRequestBody.fromByteBuffer;
-import static software.amazon.awssdk.services.s3.model.ObjectCannedACL.PUBLIC_READ;
 
 @Slf4j
 @Service
@@ -35,6 +35,9 @@ public class AwsServiceImpl implements AwsService {
 
   @Value(value = "${aws.s3.images.carFolderName}")
   private String folderName;
+
+  @Value(value = "${tinify.key}")
+  private String tinifyKey;
 
   @Override
   public String uploadImage(final MultipartFile multipartFile, final Long carId) {
@@ -55,7 +58,8 @@ public class AwsServiceImpl implements AwsService {
 
   private byte[] getBytesFromMultipartFile(final MultipartFile multipartFile) {
     try {
-      return multipartFile.getBytes();
+      Tinify.setKey(tinifyKey);
+      return Tinify.fromBuffer(multipartFile.getBytes()).toBuffer();
     } catch (final IOException e) {
       log.error("Cant get bytes from multipartFile", e);
       throw SdkException.create("Cant get bytes from multipartFile", e);
