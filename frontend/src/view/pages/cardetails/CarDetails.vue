@@ -119,7 +119,7 @@
             {{ row.item.mileage }}
           </td>
           <td>
-            <v-dialog v-model="dialogWorks" width="600px">
+            <v-dialog v-model="dialogWorks" width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="mx-2"
@@ -135,28 +135,26 @@
                 </v-btn>
               </template>
               <v-card>
-                <v-card-title>
-                  <span class="headline">Information about Service Works</span>
-                </v-card-title>
-                <v-card v-for="item in serviceWorks" :key="item.id">
-                  <v-col>
-                    <v-row>
-                      <h5>Name: {{ item.name }}</h5>
-                    </v-row>
-                    <v-row>
-                      <h5>Price: {{ item.price }}</h5>
-                    </v-row>
-                    <v-row>
-                      <h5>Guarantee:</h5>
-                      <v-icon color="green" v-if="item.guarantee">
-                        mdi-emoticon-cool-outline
-                      </v-icon>
-                      <v-icon color="red" v-else>
-                        mdi-emoticon-angry-outline
-                      </v-icon>
-                    </v-row>
-                  </v-col>
-                </v-card>
+                <v-card-title> Information about Service Works </v-card-title>
+                <v-divider class="mx-4"></v-divider>
+                <v-container fluid>
+                  <v-card-text flat v-for="item in serviceWorks" :key="item.id">
+                    <v-col>
+                      <v-row> Name: {{ item.name }} </v-row>
+                      <v-row> Price: {{ item.price }} </v-row>
+                      <v-row>
+                        Guarantee:
+                        <v-icon color="green" v-if="item.guarantee">
+                          mdi-emoticon-cool-outline
+                        </v-icon>
+                        <v-icon color="red" v-else>
+                          mdi-emoticon-angry-outline
+                        </v-icon>
+                      </v-row>
+                    </v-col>
+                  </v-card-text>
+                </v-container>
+                <v-divider class="mx-4"></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
@@ -171,7 +169,7 @@
             </v-dialog>
           </td>
           <td>
-            <v-dialog v-model="dialogDetails" width="600px">
+            <v-dialog v-model="dialogDetails" width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="mx-2"
@@ -187,14 +185,29 @@
                 </v-btn>
               </template>
               <v-card>
-                <v-card-title>
-                  <span class="headline">Information about Details</span>
-                </v-card-title>
-                <v-card v-for="item in details" :key="item.id">
-                  <h5>Model: {{ item.model }}</h5>
-                  <h5>Price: {{ item.price }}</h5>
-                  <h5>Status: {{ item.replaced ? "replaced" : "repaired" }}</h5>
-                </v-card>
+                <v-card-title> Information about Details </v-card-title>
+                <v-divider class="mx-4"></v-divider>
+                <v-container fluid>
+                  <div v-if="details.length === 0">
+                    <v-card-text flat>
+                      <v-col>
+                        <v-row> No data available </v-row>
+                      </v-col>
+                    </v-card-text>
+                  </div>
+                  <div v-else>
+                    <v-card-text flat v-for="item in details" :key="item.id">
+                      <v-col>
+                        <v-row> Model: {{ item.model }} </v-row>
+                        <v-row> Price: {{ item.price }} </v-row>
+                        <v-row>
+                          Status: {{ item.replaced ? "replaced" : "repaired" }}
+                        </v-row>
+                      </v-col>
+                    </v-card-text>
+                  </div>
+                </v-container>
+                <v-divider class="mx-4"></v-divider>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn

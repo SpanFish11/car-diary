@@ -320,10 +320,16 @@
                       </v-card>
 
                       <v-btn @click="e1 = 2" text>
-                        <v-icon left> mdi-arrow-left</v-icon>
+                        <v-icon :disabled="inLoading" left>
+                          mdi-arrow-left</v-icon
+                        >
                         Back
                       </v-btn>
-                      <v-btn class="ml-2" color="orange" @click="resetForm"
+                      <v-btn
+                        class="ml-2"
+                        :disabled="inLoading"
+                        color="orange"
+                        @click="resetForm"
                         >Reset
                       </v-btn>
                       <v-btn
