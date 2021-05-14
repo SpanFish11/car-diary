@@ -109,7 +109,7 @@ export default {
       } catch (error) {
         this.inProgress = false;
         this.inLoading = false;
-        this.setSnackbarError(!this.snackbarError);
+        this.setSnackbarError({'show': true, 'message': 'Error authentication'});
       }
     },
   },

@@ -82,7 +82,7 @@ export default {
         this.$emit("event_create");
       } catch (error) {
         console.log("ERROR: " + error.response);
-        this.setSnackbarError(!this.snackbarError);
+        this.setSnackbarError({'show': true, 'message': error.response.data});
       }
     },
   },

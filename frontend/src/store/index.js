@@ -10,6 +10,7 @@ export default new Vuex.Store({
     snackbarSuccess: null,
     snackbarError: null,
     snackbarSuccessMessage: null,
+    snackbarErrorMessage: null,
   },
   mutations: {
     SET_DRAWER(state, payload) {
@@ -17,10 +18,11 @@ export default new Vuex.Store({
     },
     SET_SNACKBARSUCCESS(state, payload) {
       state.snackbarSuccess = payload.show;
-      state.snackbarSuccessMessage = payload.message
+      state.snackbarSuccessMessage = payload.message;
     },
     SET_SNACKBARERROR(state, payload) {
-      state.snackbarError = payload;
+      state.snackbarError = payload.show;
+      state.snackbarErrorMessage = payload.message;
     },
   },
   actions: {},
