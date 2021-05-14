@@ -689,7 +689,7 @@ export default {
         console.log(error.response);
         this.overlay = false;
         this.message = `${error.response.data.message}`;
-        this.setSnackbarError(!this.snackbarError);
+        this.setSnackbarError({'show': true, 'message': error.response.data});
       }
     },
     editServiceOperationItem(item) {

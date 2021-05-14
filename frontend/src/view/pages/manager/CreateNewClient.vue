@@ -112,7 +112,7 @@ export default {
         await this.$router.push("/manager");
       } catch (error) {
         console.log(error.response);
-        this.setSnackbarError(!this.snackbarError);
+        this.setSnackbarError({'show': true, 'message': error.response.data});
       }
     },
     reset() {

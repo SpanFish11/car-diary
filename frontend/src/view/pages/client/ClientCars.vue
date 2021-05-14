@@ -478,7 +478,7 @@ export default {
         this.setSnackbarSuccess({'show': true, 'message': 'Car was created successfully!'});
       } catch (error) {
         console.log(error.response);
-        this.setSnackbarError(!this.snackbarError);
+        this.setSnackbarError({'show': true, 'message': error.response.data});
       }
     },
     async getLastAddedCar(carId) {
