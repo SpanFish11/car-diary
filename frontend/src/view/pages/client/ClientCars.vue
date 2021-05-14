@@ -320,10 +320,16 @@
                       </v-card>
 
                       <v-btn @click="e1 = 2" text>
-                        <v-icon left> mdi-arrow-left</v-icon>
+                        <v-icon :disabled="inLoading" left>
+                          mdi-arrow-left</v-icon
+                        >
                         Back
                       </v-btn>
-                      <v-btn class="ml-2" color="orange" @click="resetForm"
+                      <v-btn
+                        class="ml-2"
+                        :disabled="inLoading"
+                        color="orange"
+                        @click="resetForm"
                         >Reset
                       </v-btn>
                       <v-btn
@@ -469,7 +475,7 @@ export default {
           await CarDiaryDataService.saveCarImage(res.data, formData);
         }
         await this.getLastAddedCar(res.data);
-        this.setSnackbarSuccess(!this.snackbarSuccess);
+        this.setSnackbarSuccess({'show': true, 'message': 'Car was created successfully!'});
       } catch (error) {
         console.log(error.response);
         this.setSnackbarError(!this.snackbarError);

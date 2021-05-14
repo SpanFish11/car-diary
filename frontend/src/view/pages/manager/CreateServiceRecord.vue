@@ -676,7 +676,7 @@ export default {
         );
         this.overlay = false;
         this.message = `Record successfully created`;
-        this.setSnackbarSuccess(!this.snackbarSuccess);
+        this.setSnackbarSuccess({'show': true, 'message': 'Service record successfully created!'});
         console.log(res);
         this.clear();
         await this.$router.push({

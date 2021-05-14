@@ -7,9 +7,7 @@
       :timeout="10000"
       top
     >
-      Welcome to
-      <span class="font-weight-bold">&nbsp;MATERIAL DASHBOARD&nbsp;</span> — a
-      beautiful admin panel for every web developer.
+      {{snackbarSuccessMessage}}
 
       <template v-slot:action="{ attrs }">
         <v-icon v-bind="attrs" @click="setSnackbarSuccess(false)"
@@ -40,7 +38,7 @@
 
 <script>
 import { mapMutations } from "vuex";
-// todo сделать передучу сообщения
+
 export default {
   name: "Snackbar",
   data: () => ({}),
@@ -52,6 +50,11 @@ export default {
       set(val) {
         this.$store.commit("SET_SNACKBARSUCCESS", val);
       },
+    },
+    snackbarSuccessMessage: {
+      get() {
+        return this.$store.state.snackbarSuccessMessage;
+      }
     },
     snackbarError: {
       get() {

@@ -77,7 +77,7 @@ export default {
           extended: this.extended,
         };
         await CarDiaryDataService.createGuarantee(car, guarantee);
-        this.setSnackbarSuccess(!this.snackbarSuccess);
+        this.setSnackbarSuccess({'show': true, 'message': 'Guarantee added successfully!'});
         this.disableSubmit = true;
         this.$emit("event_create");
       } catch (error) {
