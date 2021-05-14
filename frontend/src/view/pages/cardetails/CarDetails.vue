@@ -119,7 +119,7 @@
             {{ row.item.mileage }}
           </td>
           <td>
-            <v-dialog v-model="dialogWorks" width="500px">
+            <v-dialog v-model="dialogWorks" width="500px" :retain-focus="false">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="mx-2"
@@ -169,7 +169,7 @@
             </v-dialog>
           </td>
           <td>
-            <v-dialog v-model="dialogDetails" width="500px">
+            <v-dialog v-model="dialogDetails" width="500px" :retain-focus="false">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="mx-2"

@@ -6,7 +6,7 @@ create table m_brands
     name varchar(100) not null
 );
 
-alter table m_brands owner to postgres;
+alter table m_brands owner to ctdidtksihqvpb;
 
 create unique index m_brands_id_uindex
     on m_brands (id);
@@ -25,7 +25,7 @@ create table m_models
             references m_brands
 );
 
-alter table m_models owner to postgres;
+alter table m_models owner to ctdidtksihqvpb;
 
 create unique index m_models_id_uindex
     on m_models (id);
@@ -44,7 +44,7 @@ create table m_clients
     password varchar(255) not null
 );
 
-alter table m_clients owner to postgres;
+alter table m_clients owner to ctdidtksihqvpb;
 
 create unique index m_clients_email_uindex
     on m_clients (email);
@@ -61,7 +61,7 @@ create table m_equipments
     power integer not null
 );
 
-alter table m_equipments owner to postgres;
+alter table m_equipments owner to ctdidtksihqvpb;
 
 create table m_cars
 (
@@ -86,7 +86,7 @@ create table m_cars
     used boolean not null
 );
 
-alter table m_cars owner to postgres;
+alter table m_cars owner to ctdidtksihqvpb;
 
 create unique index m_cars_id_uindex
     on m_cars (id);
@@ -113,7 +113,7 @@ create table m_service_records
             references m_cars
 );
 
-alter table m_service_records owner to postgres;
+alter table m_service_records owner to ctdidtksihqvpb;
 
 create unique index m_service_records_id_uindex
     on m_service_records (id);
@@ -131,7 +131,7 @@ create table m_service_work
             references m_service_records
 );
 
-alter table m_service_work owner to postgres;
+alter table m_service_work owner to ctdidtksihqvpb;
 
 create unique index m_service_work_id_uindex
     on m_service_work (id);
@@ -149,7 +149,7 @@ create table m_changable_parts
             references m_service_records
 );
 
-alter table m_changable_parts owner to postgres;
+alter table m_changable_parts owner to ctdidtksihqvpb;
 
 create unique index m_changable_parts_id_uindex
     on m_changable_parts (id);
@@ -164,7 +164,7 @@ create table m_maintenance
     time_interval integer not null
 );
 
-alter table m_maintenance owner to postgres;
+alter table m_maintenance owner to ctdidtksihqvpb;
 
 create unique index m_maintenance_id_uindex
     on m_maintenance (id);
@@ -184,7 +184,7 @@ create table m_operations
             references m_maintenance
 );
 
-alter table m_operations owner to postgres;
+alter table m_operations owner to ctdidtksihqvpb;
 
 create unique index m_operations_id_uindex
     on m_operations (id);
@@ -201,7 +201,7 @@ create table m_details
             references m_maintenance
 );
 
-alter table m_details owner to postgres;
+alter table m_details owner to ctdidtksihqvpb;
 
 create unique index m_details_id_uindex
     on m_details (id);
@@ -219,7 +219,7 @@ create table m_guarantee
     start_date date not null
 );
 
-alter table m_guarantee owner to postgres;
+alter table m_guarantee owner to ctdidtksihqvpb;
 
 create table m_roles
 (
@@ -229,7 +229,7 @@ create table m_roles
     role_name varchar(100) not null
 );
 
-alter table m_roles owner to postgres;
+alter table m_roles owner to ctdidtksihqvpb;
 
 create unique index m_roles_id_uindex
     on m_roles (id);
@@ -247,4 +247,4 @@ create table l_clients_roles
             references m_roles
 );
 
-alter table l_clients_roles owner to postgres;
+alter table l_clients_roles owner to ctdidtksihqvpb;
