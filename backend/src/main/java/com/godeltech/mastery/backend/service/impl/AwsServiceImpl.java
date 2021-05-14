@@ -1,6 +1,7 @@
 package com.godeltech.mastery.backend.service.impl;
 
 import com.godeltech.mastery.backend.service.AwsService;
+import com.tinify.Tinify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,9 @@ public class AwsServiceImpl implements AwsService {
   @Value(value = "${aws.s3.images.carFolderName}")
   private String folderName;
 
+  @Value(value = "${tinify.key}")
+  private String tinifyKey;
+
   @Override
   public String uploadImage(final MultipartFile multipartFile, final Long carId) {
     final byte[] imageBytes = getBytesFromMultipartFile(multipartFile);
@@ -55,7 +59,8 @@ public class AwsServiceImpl implements AwsService {
 
   private byte[] getBytesFromMultipartFile(final MultipartFile multipartFile) {
     try {
-      return multipartFile.getBytes();
+      Tinify.setKey(tinifyKey);
+      return Tinify.fromBuffer(multipartFile.getBytes()).toBuffer();
     } catch (final IOException e) {
       log.error("Cant get bytes from multipartFile", e);
       throw SdkException.create("Cant get bytes from multipartFile", e);

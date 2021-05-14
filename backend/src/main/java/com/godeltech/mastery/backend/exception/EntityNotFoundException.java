@@ -18,6 +18,10 @@ public class EntityNotFoundException extends RuntimeException {
     super(format("Could not find any %s with the ID %d.", entity, id));
   }
 
+  public EntityNotFoundException(final String entity, final String text) {
+    super(format("Could not find any %s with the %s.", entity, text));
+  }
+
   public EntityNotFoundException(final String message, final Throwable cause) {
     super(message, cause);
   }

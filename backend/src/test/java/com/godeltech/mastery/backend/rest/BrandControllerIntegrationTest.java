@@ -2,9 +2,7 @@ package com.godeltech.mastery.backend.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
-import com.godeltech.mastery.backend.service.BrandService;
 import net.minidev.json.JSONArray;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,19 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.util.NestedServletException;
 
 import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,22 +27,15 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @Sql(scripts = "/tests/brands/initTestDB.sql")
 class BrandControllerIntegrationTest {
 
-  private MockMvc mockMvc;
-
+  @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
-  @Autowired private BrandService brandService;
-
-  @BeforeEach
-  void setUp() {
-    mockMvc = standaloneSetup(new BrandController(brandService)).build();
-  }
 
   @Test
   void getAllBrands() throws Exception {
     final var jsonString =
         objectMapper.writeValueAsString(
             objectMapper.readValue(
-                new File("src/main/resources/tests/brands/allBrands.json"), JSONArray.class));
+                new File("src/test/resources/tests/brands/allBrands.json"), JSONArray.class));
 
     mockMvc
         .perform(get("/api/v1/brands"))
@@ -61,7 +49,7 @@ class BrandControllerIntegrationTest {
     final var jsonString =
         objectMapper.writeValueAsString(
             objectMapper.readValue(
-                new File("src/main/resources/tests/brands/modelsById.json"), JSONArray.class));
+                new File("src/test/resources/tests/brands/modelsById.json"), JSONArray.class));
 
     mockMvc
         .perform(get("/api/v1/brands/{brand_id}/models", 2))
@@ -71,22 +59,18 @@ class BrandControllerIntegrationTest {
   }
 
   @Test
-  void getAllModelByIncorrectId() {
-    assertThrows(
-        NestedServletException.class,
-        () ->
-            mockMvc
-                .perform(get("/api/v1/brands/{brand_id}/models", 7))
-                .andExpect(status().isNotFound())
-                .andExpect(
-                    result ->
-                        assertThat(
-                            result.getResolvedException(),
-                            instanceOf(EntityNotFoundException.class)))
-                .andExpect(
-                    result ->
-                        assertThat(
-                            result.getResolvedException().getMessage(),
-                            is("Could not find any Brand with the ID 7."))));
+  void getAllModelByIncorrectId() throws Exception {
+    mockMvc
+        .perform(get("/api/v1/brands/{brand_id}/models", 7))
+        .andExpect(status().isNotFound())
+        .andExpect(
+            result ->
+                assertThat(
+                    result.getResolvedException(), instanceOf(EntityNotFoundException.class)))
+        .andExpect(
+            result ->
+                assertThat(
+                    result.getResolvedException().getMessage(),
+                    is("Could not find any brand with the ID 7.")));
   }
 }

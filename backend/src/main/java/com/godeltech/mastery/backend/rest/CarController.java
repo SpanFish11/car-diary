@@ -1,8 +1,9 @@
 package com.godeltech.mastery.backend.rest;
 
-import com.godeltech.mastery.backend.domain.dto.CarCreateRequest;
-import com.godeltech.mastery.backend.domain.dto.CarDTO;
-import com.godeltech.mastery.backend.domain.dto.ExceptionResponseDTO;
+import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
+import com.godeltech.mastery.backend.domain.dto.request.Filter;
+import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -19,13 +21,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
 import java.util.Objects;
 
 import static java.util.List.of;
@@ -34,6 +36,8 @@ import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.http.MediaType.IMAGE_PNG;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -46,7 +50,7 @@ public class CarController {
   private final CarService carService;
 
   @Operation(
-      summary = "Get all cars",
+      summary = "Get all cars or search by filter",
       description = "Endpoint for getting all cars",
       responses = {
         @ApiResponse(responseCode = "200", description = "Ok"),
@@ -60,8 +64,11 @@ public class CarController {
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @GetMapping
-  public ResponseEntity<List<CarDTO>> getAllCars() {
-    return ok(carService.getAllCars());
+  public ResponseEntity<Page<CarDTO>> getAllCars(
+      @RequestParam(value = "page", defaultValue = "0", required = false) final Integer page,
+      @RequestParam(value = "size", defaultValue = "5", required = false) final Integer size,
+      @Valid final Filter filter) {
+    return ok(carService.getAllCarsOrFindByFilter(filter, page, size));
   }
 
   @Operation(
@@ -89,9 +96,9 @@ public class CarController {
 
   @Operation(
       summary = "Add new car",
-      description = "Endpoint for added new car",
+      description = "Endpoint for added new car for client",
       responses = {
-        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(responseCode = "201", description = "Created"),
         @ApiResponse(
             responseCode = "400",
             description = "Bad Request",
@@ -110,7 +117,7 @@ public class CarController {
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @PostMapping
-  public ResponseEntity<Long> createCar(@RequestBody @Valid final CarCreateRequest request) {
+  public ResponseEntity<Long> createCar(@RequestBody @Valid final CarCreateManagerRequest request) {
     return new ResponseEntity<>(carService.addNewCar(request), CREATED);
   }
 
@@ -136,7 +143,9 @@ public class CarController {
             description = "Internal Server Error",
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
-  @PatchMapping("/{car_id}/photos")
+  @PatchMapping(
+      value = "/{car_id}/photos",
+      consumes = {MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<HttpStatus> updateCarPhoto(
       @PathVariable("car_id") @Min(1) final Long id,
       @RequestPart(value = "photo") final MultipartFile photo)

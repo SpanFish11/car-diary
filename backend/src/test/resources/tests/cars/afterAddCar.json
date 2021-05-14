@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "model": {
+      "id": 2,
+      "name": "Terrano"
+    },
+    "year": 2017,
+    "photoUrl": "nissan.jpg",
+    "vin": "4S3BMHB68B3286050",
+    "mileage": 25405
+  },
+  {
+    "id": 2,
+    "model": {
+      "id": 1,
+      "name": "Coolray"
+    },
+    "year": 2021,
+    "photoUrl": "geely.jpg",
+    "vin": "4Y1SL65848Z411439",
+    "mileage": 0
+  },
+  {
+    "id": 3,
+    "model": {
+      "id": 2,
+      "name": "Terrano"
+    },
+    "year": 2019,
+    "photoUrl": ".url",
+    "vin": "4S3BTLB68B3286050",
+    "mileage": 20705
+  }
+]

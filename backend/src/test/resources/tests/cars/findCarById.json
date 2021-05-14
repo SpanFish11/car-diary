@@ -1,0 +1,11 @@
+{
+  "id": 2,
+  "model": {
+    "id": 1,
+    "name": "Coolray"
+  },
+  "year": 2021,
+  "photoUrl": "geely.jpg",
+  "vin": "4Y1SL65848Z411439",
+  "mileage": 0
+}

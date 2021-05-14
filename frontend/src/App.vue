@@ -1,28 +1,13 @@
 <template>
-  <div id="app">
-    <NavBar/>
-    <AddNewCarModal/>
-    <Main/>
-  </div>
+  <router-view :key="$route.fullPath" />
 </template>
 
 <script>
-import NavBar from '@/components/NavBar'
-import AddNewCarModal from "@/components/AddNewCarModal"
-import Main from "@/components/Main"
-
 export default {
-  name: 'App',
-  components: {
-    NavBar,
-    AddNewCarModal,
-    Main
-  },
+  name: "App",
   metaInfo: {
-    title: 'Car Page'
-  }
-}
+    title: "Car Diary",
+    titleTemplate: "%s | Car Diary",
+  },
+};
 </script>
-
-<style>
-</style>

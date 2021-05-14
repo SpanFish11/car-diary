@@ -1,12 +1,9 @@
 package com.godeltech.mastery.backend.service.impl;
 
-import com.godeltech.mastery.backend.domain.dto.BrandDTO;
-import com.godeltech.mastery.backend.domain.dto.ModelDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.BrandDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.ModelDTO;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
-import com.godeltech.mastery.backend.mapper.BrandMapper;
-import com.godeltech.mastery.backend.repository.BrandRepository;
 import com.godeltech.mastery.backend.service.BrandService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.Set;
 
 import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,23 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Sql(scripts = "/tests/brands/initTestDB.sql")
 class BrandServiceIntegrationTest {
 
-  @Autowired private BrandMapper brandMapper;
-  @Autowired private BrandRepository brandRepository;
-
-  private BrandService brandService;
-
-  @BeforeEach
-  void setUp() {
-    brandService = new BrandServiceImpl(brandRepository, brandMapper);
-  }
+  @Autowired private BrandService brandService;
 
   @Test
   void getAllBrands() {
-    final List<BrandDTO> expected =
-        List.of(
-            new BrandDTO(1L, "Nissan", Set.of(new ModelDTO(2L, "Terrano"))),
-            new BrandDTO(
-                2L, "Geely", Set.of(new ModelDTO(1L, "Coolray"), new ModelDTO(3L, "Emgrand"))));
+    final List<BrandDTO> expected = List.of(new BrandDTO(1L, "Nissan"), new BrandDTO(2L, "Geely"));
 
     final List<BrandDTO> actual = brandService.getAllBrands();
     assertThat(actual, is(expected));
