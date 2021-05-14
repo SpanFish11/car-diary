@@ -68,8 +68,7 @@ security:
       /api-docs/**,
       /templates/**,
       /swagger-resources/**,
-      /index.html,
-      /favicon.ico
+      /index.html
 
 tinify:
   key: ${TINIFY_SECRET_KEY:key}
