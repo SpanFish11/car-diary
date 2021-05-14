@@ -38,7 +38,7 @@
 
 <script>
 import { mapMutations } from "vuex";
-// todo сделать передучу сообщения
+
 export default {
   name: "Snackbar",
   data: () => ({}),
