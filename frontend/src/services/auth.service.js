@@ -9,9 +9,9 @@ class AuthService {
       const newUser = new User();
       if (token) {
         const { roles, sub_id } = jwt_decode(token);
-        newUser.token = token
-        newUser.userId = sub_id
-        newUser.roles = roles
+        newUser.token = token;
+        newUser.userId = sub_id;
+        newUser.roles = roles;
         localStorage.setItem("user", JSON.stringify(newUser));
       }
       return newUser;

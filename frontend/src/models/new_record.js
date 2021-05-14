@@ -1,10 +1,10 @@
 export default class NewRecord {
   constructor(
-      serviceOperationNumber,
-      date,
-      mileage,
-      serviceWorks,
-      changableParts,
+    serviceOperationNumber,
+    date,
+    mileage,
+    serviceWorks,
+    changableParts
   ) {
     this.serviceOperationNumber = serviceOperationNumber;
     this.date = date;
