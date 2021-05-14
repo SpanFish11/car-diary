@@ -23,10 +23,7 @@
       :timeout="10000"
       top
     >
-      Welcome to
-      <span class="font-weight-bold">&nbsp;MATERIAL DASHBOARD&nbsp;</span> — a
-      beautiful admin panel for every web developer.
-
+      {{snackbarErrorMessage}}
       <template v-slot:action="{ attrs }">
         <v-icon v-bind="attrs" @click="setSnackbarError(false)"
           >mdi-close-circle
@@ -64,6 +61,11 @@ export default {
         this.$store.commit("SET_SNACKBARERROR", val);
       },
     },
+    snackbarErrorMessage: {
+      get() {
+        return this.$store.state.snackbarErrorMessage;
+      }
+    }
   },
   methods: {
     ...mapMutations({
