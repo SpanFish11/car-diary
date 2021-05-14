@@ -98,7 +98,7 @@ export default {
 
       try {
         await this.$store.dispatch("auth/login", this.user).then(() => {
-          this.setSnackbarSuccess({'show': true, 'message': 'Welcome back!'});
+          this.setSnackbarSuccess({ show: true, message: "Welcome back!" });
           const { roles } = jwt_decode(this.$store.state.auth.user.token);
           if (roles.includes("user") && roles.length === 1) {
             this.$router.push({ name: "Client Cars", force: true });
@@ -109,7 +109,7 @@ export default {
       } catch (error) {
         this.inProgress = false;
         this.inLoading = false;
-        this.setSnackbarError({'show': true, 'message': 'Error authentication'});
+        this.setSnackbarError({ show: true, message: "Error authentication" });
       }
     },
   },

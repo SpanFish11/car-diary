@@ -475,10 +475,13 @@ export default {
           await CarDiaryDataService.saveCarImage(res.data, formData);
         }
         await this.getLastAddedCar(res.data);
-        this.setSnackbarSuccess({'show': true, 'message': 'Car was created successfully!'});
+        this.setSnackbarSuccess({
+          show: true,
+          message: "Car was created successfully!",
+        });
       } catch (error) {
         console.log(error.response);
-        this.setSnackbarError({'show': true, 'message': error.response.data});
+        this.setSnackbarError({ show: true, message: error.response.data });
       }
     },
     async getLastAddedCar(carId) {

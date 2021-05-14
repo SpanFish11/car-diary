@@ -108,11 +108,14 @@ export default {
       try {
         const res = await CarDiaryDataService.saveNewClient(client);
         console.log(res);
-        this.setSnackbarSuccess({'show': true, 'message': 'Client successfully created!'});
+        this.setSnackbarSuccess({
+          show: true,
+          message: "Client successfully created!",
+        });
         await this.$router.push("/manager");
       } catch (error) {
         console.log(error.response);
-        this.setSnackbarError({'show': true, 'message': error.response.data});
+        this.setSnackbarError({ show: true, message: error.response.data });
       }
     },
     reset() {

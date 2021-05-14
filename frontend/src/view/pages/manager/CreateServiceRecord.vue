@@ -676,7 +676,10 @@ export default {
         );
         this.overlay = false;
         this.message = `Record successfully created`;
-        this.setSnackbarSuccess({'show': true, 'message': 'Service record successfully created!'});
+        this.setSnackbarSuccess({
+          show: true,
+          message: "Service record successfully created!",
+        });
         console.log(res);
         this.clear();
         await this.$router.push({
@@ -689,7 +692,7 @@ export default {
         console.log(error.response);
         this.overlay = false;
         this.message = `${error.response.data.message}`;
-        this.setSnackbarError({'show': true, 'message': error.response.data});
+        this.setSnackbarError({ show: true, message: error.response.data });
       }
     },
     editServiceOperationItem(item) {
