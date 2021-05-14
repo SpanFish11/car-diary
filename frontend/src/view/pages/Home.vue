@@ -1,11 +1,12 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <v-col v-for="n in 24" :key="n" cols="4">
-        <v-card height="200"></v-card>
+  <v-parallax dark height="755" src="@/assets/Background.jpg">
+    <v-row align="center" justify="center">
+      <v-col class="text-center" cols="12">
+        <h1 class="display-1 font-weight-thin mb-4">THIS IS CAR DIARY</h1>
+        <h4 class="subheading">The unique and free car management system</h4>
       </v-col>
     </v-row>
-  </v-container>
+  </v-parallax>
 </template>
 
 <script>
