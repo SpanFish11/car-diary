@@ -475,7 +475,7 @@ export default {
           await CarDiaryDataService.saveCarImage(res.data, formData);
         }
         await this.getLastAddedCar(res.data);
-        this.setSnackbarSuccess(!this.snackbarSuccess);
+        this.setSnackbarSuccess({'show': true, 'message': 'Car was created successfully!'});
       } catch (error) {
         console.log(error.response);
         this.setSnackbarError(!this.snackbarError);
