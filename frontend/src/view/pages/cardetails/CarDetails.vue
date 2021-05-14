@@ -309,7 +309,10 @@ export default {
         link.click();
       } catch (error) {
         console.log("ERROR: " + error);
-        this.setSnackbarError({'show': true, 'message': error.response.data.message});
+        this.setSnackbarError({
+          show: true,
+          message: error.response.data.message,
+        });
       }
     },
     async getCarById() {
@@ -325,12 +328,18 @@ export default {
             (car) => car.id == this.$route.params.carId
           );
           if (this.car === undefined) {
-            this.setSnackbarError({'show': true, 'message': 'You chose not your car'});
+            this.setSnackbarError({
+              show: true,
+              message: "You chose not your car",
+            });
             await this.$router.push({ name: "Client Cars", force: true });
           }
         } catch (error) {
           console.log("ERROR: " + error.response.data);
-          this.setSnackbarError({'show': true, 'message': error.response.data.message });
+          this.setSnackbarError({
+            show: true,
+            message: error.response.data.message,
+          });
         }
       } else {
         await CarDiaryDataService.getCarById(this.$route.params.carId)
@@ -339,7 +348,10 @@ export default {
           })
           .catch((error) => {
             console.log("ERROR: " + error.response.data);
-            this.setSnackbarError({'show': true, 'message': error.response.data.message });
+            this.setSnackbarError({
+              show: true,
+              message: error.response.data.message,
+            });
           });
       }
     },
