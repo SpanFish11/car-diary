@@ -7,7 +7,7 @@
       :timeout="10000"
       top
     >
-      {{snackbarSuccessMessage}}
+      {{ snackbarSuccessMessage }}
 
       <template v-slot:action="{ attrs }">
         <v-icon v-bind="attrs" @click="setSnackbarSuccess(false)"
@@ -23,7 +23,7 @@
       :timeout="10000"
       top
     >
-      {{snackbarErrorMessage}}
+      {{ snackbarErrorMessage }}
       <template v-slot:action="{ attrs }">
         <v-icon v-bind="attrs" @click="setSnackbarError(false)"
           >mdi-close-circle
@@ -51,7 +51,7 @@ export default {
     snackbarSuccessMessage: {
       get() {
         return this.$store.state.snackbarSuccessMessage;
-      }
+      },
     },
     snackbarError: {
       get() {
@@ -64,8 +64,8 @@ export default {
     snackbarErrorMessage: {
       get() {
         return this.$store.state.snackbarErrorMessage;
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapMutations({

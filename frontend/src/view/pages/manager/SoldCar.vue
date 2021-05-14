@@ -610,10 +610,13 @@ export default {
         console.log(res);
         this.resetForm();
         await this.$router.push("/manager");
-        this.setSnackbarSuccess({'show': true, 'message': 'Car successfully created!'});
+        this.setSnackbarSuccess({
+          show: true,
+          message: "Car successfully created!",
+        });
       } catch (error) {
         console.log(error.response);
-        this.setSnackbarError({'show': true, 'message': error.response.data});
+        this.setSnackbarError({ show: true, message: error.response.data });
       }
     },
     async loadAllBrands() {
