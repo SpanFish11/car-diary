@@ -45,7 +45,7 @@
                   <validation-provider
                     v-slot="{ errors }"
                     name="email"
-                    :rules="{ required: true, email: true, excluded: emails}"
+                    :rules="{ required: true, email: true, excluded: emails }"
                   >
                     <v-text-field
                       label="Email*"

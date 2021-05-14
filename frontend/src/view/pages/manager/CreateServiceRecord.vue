@@ -6,7 +6,7 @@
       </v-overlay>
 
       <v-card elevation="24">
-        <v-card-title>Add new dervice record</v-card-title>
+        <v-card-title>Add new service record</v-card-title>
 
         <v-container fluid>
           <form ref="form" @submit.stop.prevent="submit">
@@ -645,7 +645,13 @@ export default {
     },
     async saveServiceRecord() {
       this.overlay = !this.overlay;
-      const data = new NewRecord(this.serviceOperationName, this.date, this.mileage, this.serviceWorks, this.serviceParts);
+      const data = new NewRecord(
+        this.serviceOperationName,
+        this.date,
+        this.mileage,
+        this.serviceWorks,
+        this.serviceParts
+      );
       // todo сделать красиво
       await new Promise((resolve) => {
         setTimeout(resolve, 2000);
