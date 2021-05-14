@@ -608,6 +608,13 @@ export default {
       try {
         const res = await CarDiaryDataService.saveCar(car);
         console.log(res);
+        if (this.photoToUpload.photo !== null) {
+          const formData = new FormData();
+          Object.keys(this.photoToUpload).forEach((key) => {
+            formData.append(key, this.photoToUpload[key]);
+          });
+          await CarDiaryDataService.saveCarImage(res.data, formData);
+        }
         this.resetForm();
         await this.$router.push("/manager");
         this.setSnackbarSuccess({
