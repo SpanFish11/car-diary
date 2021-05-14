@@ -14,16 +14,16 @@
         <h4>Fuel type: {{ car.equipment.engineType }}</h4>
         <h4>Transmission type: {{ car.equipment.transmissionType }}</h4>
         <h4>Power: {{ car.equipment.horsePower }} hp</h4>
-        <div v-if="guarantee.length !== 0">
+        <div v-if="car.guarantee !== null">
           <h2 style="color: goldenrod">
             Guarantee
             <v-icon color="green" large>mdi-shield-check-outline</v-icon>
           </h2>
-          <h4>Guarantee start: {{ guarantee.start }}</h4>
-          <h4>Guarantee end: {{ guarantee.end }}</h4>
+          <h4>Guarantee start: {{ car.guarantee.start }}</h4>
+          <h4>Guarantee end: {{ car.guarantee.end }}</h4>
           <h4>
             Guarantee extended:
-            <v-icon color="green" v-if="guarantee.extended" large>
+            <v-icon color="green" v-if="car.guarantee.extended" large>
               mdi-check-bold
             </v-icon>
             <v-icon color="red" v-else large>mdi-close-thick</v-icon>
@@ -38,8 +38,10 @@
             max-width="350"
             v-model="dialogGuarantee"
             v-if="
-              !this.$store.state.auth.user.roles.includes('user') &&
-              this.$store.state.auth.user.roles.length === 1
+              !(
+                currentUser().roles.includes('user') &&
+                currentUser().roles.length === 1
+              )
             "
           >
             <template v-slot:activator="{ on, attrs }">
@@ -52,18 +54,23 @@
         </div>
       </v-col>
       <v-col>
-        <v-btn depressed color="error" @click="$router.go(-1)">Return</v-btn>
+        <v-btn depressed color="error" @click="returnHomePage">
+          <v-icon left> mdi-arrow-left</v-icon>
+          Return
+        </v-btn>
       </v-col>
     </v-row>
     <v-row align-v="center">
       <v-col cols="8"><h1>History of service operations</h1></v-col>
       <v-col>
-        <v-btn color="primary" @click="printHistoryRecords"> Download </v-btn>
+        <v-btn color="primary" @click="printHistoryRecords"> Download</v-btn>
       </v-col>
       <v-col
         v-if="
-          !this.$store.state.auth.user.roles.includes('user') &&
-          this.$store.state.auth.user.roles.length === 1
+          !(
+            currentUser().roles.includes('user') &&
+            currentUser().roles.length === 1
+          )
         "
       >
         <router-link
@@ -230,8 +237,7 @@ export default {
         { text: "Service works", value: "serviceWorks", sortable: false },
         { text: "Details", value: "changableParts", sortable: false },
       ],
-      car: [],
-      guarantee: [],
+      car: null,
       dialogWorks: false,
       dialogDetails: false,
       dialogGuarantee: false,
@@ -249,13 +255,25 @@ export default {
   },
   mounted() {
     this.getCarById();
-    this.getGuaranteeById();
     this.getServiceRecord();
   },
   methods: {
     ...mapMutations({
       setSnackbarError: "SET_SNACKBARERROR",
     }),
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+    returnHomePage() {
+      if (
+        this.currentUser().roles.includes("user") &&
+        this.currentUser().roles.length === 1
+      ) {
+        this.$router.push({ name: "Client Cars", force: true });
+      } else {
+        this.$router.push({ name: "Cars", force: true });
+      }
+    },
     editDetails(value) {
       this.details = value;
     },
@@ -264,7 +282,7 @@ export default {
     },
     eventHandler() {
       this.dialogGuarantee = false;
-      this.getGuaranteeById();
+      this.$router.go(0);
     },
     async printHistoryRecords() {
       try {
@@ -281,23 +299,34 @@ export default {
         this.setSnackbarError(!this.snackbarError);
       }
     },
-    getCarById() {
-      CarDiaryDataService.getCarById(this.$route.params.carId)
-        .then((response) => {
-          this.car = response.data;
-        })
-        .catch((error) => {
-          console.log("ERROR: " + error.response.data);
-        });
-    },
-    getGuaranteeById() {
-      CarDiaryDataService.getGuaranteeByCarId(this.$route.params.carId)
-        .then((response) => {
-          this.guarantee = response.data;
-        })
-        .catch((error) => {
-          console.log("ERROR: " + error.response.data);
-        });
+    async getCarById() {
+      if (
+        this.currentUser().roles.includes("user") &&
+        this.currentUser().roles.length === 1
+      ) {
+        try {
+          const response = await CarDiaryDataService.getAllClientsCars(
+            this.currentUser().userId
+          );
+          this.car = await response.data.find(
+            (car) => car.id == this.$route.params.carId
+          );
+          if (this.car === undefined) {
+            await this.$router.push({ name: "Client Cars", force: true });
+            this.setSnackbarError(!this.snackbarError);
+          }
+        } catch (error) {
+          console.log("ERROR: " + error.data);
+        }
+      } else {
+        await CarDiaryDataService.getCarById(this.$route.params.carId)
+          .then((response) => {
+            this.car = response.data;
+          })
+          .catch((error) => {
+            console.log("ERROR: " + error.response.data);
+          });
+      }
     },
     formatServiceRecordNumber(value) {
       return value ? value : "Not regular maintenance";
