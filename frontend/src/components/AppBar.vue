@@ -10,8 +10,6 @@
   >
     <v-app-bar-nav-icon @click="setDrawer(!drawer)"></v-app-bar-nav-icon>
 
-    <v-app-bar-title class="font-weight-light" v-text="$route.name" />
-
     <v-spacer></v-spacer>
 
     <v-switch
