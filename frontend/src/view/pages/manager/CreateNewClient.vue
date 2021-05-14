@@ -84,6 +84,9 @@ import { mapMutations, mapState } from "vuex";
 
 export default {
   name: "CreateNewClient",
+  metaInfo: {
+    title: "Add New Client",
+  },
   data: () => ({
     user: new NewUser(),
     emails: [],

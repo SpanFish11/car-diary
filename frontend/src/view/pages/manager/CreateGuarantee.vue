@@ -47,6 +47,9 @@ import { mapMutations, mapState } from "vuex";
 
 export default {
   name: "CreateGuarantee",
+  metaInfo: {
+    title: "Add Guarantee",
+  },
   props: ["carId"],
   data() {
     return {

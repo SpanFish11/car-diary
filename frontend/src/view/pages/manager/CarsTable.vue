@@ -219,6 +219,9 @@ import Filter from "@/models/filter";
 
 export default {
   name: "CarsTable",
+  metaInfo: {
+    title: "All Cars",
+  },
   data: () => ({
     filter: new Filter(),
     searchBy: [

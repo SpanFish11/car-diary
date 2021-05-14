@@ -72,6 +72,9 @@ import jwt_decode from "jwt-decode";
 
 export default {
   name: "LoginPage",
+  metaInfo: {
+    title: "Sign in",
+  },
   data: () => ({
     user: new AuthRequest(),
 

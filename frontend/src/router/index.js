@@ -10,7 +10,11 @@ const routes = [
     component: () => import("@/view/Index"),
     children: [
       {
-        name: "Login",
+        name: "Home",
+        path: "/",
+        component: () => import("@/view/pages/Home"),
+      },
+      {
         path: "/login",
         component: () => import("@/view/pages/LoginPage"),
       },
