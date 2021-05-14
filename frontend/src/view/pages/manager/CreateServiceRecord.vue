@@ -469,6 +469,9 @@ import { mapMutations, mapState } from "vuex";
 export default {
   name: "CreateServiceRecord.vue",
   props: ["id"],
+  metaInfo: {
+    title: "Add New Service Record",
+  },
   data: () => ({
     servicePartItemFormValid: true,
     serviceServiceOperationFormValid: true,

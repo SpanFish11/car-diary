@@ -10,6 +10,10 @@
 <script>
 export default {
   name: "CarDiaryIndex",
+  metaInfo: {
+    title: "Car Diary",
+    titleTemplate: "%s | Car Diary",
+  },
   components: {
     AppBar: () => import("../components/AppBar"),
     Drawer: () => import("../components/Drawer"),

@@ -509,6 +509,9 @@ import NewUser from "@/models/new_user";
 import { mapMutations, mapState } from "vuex";
 export default {
   name: "SoldCar",
+  metaInfo: {
+    title: "Add New Car",
+  },
   data: () => ({
     car: new NewCar(),
     user: new NewUser(),

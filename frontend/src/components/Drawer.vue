@@ -12,11 +12,8 @@
 
     <v-list dense nav>
       <v-list-item>
-        <v-list-item-avatar class="align-self-center" color="white" contain>
-          <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="30"
-          />
+        <v-list-item-avatar class="align-self-center" contain>
+          <v-img src="@/assets/AppBarLogo.png" />
         </v-list-item-avatar>
 
         <v-list-item-content>
@@ -67,24 +64,19 @@ export default {
     items: [],
     user_role: [
       {
-        title: "Home",
-        icon: "mdi-home-city",
+        title: "My cars",
+        icon: "mdi-car-multiple",
         to: "/client",
       },
     ],
     other: [
       {
-        title: "Home",
-        icon: "mdi-home-city",
+        title: "All Cars",
+        icon: "mdi-car-multiple",
         to: "/manager",
       },
       {
-        title: "Add Service Record",
-        icon: "mdi-clipboard-outline",
-        to: "/manager/service/add",
-      },
-      {
-        title: "Sold Car",
+        title: "Add New Car",
         icon: "mdi-car",
         to: "/manager/car/add",
       },
@@ -108,11 +100,10 @@ export default {
       return this.$store.state.auth.user;
     },
   },
-  // TODO костыль
   methods: {
     resolveRole() {
-      const { roles } = this.currentUser;
-      if (roles !== null) {
+      if (this.currentUser !== null) {
+        const { roles } = this.currentUser;
         if (roles.includes("user") && roles.length === 1) {
           this.items = this.user_role;
         } else {
