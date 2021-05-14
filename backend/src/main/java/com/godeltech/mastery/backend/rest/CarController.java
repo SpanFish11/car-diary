@@ -31,12 +31,12 @@ import javax.validation.constraints.Min;
 import java.util.Objects;
 
 import static java.util.List.of;
-import static org.apache.tomcat.util.http.fileupload.FileUploadBase.MULTIPART_FORM_DATA;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.http.MediaType.IMAGE_PNG;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.http.MediaType.parseMediaType;
 import static org.springframework.http.ResponseEntity.ok;
@@ -143,7 +143,9 @@ public class CarController {
             description = "Internal Server Error",
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
-  @PatchMapping(value = "/{car_id}/photos", consumes = MULTIPART_FORM_DATA)
+  @PatchMapping(
+      value = "/{car_id}/photos",
+      consumes = {MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<HttpStatus> updateCarPhoto(
       @PathVariable("car_id") @Min(1) final Long id,
       @RequestPart(value = "photo") final MultipartFile photo)
