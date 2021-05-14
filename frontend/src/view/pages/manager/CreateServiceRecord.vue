@@ -32,19 +32,19 @@
                   :rules="{
                     required: true,
                     numeric: true,
-                    max: 7,
-                    min_value: 0,
+                    min_value: currentMileage,
+                    max_value: 999999,
                   }"
                 >
                   <v-text-field
-                    :counter="7"
+                    :counter="6"
                     v-model="mileage"
                     label="Mileage"
                     :error-messages="errors"
                     filled
                     dense
                     clearable
-                    placeholder="Type mileage"
+                    :placeholder="`Current value is ${currentMileage}`"
                   ></v-text-field>
                 </validation-provider>
               </v-col>
@@ -487,6 +487,7 @@ export default {
     serviceOperationName: null,
     tempServiceOperationName: null,
     mileage: null,
+    currentMileage: null,
     serviceOperationDate: false,
     serviceWorksHeaders: [
       {
@@ -548,6 +549,7 @@ export default {
   mounted() {
     this.loadMaintenances();
     this.carId = this.$route.params.id;
+    this.getCurrentMileage();
   },
   computed: {
     formServiceOperationTitle() {
@@ -578,6 +580,14 @@ export default {
       setSnackbarSuccess: "SET_SNACKBARSUCCESS",
       setSnackbarError: "SET_SNACKBARERROR",
     }),
+    async getCurrentMileage() {
+      try {
+        const response = await CarDiaryDataService.getCarById(this.carId);
+        this.currentMileage = response.data.mileage;
+      } catch (error) {
+        console.log(error.response);
+      }
+    },
     async loadMaintenances() {
       try {
         const res = await CarDiaryDataService.getAllMaintenances();
