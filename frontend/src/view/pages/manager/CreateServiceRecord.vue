@@ -463,6 +463,7 @@
 
 <script>
 import CarDiaryDataService from "@/services/CarDiaryDataService";
+import NewRecord from "@/models/new_record";
 import { mapMutations, mapState } from "vuex";
 
 export default {
@@ -644,14 +645,7 @@ export default {
     },
     async saveServiceRecord() {
       this.overlay = !this.overlay;
-      // todo создать класс
-      const data = {
-        serviceOperationNumber: this.serviceOperationName,
-        date: this.date,
-        mileage: this.mileage,
-        serviceWorks: this.serviceWorks,
-        changableParts: this.serviceParts,
-      };
+      const data = new NewRecord(this.serviceOperationName, this.date, this.mileage, this.serviceWorks, this.serviceParts);
       // todo сделать красиво
       await new Promise((resolve) => {
         setTimeout(resolve, 2000);

@@ -50,7 +50,7 @@ springdoc:
 
 jwt:
   token:
-    secret: ${JWT_SECRET:seckret}
+    secret: ${JWT_SECRET:secret}
     expiration: ${JWT_EXPIRATION:86000000}
     issuer: ${JWT_ISSUER:api}
     audience: ${JWT_AUDIENCE:app}
