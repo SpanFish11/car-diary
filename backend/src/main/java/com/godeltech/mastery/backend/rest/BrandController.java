@@ -1,5 +1,10 @@
 package com.godeltech.mastery.backend.rest;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.http.ResponseEntity.ok;
+
+import com.godeltech.mastery.backend.assembler.BrandModelAssembler;
 import com.godeltech.mastery.backend.domain.dto.responce.BrandDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.ModelDTO;
@@ -9,17 +14,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.Min;
-import java.util.List;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @Tag(name = "Brand Controller", description = "Operations about brand")
 @RestController
@@ -28,6 +33,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class BrandController {
 
   private final BrandService brandService;
+  private final BrandModelAssembler brandModelAssembler;
 
   @Operation(
       summary = "Get all brands",
@@ -44,8 +50,33 @@ public class BrandController {
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @GetMapping
-  public ResponseEntity<List<BrandDTO>> getAllBrands() {
-    return ok(brandService.getAllBrands());
+  public ResponseEntity<CollectionModel<EntityModel<BrandDTO>>> getAllBrands() {
+    final List<EntityModel<BrandDTO>> brands =
+        brandService.getAllBrands().stream()
+            .map(brandModelAssembler::dtoToModel)
+            .collect(Collectors.toList());
+    return ok(
+        CollectionModel.of(
+            brands, linkTo(methodOn(BrandController.class).getAllBrands()).withSelfRel()));
+  }
+
+  @Operation(
+      summary = "Get brand",
+      description = "Endpoint for getting brand by id",
+      responses = {
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Bad Request",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
+      })
+  @GetMapping("/{id}")
+  public ResponseEntity<EntityModel<BrandDTO>> getBrandById(@PathVariable Long id) {
+    return ok(brandModelAssembler.toModel(brandService.getById(id)));
   }
 
   @Operation(
@@ -67,8 +98,14 @@ public class BrandController {
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @GetMapping("/{brand_id}/models")
-  public ResponseEntity<List<ModelDTO>> getAllModelById(
+  public ResponseEntity<CollectionModel<EntityModel<ModelDTO>>> getAllModelById(
       @PathVariable(name = "brand_id") @Min(1) final Long id) {
-    return ok(brandService.getModelsByBrandId(id));
+    final List<EntityModel<ModelDTO>> models =
+        brandService.getModelsByBrandId(id).stream()
+            .map(modelDTO -> brandModelAssembler.modelDTOToModel(modelDTO, id))
+            .collect(Collectors.toList());
+    return ok(
+        CollectionModel.of(
+            models, linkTo(methodOn(BrandController.class).getAllModelById(id)).withSelfRel()));
   }
 }

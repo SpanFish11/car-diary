@@ -1,5 +1,6 @@
 package com.godeltech.mastery.backend.rest;
 
+import com.godeltech.mastery.backend.assembler.CarModelAssembler;
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
 import com.godeltech.mastery.backend.domain.dto.request.Filter;
 import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -48,6 +50,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class CarController {
 
   private final CarService carService;
+  private final CarModelAssembler carModelAssembler;
 
   @Operation(
       summary = "Get all cars or search by filter",
@@ -90,8 +93,8 @@ public class CarController {
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @GetMapping("/{car_id}")
-  public ResponseEntity<CarDTO> getCarById(@PathVariable("car_id") @Min(1) final Long id) {
-    return ok(carService.getCarById(id));
+  public ResponseEntity<EntityModel<CarDTO>> getCarById(@PathVariable("car_id") @Min(1) final Long id) {
+    return ok(carModelAssembler.toModel(carService.getCarById(id)));
   }
 
   @Operation(

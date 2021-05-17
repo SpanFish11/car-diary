@@ -1,5 +1,10 @@
 package com.godeltech.mastery.backend.rest;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.ResponseEntity.ok;
+
 import com.godeltech.mastery.backend.domain.dto.request.GuaranteeCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.GuaranteeDTO;
@@ -9,7 +14,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.ResponseEntity.ok;
 
 @Tag(name = "Guarantee Controller", description = "Operations about guarantee")
 @RestController
@@ -80,7 +82,11 @@ public class GuaranteeController {
             content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @GetMapping("/{car_id}")
-  public ResponseEntity<GuaranteeDTO> getGuarantee(@PathVariable("car_id") @Min(1) final Long id) {
-    return ok(guaranteeService.getGuarantee(id));
+  public ResponseEntity<EntityModel<GuaranteeDTO>> getGuarantee(
+      @PathVariable("car_id") @Min(1) final Long id) {
+    return ok(
+        EntityModel.of(
+            guaranteeService.getGuarantee(id),
+            linkTo(methodOn(GuaranteeController.class).getGuarantee(id)).withSelfRel()));
   }
 }
