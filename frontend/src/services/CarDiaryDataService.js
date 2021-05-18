@@ -1,4 +1,4 @@
-import { AXIOS } from "@/http-common";
+import {AXIOS} from "@/http-common";
 import authHeader from "@/services/auth-header";
 
 class CarDiaryDataService {
@@ -15,19 +15,19 @@ class CarDiaryDataService {
   }
 
   getAllCars(params) {
-    return AXIOS.get(`cars`, { params: params.params, headers: authHeader() });
+    return AXIOS.get(`cars`, {params: params.params, headers: authHeader()});
   }
 
   getAllBrands() {
-    return AXIOS.get(`brands`, { headers: authHeader() });
+    return AXIOS.get(`brands`, {headers: authHeader()});
   }
 
   getBrandModels(brandId) {
-    return AXIOS.get(`brands/${brandId}/models`, { headers: authHeader() });
+    return AXIOS.get(`brands/${brandId}/models`, {headers: authHeader()});
   }
 
   getLastAddedClientCar(carId) {
-    return AXIOS.get(`/cars/${carId}`, { headers: authHeader() });
+    return AXIOS.get(`/cars/${carId}`, {headers: authHeader()});
   }
 
   saveNewCar(clientId, car) {
@@ -38,44 +38,44 @@ class CarDiaryDataService {
 
   saveCarImage(carId, photo) {
     let header = authHeader();
-    Object.assign(header, { "Content-Type": "multipart/form-data" });
-    return AXIOS.patch(`cars/${carId}/photos`, photo, { headers: header });
+    Object.assign(header, {"Content-Type": "multipart/form-data"});
+    return AXIOS.patch(`cars/${carId}/photos`, photo, {headers: header});
   }
 
   getAllClients() {
-    return AXIOS.get(`/clients`, { headers: authHeader() });
+    return AXIOS.get(`/clients`, {headers: authHeader()});
   }
 
   getAllClientsCars(clientId) {
-    return AXIOS.get(`/clients/${clientId}/cars`, { headers: authHeader() });
+    return AXIOS.get(`/clients/${clientId}/cars`, {headers: authHeader()});
   }
 
   getAllEquipments() {
-    return AXIOS.get(`equipments`, { headers: authHeader() });
+    return AXIOS.get(`equipments`, {headers: authHeader()});
   }
 
   saveNewClient(client) {
-    return AXIOS.post(`/clients`, client, { headers: authHeader() });
+    return AXIOS.post(`/clients`, client, {headers: authHeader()});
   }
 
   saveCar(car) {
-    return AXIOS.post(`/cars`, car, { headers: authHeader() });
+    return AXIOS.post(`/cars`, car, {headers: authHeader()});
   }
 
   createGuarantee(carId, request) {
-    return AXIOS.post(`guarantee/${carId}`, request, { headers: authHeader() });
+    return AXIOS.post(`guarantee/${carId}`, request, {headers: authHeader()});
   }
 
   getCarById(carId) {
-    return AXIOS.get(`/cars/${carId}`, { headers: authHeader() });
+    return AXIOS.get(`/cars/${carId}`, {headers: authHeader()});
   }
 
   getGuaranteeByCarId(carId) {
-    return AXIOS.get(`/guarantee/${carId}`, { headers: authHeader() });
+    return AXIOS.get(`/guarantee/${carId}`, {headers: authHeader()});
   }
 
   getServiceRecordsByCarId(carId) {
-    return AXIOS.get(`/operations/${carId}`, { headers: authHeader() });
+    return AXIOS.get(`/operations/${carId}`, {headers: authHeader()});
   }
 
   printHistoryOfServiceRecord(carId) {
@@ -84,6 +84,24 @@ class CarDiaryDataService {
       responseType: "arraybuffer",
     });
   }
+
+  saveAppointment(appointment) {
+    return AXIOS.post('/appointments', appointment, {headers: authHeader()});
+  }
+
+  getAllClientAppointments() {
+    return AXIOS.get('/clients/appointments', {headers: authHeader()});
+  }
+
+  getAllAppointments() {
+    return AXIOS.get('/appointments', {headers: authHeader()});
+  }
+
+  changeAppointmentStatus(appointmentId, request) {
+    return AXIOS.put(`/appointments/${appointmentId}?status=` + request, {},
+        {headers: authHeader()});
+  }
+
 }
 
 export default new CarDiaryDataService();
