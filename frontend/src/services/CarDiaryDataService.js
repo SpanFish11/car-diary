@@ -70,10 +70,6 @@ class CarDiaryDataService {
     return AXIOS.get(`/cars/${carId}`, { headers: authHeader() });
   }
 
-  getGuaranteeByCarId(carId) {
-    return AXIOS.get(`/guarantee/${carId}`, { headers: authHeader() });
-  }
-
   getServiceRecordsByCarId(carId) {
     return AXIOS.get(`/operations/${carId}`, { headers: authHeader() });
   }
@@ -83,6 +79,10 @@ class CarDiaryDataService {
       headers: authHeader(),
       responseType: "arraybuffer",
     });
+  }
+
+  saveNewPassword(data) {
+    return AXIOS.put(`clients/password/reset`, data, { headers: authHeader() });
   }
 }
 

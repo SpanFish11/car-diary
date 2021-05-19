@@ -1,10 +1,10 @@
 <template>
   <v-navigation-drawer
-    app
     v-model="drawer"
+    :expand-on-hover="expandOnHover"
+    app
     dark
     flat
-    :expand-on-hover="expandOnHover"
     mobile-breakpoint="960"
     width="260"
   >
@@ -33,12 +33,12 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <router-link :to="item.to" custom v-slot="{ navigate }">
+            <router-link v-slot="{ navigate }" :to="item.to" custom>
               <v-list-item-title
-                @click="navigate"
-                @keypress.enter="navigate"
                 role="link"
+                @click="navigate"
                 v-text="item.title"
+                @keypress.enter="navigate"
               >
               </v-list-item-title>
             </router-link>

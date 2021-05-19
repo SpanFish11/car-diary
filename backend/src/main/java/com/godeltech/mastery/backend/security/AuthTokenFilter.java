@@ -1,5 +1,7 @@
 package com.godeltech.mastery.backend.security;
 
+import com.godeltech.mastery.backend.exception.CustomAuthenticationException;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -58,8 +60,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
       }
       filterChain.doFilter(request, response);
-    } catch (final AuthenticationException ex) {
-      entryPoint.commence(request, response, ex);
+    } catch (final AuthenticationException | JwtException ex) {
+      entryPoint.commence(
+          request, response, new CustomAuthenticationException(ex.getMessage(), ex));
     }
   }
 }

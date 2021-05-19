@@ -54,6 +54,11 @@ const routes = [
         component: () => import("@/view/pages/manager/CreateGuarantee"),
       },
       {
+        name: "Change Password",
+        path: "/password",
+        component: () => import("@/view/pages/ChangePassword"),
+      },
+      {
         path: "*",
         component: () => import("@/view/pages/NotFound"),
       },

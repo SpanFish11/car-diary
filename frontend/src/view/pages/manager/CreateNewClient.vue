@@ -9,50 +9,50 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" sm="6" md="6">
+                <v-col cols="12" md="6" sm="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="first name"
                     :rules="{ required: true, alpha_spaces: true }"
+                    name="first name"
                   >
                     <v-text-field
-                      label="Legal first name*"
                       v-model="user.firstName"
-                      type="text"
-                      clearable
                       :error-messages="errors"
+                      clearable
+                      label="Legal first name*"
                       required
+                      type="text"
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
-                <v-col cols="12" sm="6" md="6">
+                <v-col cols="12" md="6" sm="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="last name"
                     :rules="{ required: true, alpha_spaces: true }"
+                    name="last name"
                   >
                     <v-text-field
+                      v-model="user.lastName"
+                      :error-messages="errors"
+                      clearable
                       label="Legal last name*"
                       required
-                      clearable
-                      :error-messages="errors"
                       type="text"
-                      v-model="user.lastName"
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
                 <v-col cols="12">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="email"
                     :rules="{ required: true, email: true, excluded: emails }"
+                    name="email"
                   >
                     <v-text-field
+                      v-model="user.email"
+                      :error-messages="errors"
+                      clearable
                       label="Email*"
                       required
-                      clearable
-                      :error-messages="errors"
-                      v-model="user.email"
                     ></v-text-field>
                   </validation-provider>
                 </v-col>
@@ -62,10 +62,10 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="error" @click="reset"> Reset </v-btn>
+            <v-btn color="error" @click="reset"> Reset</v-btn>
             <v-btn
-              color="success"
               :disabled="invalid"
+              color="success"
               @click="saveClient(user)"
             >
               Save

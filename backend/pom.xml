@@ -27,6 +27,7 @@
     <jasper.version>6.17.0</jasper.version>
     <jjwt.version>0.11.2</jjwt.version>
     <tinity.version>1.6.0</tinity.version>
+    <passay.version>1.6.0</passay.version>
   </properties>
 
   <dependencies>
@@ -181,6 +182,12 @@
       <groupId>com.tinify</groupId>
       <artifactId>tinify</artifactId>
       <version>${tinity.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.passay</groupId>
+      <artifactId>passay</artifactId>
+      <version>${passay.version}</version>
     </dependency>
 
   </dependencies>
