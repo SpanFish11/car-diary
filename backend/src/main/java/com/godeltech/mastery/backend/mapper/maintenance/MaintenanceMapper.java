@@ -1,15 +1,18 @@
 package com.godeltech.mastery.backend.mapper.maintenance;
 
-import com.godeltech.mastery.backend.domain.dto.responce.maintenance.MaintenanceDTO;
-import com.godeltech.mastery.backend.domain.entity.maintenance.Maintenance;
+import com.godeltech.mastery.backend.domain.dto.responce.MaintenanceDTO;
+import com.godeltech.mastery.backend.domain.entity.Maintenance;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
 
+import static org.mapstruct.ReportingPolicy.IGNORE;
+
 @Mapper(
     componentModel = "spring",
-    uses = {MaintenanceOperationMapper.class, DetailMapper.class})
+    uses = {MaintenanceOperationMapper.class, DetailMapper.class},
+    unmappedTargetPolicy = IGNORE)
 public interface MaintenanceMapper {
 
   @Mapping(target = "id", source = "id")

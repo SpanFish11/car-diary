@@ -1,4 +1,4 @@
-package com.godeltech.mastery.backend.domain.entity.maintenance;
+package com.godeltech.mastery.backend.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
@@ -12,13 +12,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
-@Table(name = "m_details")
-public class Detail {
+@Table(name = "m_operations")
+public class MaintenanceOperation {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -30,7 +30,7 @@ public class Detail {
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 
-  @ManyToOne(fetch = EAGER)
+  @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "maintenance_id", referencedColumnName = "id")
   @JsonBackReference
   private Maintenance maintenance;

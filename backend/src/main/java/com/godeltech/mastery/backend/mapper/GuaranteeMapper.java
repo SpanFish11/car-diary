@@ -6,7 +6,9 @@ import com.godeltech.mastery.backend.domain.entity.Guarantee;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+import static org.mapstruct.ReportingPolicy.IGNORE;
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = IGNORE)
 public interface GuaranteeMapper {
 
   @Mapping(target = "start", source = "start")

@@ -37,6 +37,6 @@ public class AuthenticationController {
     }
     final var client = clientService.getClientByEmail(authRequest.getEmail());
     final var jwtToken = jwtUtils.generateToken(client);
-    return ok(AuthResponseDTO.builder().token(jwtToken).build());
+    return ok(new AuthResponseDTO(jwtToken));
   }
 }
