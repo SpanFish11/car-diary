@@ -14,7 +14,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -37,7 +37,7 @@ public class ServiceWork implements Serializable {
   @Column(name = "guarantee", nullable = false)
   private Boolean guarantee;
 
-  @ManyToOne(fetch = EAGER)
+  @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "service_operation_record_id", referencedColumnName = "id")
   @JsonBackReference
   private ServiceOperationRecord serviceOperationRecord;

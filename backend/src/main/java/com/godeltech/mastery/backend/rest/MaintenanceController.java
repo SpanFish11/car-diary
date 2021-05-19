@@ -1,7 +1,7 @@
 package com.godeltech.mastery.backend.rest;
 
 import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
-import com.godeltech.mastery.backend.domain.dto.responce.maintenance.MaintenanceDTO;
+import com.godeltech.mastery.backend.domain.dto.responce.MaintenanceDTO;
 import com.godeltech.mastery.backend.service.MaintenanceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

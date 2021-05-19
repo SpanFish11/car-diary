@@ -8,9 +8,12 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
+import static org.mapstruct.ReportingPolicy.IGNORE;
+
 @Mapper(
     componentModel = "spring",
-    uses = {ServiceWorkMapper.class, ChangablePartMapper.class})
+    uses = {ServiceWorkMapper.class, ChangeablePartMapper.class},
+    unmappedTargetPolicy = IGNORE)
 public interface OperationMapper {
 
   @Mapping(target = "serviceOperationNumber", source = "serviceOperationNumber")

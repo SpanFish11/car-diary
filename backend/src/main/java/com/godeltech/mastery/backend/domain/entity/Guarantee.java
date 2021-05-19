@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -32,7 +33,7 @@ public class Guarantee {
   @Column(name = "extended", nullable = false)
   private Boolean extended;
 
-  @OneToOne
+  @OneToOne(fetch = LAZY)
   @JoinColumn(name = "car_id", referencedColumnName = "id")
   @JsonBackReference
   private Car car;

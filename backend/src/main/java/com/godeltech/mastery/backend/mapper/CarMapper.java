@@ -9,6 +9,8 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
+import static org.mapstruct.ReportingPolicy.IGNORE;
+
 @Mapper(
     componentModel = "spring",
     uses = {
@@ -18,7 +20,8 @@ import java.util.List;
       EquipmentMapper.class,
       OperationMapper.class,
       GuaranteeMapper.class
-    })
+    },
+    unmappedTargetPolicy = IGNORE)
 public interface CarMapper {
 
   @Mapping(target = "year", source = "year")

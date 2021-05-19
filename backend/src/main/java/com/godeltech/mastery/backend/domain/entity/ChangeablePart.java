@@ -14,13 +14,13 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Data
 @Table(name = "m_changable_parts")
-public class ChangablePart implements Serializable {
+public class ChangeablePart implements Serializable {
 
   @Serial private static final long serialVersionUID = -2507350357873574849L;
 
@@ -37,7 +37,7 @@ public class ChangablePart implements Serializable {
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 
-  @ManyToOne(fetch = EAGER)
+  @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "service_operation_record_id", referencedColumnName = "id")
   @JsonBackReference
   private ServiceOperationRecord serviceOperationRecord;
