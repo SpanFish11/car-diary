@@ -1,5 +1,7 @@
 package com.godeltech.mastery.backend.service.impl;
 
+import static java.util.stream.Collectors.toList;
+
 import com.godeltech.mastery.backend.domain.dto.responce.BrandDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.ModelDTO;
 import com.godeltech.mastery.backend.domain.entity.Brand;
@@ -8,12 +10,9 @@ import com.godeltech.mastery.backend.mapper.BrandMapper;
 import com.godeltech.mastery.backend.mapper.ModelMapper;
 import com.godeltech.mastery.backend.repository.BrandRepository;
 import com.godeltech.mastery.backend.service.BrandService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor

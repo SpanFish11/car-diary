@@ -1,5 +1,7 @@
 package com.godeltech.mastery.backend.service.impl;
 
+import static java.lang.Boolean.TRUE;
+
 import com.godeltech.mastery.backend.domain.dto.request.GuaranteeCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.GuaranteeDTO;
 import com.godeltech.mastery.backend.domain.entity.Guarantee;
@@ -10,8 +12,6 @@ import com.godeltech.mastery.backend.service.CarService;
 import com.godeltech.mastery.backend.service.GuaranteeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import static java.lang.Boolean.TRUE;
 
 @Service
 @RequiredArgsConstructor

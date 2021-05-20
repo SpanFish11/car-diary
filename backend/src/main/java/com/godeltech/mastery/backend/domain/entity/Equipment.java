@@ -1,19 +1,18 @@
 package com.godeltech.mastery.backend.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import static javax.persistence.GenerationType.IDENTITY;
 
+import java.io.Serial;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serial;
-import java.io.Serializable;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity

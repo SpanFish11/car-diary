@@ -1,11 +1,10 @@
 package com.godeltech.mastery.backend.domain.event;
 
 import com.godeltech.mastery.backend.domain.entity.Client;
+import java.io.Serial;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
-
-import java.io.Serial;
 
 @Setter
 @Getter

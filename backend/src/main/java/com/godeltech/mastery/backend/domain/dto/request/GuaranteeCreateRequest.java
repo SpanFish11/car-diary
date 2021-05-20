@@ -1,13 +1,12 @@
 package com.godeltech.mastery.backend.domain.dto.request;
 
-import lombok.Data;
+import static javax.persistence.TemporalType.DATE;
 
+import java.time.LocalDate;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
-import java.time.LocalDate;
-
-import static javax.persistence.TemporalType.DATE;
+import lombok.Data;
 
 @Data
 public class GuaranteeCreateRequest {

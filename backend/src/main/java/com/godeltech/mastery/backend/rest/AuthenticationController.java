@@ -1,5 +1,7 @@
 package com.godeltech.mastery.backend.rest;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 import com.godeltech.mastery.backend.domain.dto.request.AuthRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.AuthResponseDTO;
 import com.godeltech.mastery.backend.security.JwtUtils;
@@ -13,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequiredArgsConstructor
