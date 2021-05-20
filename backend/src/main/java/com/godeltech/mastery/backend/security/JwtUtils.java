@@ -1,18 +1,5 @@
 package com.godeltech.mastery.backend.security;
 
-import com.godeltech.mastery.backend.config.JwtConfiguration;
-import com.godeltech.mastery.backend.domain.entity.Client;
-import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
 import static io.jsonwebtoken.Claims.AUDIENCE;
 import static io.jsonwebtoken.Claims.EXPIRATION;
 import static io.jsonwebtoken.Claims.ID;
@@ -28,6 +15,18 @@ import static java.util.Calendar.MILLISECOND;
 import static java.util.Calendar.getInstance;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
+
+import com.godeltech.mastery.backend.config.JwtConfiguration;
+import com.godeltech.mastery.backend.domain.entity.Client;
+import io.jsonwebtoken.Claims;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

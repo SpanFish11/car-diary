@@ -1,20 +1,5 @@
 package com.godeltech.mastery.backend.validator;
 
-import lombok.SneakyThrows;
-import org.passay.CharacterRule;
-import org.passay.IllegalSequenceRule;
-import org.passay.LengthRule;
-import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.PropertiesMessageResolver;
-import org.passay.RuleResult;
-import org.passay.WhitespaceRule;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import java.util.List;
-import java.util.Properties;
-
 import static java.lang.String.join;
 import static java.util.Arrays.asList;
 import static org.passay.EnglishCharacterData.Digit;
@@ -24,6 +9,20 @@ import static org.passay.EnglishCharacterData.UpperCase;
 import static org.passay.EnglishSequenceData.Alphabetical;
 import static org.passay.EnglishSequenceData.Numerical;
 import static org.passay.EnglishSequenceData.USQwerty;
+
+import java.util.List;
+import java.util.Properties;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import lombok.SneakyThrows;
+import org.passay.CharacterRule;
+import org.passay.IllegalSequenceRule;
+import org.passay.LengthRule;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.PropertiesMessageResolver;
+import org.passay.RuleResult;
+import org.passay.WhitespaceRule;
 
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 

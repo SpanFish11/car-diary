@@ -1,12 +1,11 @@
 package com.godeltech.mastery.backend.domain.dto.request;
 
-import lombok.Data;
-
+import java.math.BigDecimal;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class ServiceWorkCreateRequest {

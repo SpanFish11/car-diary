@@ -1,5 +1,9 @@
 package com.godeltech.mastery.backend.config;
 
+import static io.swagger.v3.oas.models.security.SecurityScheme.In.HEADER;
+import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
+import static java.util.Arrays.asList;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -7,10 +11,6 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import static io.swagger.v3.oas.models.security.SecurityScheme.In.HEADER;
-import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
-import static java.util.Arrays.asList;
 
 @Configuration
 public class SwaggerConfiguration {

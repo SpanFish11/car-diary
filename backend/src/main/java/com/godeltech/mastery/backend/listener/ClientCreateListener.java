@@ -1,5 +1,7 @@
 package com.godeltech.mastery.backend.listener;
 
+import static java.lang.String.format;
+
 import com.godeltech.mastery.backend.domain.entity.Client;
 import com.godeltech.mastery.backend.domain.event.ClientCreateEvent;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +10,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-
-import static java.lang.String.format;
 
 @Component
 @RequiredArgsConstructor

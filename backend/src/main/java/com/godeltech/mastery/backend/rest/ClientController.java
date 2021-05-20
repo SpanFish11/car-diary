@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.ok;
 
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateRequest;
+import com.godeltech.mastery.backend.domain.dto.request.ChangeMileageRequest;
 import com.godeltech.mastery.backend.domain.dto.request.ClientCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.request.ResetPasswordRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.AppointmentDTO;
@@ -26,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -84,9 +86,9 @@ public class ClientController {
   @Operation(
       summary = "Add new client",
       description = """
-              Endpoint for added new client. After adding a client,
-              he will receive an email with a username and password.
-              """,
+          Endpoint for added new client. After adding a client,
+          he will receive an email with a username and password.
+          """,
       responses = {
         @ApiResponse(responseCode = "201", description = "Created"),
         @ApiResponse(
@@ -162,6 +164,14 @@ public class ClientController {
       @PathVariable("client_id") @Min(1) final Long id,
       @RequestBody @Valid final CarCreateRequest request) {
     return new ResponseEntity<>(carService.addNewCar(id, request), CREATED);
+  }
+
+  @PatchMapping("/{client_id}/cars")
+  public ResponseEntity<HttpStatus> updateCarMileage(
+      @PathVariable("client_id") @Min(1) final Long id,
+      @RequestBody @Valid ChangeMileageRequest request) {
+    carService.changeCarMileage(id, request);
+    return ok().build();
   }
 
   @PutMapping("/password/reset")
