@@ -17,6 +17,7 @@ public interface GuaranteeMapper {
 
   @Mapping(target = "end", source = "end")
   @Mapping(target = "start", source = "start")
+  @Mapping(target = "mileage", source = "mileage")
   @Mapping(target = "extended", source = "extended")
   GuaranteeDTO toDTO(Guarantee guarantee);
 }

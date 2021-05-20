@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,5 +82,11 @@ public class GuaranteeController {
   @GetMapping("/{car_id}")
   public ResponseEntity<GuaranteeDTO> getGuarantee(@PathVariable("car_id") @Min(1) final Long id) {
     return ok(guaranteeService.getGuarantee(id));
+  }
+
+  @PutMapping("/{car_id}")
+  public ResponseEntity<GuaranteeDTO> extendedGuarantee(
+      @PathVariable("car_id") @Min(1) final Long id) {
+    return ok(guaranteeService.extensionGuarantee(id));
   }
 }

@@ -8,4 +8,6 @@ public interface GuaranteeService {
   Long createGuarantee(Long carId, GuaranteeCreateRequest guaranteeCreateRequest);
 
   GuaranteeDTO getGuarantee(Long carId);
+
+  GuaranteeDTO extensionGuarantee(Long carId);
 }

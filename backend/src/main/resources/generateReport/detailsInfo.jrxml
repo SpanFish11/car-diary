@@ -1,75 +1,75 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN"
-        "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+  "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://jasperreports.sourceforge.net/jasperreports"
-        xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://jasperreports.sourceforge.net/jasperreports"
+  xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
    http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
-        name="report2" pageWidth="595" pageHeight="842"
-        columnWidth="555" leftMargin="20" rightMargin="20"
-        topMargin="20" bottomMargin="20">
-    <field name="model">
-        <fieldDescription>
-            <![CDATA[model]]>
-        </fieldDescription>
-    </field>
-    <field name="price" class="java.math.BigDecimal">
-        <fieldDescription>
-            <![CDATA[price]]>
-        </fieldDescription>
-    </field>
-    <field name="replaced" class="java.lang.Boolean">
-        <fieldDescription>
-            <![CDATA[replaced]]>
-        </fieldDescription>
-    </field>
-    <background>
-        <band splitType="Stretch"/>
-    </background>
-    <detail>
-        <band height="70" splitType="Stretch">
-            <staticText>
-                <reportElement x="0" y="0" width="150" height="15"/>
-                <textElement/>
-                <text><![CDATA[Details information:]]></text>
-            </staticText>
-            <staticText>
-                <reportElement x="0" y="20" width="30" height="15"/>
-                <textElement/>
-                <text><![CDATA[Model:]]></text>
-            </staticText>
-            <textField>
-                <reportElement x="40" y="20" width="100" height="15"/>
-                <textElement textAlignment="Left" verticalAlignment="Middle"/>
-                <textFieldExpression class="java.lang.String">
-                    <![CDATA[$F{model}]]>
-                </textFieldExpression>
-            </textField>
-            <staticText>
-                <reportElement x="0" y="35" width="50" height="15"/>
-                <textElement/>
-                <text><![CDATA[Price:]]></text>
-            </staticText>
-            <textField>
-                <reportElement x="30" y="35" width="150" height="15"/>
-                <textElement textAlignment="Left" verticalAlignment="Middle"/>
-                <textFieldExpression class="java.math.BigDecimal">
-                    <![CDATA[$F{price}]]>
-                </textFieldExpression>
-            </textField>
-            <staticText>
-                <reportElement x="0" y="50" width="60" height="15"/>
-                <textElement/>
-                <text><![CDATA[Replaced:]]></text>
-            </staticText>
-            <textField>
-                <reportElement x="65" y="50" width="150" height="15"/>
-                <textElement textAlignment="Left" verticalAlignment="Middle"/>
-                <textFieldExpression class="java.lang.Boolean">
-                    <![CDATA[$F{replaced}]]>
-                </textFieldExpression>
-            </textField>
-        </band>
-    </detail>
+  name="report2" pageWidth="595" pageHeight="842"
+  columnWidth="555" leftMargin="20" rightMargin="20"
+  topMargin="20" bottomMargin="20">
+  <field name="model">
+    <fieldDescription>
+      <![CDATA[model]]>
+    </fieldDescription>
+  </field>
+  <field name="price" class="java.math.BigDecimal">
+    <fieldDescription>
+      <![CDATA[price]]>
+    </fieldDescription>
+  </field>
+  <field name="replaced" class="java.lang.Boolean">
+    <fieldDescription>
+      <![CDATA[replaced]]>
+    </fieldDescription>
+  </field>
+  <background>
+    <band splitType="Stretch"/>
+  </background>
+  <detail>
+    <band height="70" splitType="Stretch">
+      <staticText>
+        <reportElement x="0" y="0" width="150" height="15"/>
+        <textElement/>
+        <text><![CDATA[Details information:]]></text>
+      </staticText>
+      <staticText>
+        <reportElement x="0" y="20" width="30" height="15"/>
+        <textElement/>
+        <text><![CDATA[Model:]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="40" y="20" width="100" height="15"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle"/>
+        <textFieldExpression class="java.lang.String">
+          <![CDATA[$F{model}]]>
+        </textFieldExpression>
+      </textField>
+      <staticText>
+        <reportElement x="0" y="35" width="50" height="15"/>
+        <textElement/>
+        <text><![CDATA[Price:]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="30" y="35" width="150" height="15"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle"/>
+        <textFieldExpression class="java.math.BigDecimal">
+          <![CDATA[$F{price}]]>
+        </textFieldExpression>
+      </textField>
+      <staticText>
+        <reportElement x="0" y="50" width="60" height="15"/>
+        <textElement/>
+        <text><![CDATA[Replaced:]]></text>
+      </staticText>
+      <textField>
+        <reportElement x="65" y="50" width="150" height="15"/>
+        <textElement textAlignment="Left" verticalAlignment="Middle"/>
+        <textFieldExpression class="java.lang.Boolean">
+          <![CDATA[$F{replaced}]]>
+        </textFieldExpression>
+      </textField>
+    </band>
+  </detail>
 </jasperReport>
