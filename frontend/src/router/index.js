@@ -59,9 +59,14 @@ const routes = [
         component: () => import("@/view/pages/ChangePassword"),
       },
       {
+        name: "Appointments",
+        path: "/appointments",
+        component: () => import("@/view/pages/appointments/Appointments")
+      },
+      {
         path: "*",
         component: () => import("@/view/pages/NotFound"),
-      },
+      }
     ],
   },
 ];

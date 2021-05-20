@@ -1,19 +1,19 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer"
-    :expand-on-hover="expandOnHover"
-    app
-    dark
-    flat
-    mobile-breakpoint="960"
-    width="260"
+      app
+      v-model="drawer"
+      dark
+      flat
+      :expand-on-hover="expandOnHover"
+      mobile-breakpoint="960"
+      width="260"
   >
-    <v-divider class="mb-1" />
+    <v-divider class="mb-1"/>
 
     <v-list dense nav>
       <v-list-item>
         <v-list-item-avatar class="align-self-center" contain>
-          <v-img src="@/assets/AppBarLogo.png" />
+          <v-img src="@/assets/AppBarLogo.png"/>
         </v-list-item-avatar>
 
         <v-list-item-content>
@@ -22,10 +22,10 @@
       </v-list-item>
     </v-list>
 
-    <v-divider class="mb-2" />
+    <v-divider class="mb-2"/>
 
     <v-list expand nav>
-      <div />
+      <div/>
       <v-list-item-group v-model="model">
         <v-list-item v-for="(item, i) in items" :key="i">
           <v-list-item-icon>
@@ -35,17 +35,17 @@
           <v-list-item-content>
             <router-link v-slot="{ navigate }" :to="item.to" custom>
               <v-list-item-title
-                role="link"
-                @click="navigate"
-                v-text="item.title"
-                @keypress.enter="navigate"
+                  @click="navigate"
+                  @keypress.enter="navigate"
+                  role="link"
+                  v-text="item.title"
               >
               </v-list-item-title>
             </router-link>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
-      <div />
+      <div/>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -68,6 +68,11 @@ export default {
         icon: "mdi-car-multiple",
         to: "/client",
       },
+      {
+        title: "My appointments",
+        icon: "mdi-calendar-multiple",
+        to: "/appointments"
+      }
     ],
     other: [
       {
@@ -85,6 +90,11 @@ export default {
         icon: "mdi-account",
         to: "/manager/client/add",
       },
+      {
+        title: "All Appointments",
+        icon: "mdi-calendar-multiple",
+        to: "/appointments"
+      }
     ],
   }),
   computed: {
@@ -103,7 +113,7 @@ export default {
   methods: {
     resolveRole() {
       if (this.currentUser !== null) {
-        const { roles } = this.currentUser;
+        const {roles} = this.currentUser;
         if (roles.includes("user") && roles.length === 1) {
           this.items = this.user_role;
         } else {

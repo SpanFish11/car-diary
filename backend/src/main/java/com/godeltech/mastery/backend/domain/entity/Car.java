@@ -80,4 +80,8 @@ public class Car implements Serializable {
   @OneToMany(mappedBy = "car", fetch = LAZY)
   @JsonManagedReference
   private List<ServiceOperationRecord> serviceOperations;
+
+  @OneToMany(mappedBy = "car")
+  @JsonManagedReference
+  private List<Appointment> appointments;
 }

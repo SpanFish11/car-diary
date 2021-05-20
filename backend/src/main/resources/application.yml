@@ -28,6 +28,10 @@ spring:
     password: ${MAIL_PASSWORD:password}
     port: ${MAIL_PORT:545454884}
 
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
+
 aws:
   s3:
     images:

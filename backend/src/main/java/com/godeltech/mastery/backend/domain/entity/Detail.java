@@ -1,8 +1,12 @@
 package com.godeltech.mastery.backend.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,15 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
-
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
+import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "m_details")
-public class Detail {
+public class Detail implements Serializable {
+
+  @Serial private static final long serialVersionUID = 551786349279844685L;
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
