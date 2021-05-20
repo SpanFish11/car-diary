@@ -82,7 +82,7 @@ class CarDiaryDataService {
   }
 
   saveNewPassword(data) {
-    return AXIOS.put(`clients/password/reset`, data, { headers: authHeader() });
+    return AXIOS.put(`clients/password/reset`, data, {headers: authHeader()});
   }
 
   saveAppointment(appointment) {
@@ -100,6 +100,10 @@ class CarDiaryDataService {
   changeAppointmentStatus(appointmentId, request) {
     return AXIOS.put(`/appointments/${appointmentId}?status=` + request, {},
         {headers: authHeader()});
+  }
+
+  changeGuarantee(carId) {
+    return AXIOS.put(`guarantee/${carId}`, {},{headers: authHeader()});
   }
 
 }

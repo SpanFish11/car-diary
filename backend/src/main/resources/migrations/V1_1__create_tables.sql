@@ -248,3 +248,18 @@ create table l_clients_roles
 );
 
 alter table l_clients_roles owner to ctdidtksihqvpb;
+
+CREATE FUNCTION change_mileage() RETURNS trigger AS $change_mileage$
+BEGIN
+    UPDATE m_cars
+    SET mileage = NEW.mileage
+    WHERE id = NEW.car_id;
+    RETURN NEW;
+END;
+$change_mileage$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS change_mileage ON m_service_records;
+CREATE TRIGGER change_mileage AFTER INSERT OR UPDATE ON m_service_records
+    FOR EACH ROW EXECUTE PROCEDURE change_mileage();
+
+ALTER FUNCTION change_mileage() OWNER TO ctdidtksihqvpb;

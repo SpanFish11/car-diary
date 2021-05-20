@@ -33,7 +33,6 @@ public class OperationServiceImpl implements OperationService {
   public Long createOperation(final Long carId, final OperationCreateRequest operation) {
     final var serviceOperationRecord = operationMapper.toEntity(operation);
     final var car = carService.findCarById(carId);
-    car.setMileage(operation.getMileage());
     serviceOperationRecord.setCar(car);
     return operationRepository.save(serviceOperationRecord).getId();
   }

@@ -31,6 +31,9 @@ public class Guarantee {
   @Column(name = "end_date", nullable = false)
   private LocalDate end;
 
+  @Column(name = "mileage", nullable = false)
+  private Integer mileage;
+
   @Column(name = "extended", nullable = false)
   private Boolean extended;
 

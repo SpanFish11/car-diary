@@ -4,7 +4,7 @@
       <v-col class="text-center" cols="4">
         <h2>{{ car.brand.name }} {{ car.model.name }}, {{ car.year }}</h2>
         <v-card>
-          <v-img v-bind:src="car.photoUrl" />
+          <v-img v-bind:src="car.photoUrl"/>
         </v-card>
       </v-col>
       <v-col cols="6">
@@ -21,6 +21,14 @@
           </h2>
           <h4>Guarantee start: {{ car.guarantee.start }}</h4>
           <h4>Guarantee end: {{ car.guarantee.end }}</h4>
+          <h4>Max mileage: {{ car.guarantee.mileage }} km</h4>
+          <h4 style="color: green">Number of mileage remaining: {{
+              car.guarantee.mileage - car.mileage
+            }} km</h4>
+          <h4 style="color: green">Number of days remaining: {{
+              (Date.parse(car.guarantee.end) - Date.parse(car.guarantee.start)) / (60 * 60 * 24
+                  * 1000)
+            }}</h4>
           <h4>
             Guarantee extended:
             <v-icon v-if="car.guarantee.extended" color="green" large>
@@ -28,6 +36,19 @@
             </v-icon>
             <v-icon v-else color="red" large>mdi-close-thick</v-icon>
           </h4>
+          <div v-if="
+              !(
+                currentUser().roles.includes('user') &&
+                currentUser().roles.length === 1) &&
+                !car.guarantee.extended
+            ">
+            <v-btn
+                color="blue"
+                outlined
+                @click="extendGurantee">
+              Extend
+            </v-btn>
+          </div>
         </div>
         <div v-else>
           <h3>
@@ -35,21 +56,21 @@
             <v-icon color="red" medium>mdi-alert-octagram-outline</v-icon>
           </h3>
           <v-dialog
-            v-if="
+              v-if="
               !(
                 currentUser().roles.includes('user') &&
                 currentUser().roles.length === 1
               )
             "
-            v-model="dialogGuarantee"
-            max-width="350"
+              v-model="dialogGuarantee"
+              max-width="350"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-bind="attrs" v-on="on" color="primary" dark>
                 Add Guarantee
               </v-btn>
             </template>
-            <CreateGuarantee v-on:event_create="eventHandler" />
+            <CreateGuarantee v-on:event_create="eventHandler"/>
           </v-dialog>
         </div>
       </v-col>
@@ -66,7 +87,7 @@
         <v-btn color="primary" @click="printHistoryRecords"> Download</v-btn>
       </v-col>
       <v-col
-        v-if="
+          v-if="
           !(
             currentUser().roles.includes('user') &&
             currentUser().roles.length === 1
@@ -74,18 +95,18 @@
         "
       >
         <router-link
-          v-slot="{ navigate }"
-          :to="{
+            v-slot="{ navigate }"
+            :to="{
             name: 'Add New Service Record',
             params: { id: $route.params.carId },
           }"
-          custom
+            custom
         >
           <v-btn
-            color="primary"
-            role="link"
-            @click="navigate"
-            @keypress.enter="navigate"
+              color="primary"
+              role="link"
+              @click="navigate"
+              @keypress.enter="navigate"
           >
             Add Service Record
           </v-btn>
@@ -93,17 +114,17 @@
       </v-col>
     </v-row>
     <v-data-table
-      :headers="headers"
-      :items="serviceRecord"
-      :items-per-page="5"
-      class="elevation-1"
-      item-key="id"
+        :headers="headers"
+        :items="serviceRecord"
+        :items-per-page="5"
+        class="elevation-1"
+        item-key="id"
     >
       <template
-        v-for="header in headers.filter((header) =>
+          v-for="header in headers.filter((header) =>
           header.hasOwnProperty('formatter')
         )"
-        v-slot:[`item.${header.value}`]="{ value }"
+          v-slot:[`item.${header.value}`]="{ value }"
       >
         {{ header.formatter(value) }}
       </template>
@@ -122,14 +143,14 @@
             <v-dialog v-model="dialogWorks" :retain-focus="false" width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  v-bind="attrs"
-                  v-on="on"
-                  class="mx-2"
-                  color="grey darken-1"
-                  dark
-                  fab
-                  small
-                  @click="editServiceWorks(row.item.serviceWorks)"
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mx-2"
+                    color="grey darken-1"
+                    dark
+                    fab
+                    small
+                    @click="editServiceWorks(row.item.serviceWorks)"
                 >
                   <v-icon dark>mdi-folder-information-outline</v-icon>
                 </v-btn>
@@ -158,9 +179,9 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
-                    color="green darken-1"
-                    text
-                    @click="dialogWorks = false"
+                      color="green darken-1"
+                      text
+                      @click="dialogWorks = false"
                   >
                     Close
                   </v-btn>
@@ -170,20 +191,20 @@
           </td>
           <td>
             <v-dialog
-              v-model="dialogDetails"
-              :retain-focus="false"
-              width="500px"
+                v-model="dialogDetails"
+                :retain-focus="false"
+                width="500px"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  v-bind="attrs"
-                  v-on="on"
-                  class="mx-2"
-                  color="deep-orange lighten-2"
-                  dark
-                  fab
-                  small
-                  @click="editDetails(row.item.changableParts)"
+                    v-bind="attrs"
+                    v-on="on"
+                    class="mx-2"
+                    color="deep-orange lighten-2"
+                    dark
+                    fab
+                    small
+                    @click="editDetails(row.item.changableParts)"
                 >
                   <v-icon dark>mdi-folder-information-outline</v-icon>
                 </v-btn>
@@ -215,9 +236,9 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
-                    color="green darken-1"
-                    text
-                    @click="dialogDetails = false"
+                      color="green darken-1"
+                      text
+                      @click="dialogDetails = false"
                   >
                     Close
                   </v-btn>
@@ -234,11 +255,11 @@
 <script>
 import CarDiaryDataService from "@/services/CarDiaryDataService";
 import CreateGuarantee from "@/view/pages/manager/CreateGuarantee";
-import { mapMutations, mapState } from "vuex";
+import {mapMutations, mapState} from "vuex";
 
 export default {
   name: "car-details",
-  components: { CreateGuarantee },
+  components: {CreateGuarantee},
   props: ["carId"],
   data() {
     return {
@@ -249,10 +270,10 @@ export default {
           sortable: true,
           value: "serviceOperationNumber",
         },
-        { text: "Date", value: "date", sortable: true },
-        { text: "Mileage", value: "mileage", sortable: true },
-        { text: "Service works", value: "serviceWorks", sortable: false },
-        { text: "Details", value: "changableParts", sortable: false },
+        {text: "Date", value: "date", sortable: true},
+        {text: "Mileage", value: "mileage", sortable: true},
+        {text: "Service works", value: "serviceWorks", sortable: false},
+        {text: "Details", value: "changableParts", sortable: false},
       ],
       car: null,
       dialogWorks: false,
@@ -283,12 +304,12 @@ export default {
     },
     returnHomePage() {
       if (
-        this.currentUser().roles.includes("user") &&
-        this.currentUser().roles.length === 1
+          this.currentUser().roles.includes("user") &&
+          this.currentUser().roles.length === 1
       ) {
-        this.$router.push({ name: "Client Cars", force: true });
+        this.$router.push({name: "Client Cars", force: true});
       } else {
-        this.$router.push({ name: "Cars", force: true });
+        this.$router.push({name: "Cars", force: true});
       }
     },
     editDetails(value) {
@@ -304,9 +325,9 @@ export default {
     async printHistoryRecords() {
       try {
         const response = await CarDiaryDataService.printHistoryOfServiceRecord(
-          this.$route.params.carId
+            this.$route.params.carId
         );
-        let blob = new Blob([response.data], { type: "application/pdf" });
+        let blob = new Blob([response.data], {type: "application/pdf"});
         let link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
         link.download = "carOperations.pdf";
@@ -321,22 +342,22 @@ export default {
     },
     async getCarById() {
       if (
-        this.currentUser().roles.includes("user") &&
-        this.currentUser().roles.length === 1
+          this.currentUser().roles.includes("user") &&
+          this.currentUser().roles.length === 1
       ) {
         try {
           const response = await CarDiaryDataService.getAllClientsCars(
-            this.currentUser().userId
+              this.currentUser().userId
           );
           this.car = await response.data.find(
-            (car) => car.id == this.$route.params.carId
+              (car) => car.id == this.$route.params.carId
           );
           if (this.car === undefined) {
             this.setSnackbarError({
               show: true,
               message: "You chose not your car",
             });
-            await this.$router.push({ name: "Client Cars", force: true });
+            await this.$router.push({name: "Client Cars", force: true});
           }
         } catch (error) {
           console.log("ERROR: " + error.response.data);
@@ -347,16 +368,16 @@ export default {
         }
       } else {
         await CarDiaryDataService.getCarById(this.$route.params.carId)
-          .then((response) => {
-            this.car = response.data;
-          })
-          .catch((error) => {
-            console.log("ERROR: " + error.response.data);
-            this.setSnackbarError({
-              show: true,
-              message: error.response.data.message,
-            });
+        .then((response) => {
+          this.car = response.data;
+        })
+        .catch((error) => {
+          console.log("ERROR: " + error.response.data);
+          this.setSnackbarError({
+            show: true,
+            message: error.response.data.message,
           });
+        });
       }
     },
     formatServiceRecordNumber(value) {
@@ -365,13 +386,26 @@ export default {
     async getServiceRecord() {
       try {
         const response = await CarDiaryDataService.getServiceRecordsByCarId(
-          this.$route.params.carId
+            this.$route.params.carId
         );
         this.serviceRecord = response.data;
       } catch (error) {
         console.log("ERROR: " + error.response.data);
       }
     },
+    async extendGurantee() {
+      await CarDiaryDataService.changeGuarantee(this.$route.params.carId)
+      .then((response) => {
+        this.car.guarantee = response.data;
+      })
+      .catch((error) => {
+        console.log("ERROR: " + error.response.data);
+        this.setSnackbarError({
+          show: true,
+          message: error.response.data.message,
+        });
+      });
+    }
   },
   metaInfo: {
     title: "Car details",

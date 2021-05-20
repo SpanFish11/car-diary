@@ -70,6 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(API + "/equipments").access(ALL_ROLES)
                     .antMatchers(GET, API + "/guarantee/{\\d+}").access(ALL_ROLES)
                     .antMatchers(API + "/guarantee/**").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(PUT, API + "/guarantee/{\\d+}").access(MANAGER_ADMIN_ROLES)
                     .antMatchers(API + "/maintenances").access(ALL_ROLES)
                     .antMatchers(GET, API + "/operations/{\\d+}").access(ALL_ROLES)
                     .antMatchers(POST, API + "/operations/**").access(MANAGER_ADMIN_ROLES)
