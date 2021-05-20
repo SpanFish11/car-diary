@@ -1,7 +1,4 @@
-package com.godeltech.mastery.backend.domain.entity.maintenance;
-
-import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.GenerationType.IDENTITY;
+package com.godeltech.mastery.backend.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serial;
@@ -14,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.math.BigDecimal;
+
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 import lombok.Data;
 
 @Data
@@ -33,7 +34,7 @@ public class MaintenanceOperation implements Serializable {
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 
-  @ManyToOne(fetch = EAGER)
+  @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "maintenance_id", referencedColumnName = "id")
   @JsonBackReference
   private Maintenance maintenance;

@@ -33,7 +33,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <router-link :to="item.to" custom v-slot="{ navigate }">
+            <router-link v-slot="{ navigate }" :to="item.to" custom>
               <v-list-item-title
                   @click="navigate"
                   @keypress.enter="navigate"

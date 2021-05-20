@@ -23,10 +23,10 @@
           <h4>Guarantee end: {{ car.guarantee.end }}</h4>
           <h4>
             Guarantee extended:
-            <v-icon color="green" v-if="car.guarantee.extended" large>
+            <v-icon v-if="car.guarantee.extended" color="green" large>
               mdi-check-bold
             </v-icon>
-            <v-icon color="red" v-else large>mdi-close-thick</v-icon>
+            <v-icon v-else color="red" large>mdi-close-thick</v-icon>
           </h4>
         </div>
         <div v-else>
@@ -35,17 +35,17 @@
             <v-icon color="red" medium>mdi-alert-octagram-outline</v-icon>
           </h3>
           <v-dialog
-            max-width="350"
-            v-model="dialogGuarantee"
             v-if="
               !(
                 currentUser().roles.includes('user') &&
                 currentUser().roles.length === 1
               )
             "
+            v-model="dialogGuarantee"
+            max-width="350"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark v-bind="attrs" v-on="on">
+              <v-btn v-bind="attrs" v-on="on" color="primary" dark>
                 Add Guarantee
               </v-btn>
             </template>
@@ -54,7 +54,7 @@
         </div>
       </v-col>
       <v-col>
-        <v-btn depressed color="error" @click="returnHomePage">
+        <v-btn color="error" depressed @click="returnHomePage">
           <v-icon left> mdi-arrow-left</v-icon>
           Return
         </v-btn>
@@ -74,18 +74,18 @@
         "
       >
         <router-link
+          v-slot="{ navigate }"
           :to="{
             name: 'Add New Service Record',
             params: { id: $route.params.carId },
           }"
           custom
-          v-slot="{ navigate }"
         >
           <v-btn
             color="primary"
+            role="link"
             @click="navigate"
             @keypress.enter="navigate"
-            role="link"
           >
             Add Service Record
           </v-btn>
@@ -95,9 +95,9 @@
     <v-data-table
       :headers="headers"
       :items="serviceRecord"
-      item-key="id"
       :items-per-page="5"
       class="elevation-1"
+      item-key="id"
     >
       <template
         v-for="header in headers.filter((header) =>
@@ -119,35 +119,35 @@
             {{ row.item.mileage }}
           </td>
           <td>
-            <v-dialog v-model="dialogWorks" width="500px" :retain-focus="false">
+            <v-dialog v-model="dialogWorks" :retain-focus="false" width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  small
-                  color="grey darken-1"
                   v-bind="attrs"
                   v-on="on"
+                  class="mx-2"
+                  color="grey darken-1"
+                  dark
+                  fab
+                  small
                   @click="editServiceWorks(row.item.serviceWorks)"
                 >
                   <v-icon dark>mdi-folder-information-outline</v-icon>
                 </v-btn>
               </template>
               <v-card>
-                <v-card-title> Information about Service Works </v-card-title>
+                <v-card-title> Information about Service Works</v-card-title>
                 <v-divider class="mx-4"></v-divider>
                 <v-container fluid>
-                  <v-card-text flat v-for="item in serviceWorks" :key="item.id">
+                  <v-card-text v-for="item in serviceWorks" :key="item.id" flat>
                     <v-col>
-                      <v-row> Name: {{ item.name }} </v-row>
-                      <v-row> Price: {{ item.price }} </v-row>
+                      <v-row> Name: {{ item.name }}</v-row>
+                      <v-row> Price: {{ item.price }}</v-row>
                       <v-row>
                         Guarantee:
-                        <v-icon color="green" v-if="item.guarantee">
+                        <v-icon v-if="item.guarantee" color="green">
                           mdi-emoticon-cool-outline
                         </v-icon>
-                        <v-icon color="red" v-else>
+                        <v-icon v-else color="red">
                           mdi-emoticon-angry-outline
                         </v-icon>
                       </v-row>
@@ -169,37 +169,41 @@
             </v-dialog>
           </td>
           <td>
-            <v-dialog v-model="dialogDetails" width="500px" :retain-focus="false">
+            <v-dialog
+              v-model="dialogDetails"
+              :retain-focus="false"
+              width="500px"
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  small
-                  color="deep-orange lighten-2"
-                  v-on="on"
                   v-bind="attrs"
+                  v-on="on"
+                  class="mx-2"
+                  color="deep-orange lighten-2"
+                  dark
+                  fab
+                  small
                   @click="editDetails(row.item.changableParts)"
                 >
                   <v-icon dark>mdi-folder-information-outline</v-icon>
                 </v-btn>
               </template>
               <v-card>
-                <v-card-title> Information about Details </v-card-title>
+                <v-card-title> Information about Details</v-card-title>
                 <v-divider class="mx-4"></v-divider>
                 <v-container fluid>
                   <div v-if="details.length === 0">
                     <v-card-text flat>
                       <v-col>
-                        <v-row> No data available </v-row>
+                        <v-row> No data available</v-row>
                       </v-col>
                     </v-card-text>
                   </div>
                   <div v-else>
-                    <v-card-text flat v-for="item in details" :key="item.id">
+                    <v-card-text v-for="item in details" :key="item.id" flat>
                       <v-col>
-                        <v-row> Model: {{ item.model }} </v-row>
-                        <v-row> Price: {{ item.price }} </v-row>
+                        <v-row> Model: {{ item.model }}</v-row>
+                        <v-row> Price: {{ item.price }}</v-row>
                         <v-row>
                           Status: {{ item.replaced ? "replaced" : "repaired" }}
                         </v-row>

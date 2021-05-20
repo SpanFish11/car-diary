@@ -14,8 +14,8 @@
             width="700"
         >
           <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on" elevation="5" color="primary"
-            >Add New Car
+            <v-btn v-bind="attrs" v-on="on" color="primary" elevation="5"
+              >Add New Car
             </v-btn>
           </template>
 
@@ -264,7 +264,7 @@
                         Back
                       </v-btn>
                       <v-btn class="ml-2" color="primary" @click="e1 = 3"
-                      >Next
+                        >Next
                         <v-icon right> mdi-arrow-right</v-icon>
                       </v-btn>
                     </v-stepper-content>
@@ -277,31 +277,31 @@
                             Brand:
                             {{
                               car.brandId
-                                  ? brands.find(
-                                  (brand) => brand.value === car.brandId
+                                ? brands.find(
+                                    (brand) => brand.value === car.brandId
                                   ).text
-                                  : null
+                                : null
                             }}
                           </div>
                           <div>
                             Model:
                             {{
                               car.modelId
-                                  ? models.find(
-                                  (model) => model.value === car.modelId
+                                ? models.find(
+                                    (model) => model.value === car.modelId
                                   ).text
-                                  : null
+                                : null
                             }}
                           </div>
                           <div>
                             Equipment:
                             {{
                               car.equipmentId
-                                  ? equipments.find(
-                                  (equipment) =>
+                                ? equipments.find(
+                                    (equipment) =>
                                       equipment.value === car.equipmentId
                                   ).text
-                                  : null
+                                : null
                             }}
                           </div>
                           <div>Manufacture year: {{ car.year }}</div>
@@ -322,8 +322,7 @@
                       <v-btn @click="e1 = 2" text>
                         <v-icon :disabled="inLoading" left>
                           mdi-arrow-left
-                        </v-icon
-                        >
+                        </v-icon>
                         Back
                       </v-btn>
                       <v-btn
@@ -412,7 +411,7 @@
 </template>
 
 <script>
-import {mapMutations, mapState} from "vuex";
+import { mapMutations, mapState } from "vuex";
 import CarDiaryDataService from "@/services/CarDiaryDataService";
 import NewCar from "@/models/new_car";
 import CreateAppointment from "@/view/pages/client/CreateAppointment";
@@ -499,13 +498,13 @@ export default {
         });
       } catch (error) {
         console.log(error.response);
-        this.setSnackbarError({show: true, message: error.response.data});
+        this.setSnackbarError({ show: true, message: error.response.data });
       }
     },
     async getLastAddedCar(carId) {
       try {
         const res = await CarDiaryDataService.getAllClientsCars(
-            this.currentUser.userId
+          this.currentUser.userId
         );
         const cars = res.data;
         const car = cars.find((c) => c.id === carId);
@@ -558,7 +557,7 @@ export default {
       } else {
         try {
           const models = await CarDiaryDataService.getBrandModels(
-              this.car.brandId
+            this.car.brandId
           );
           this.models = this.processResponse(models.data);
         } catch (error) {
@@ -573,7 +572,7 @@ export default {
       try {
         const equipments = await CarDiaryDataService.getAllEquipments();
         this.equipmentInfo = equipments.data.find(
-            (equipment) => equipment.id === this.car.equipmentId
+          (equipment) => equipment.id === this.car.equipmentId
         );
       } catch (error) {
         console.log(error.response);
@@ -582,7 +581,7 @@ export default {
     processResponse: function (data) {
       const arr = [];
       data.forEach(function (item) {
-        arr.push({value: item.id, text: item.name});
+        arr.push({ value: item.id, text: item.name });
       });
       return arr;
     },

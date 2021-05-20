@@ -18,12 +18,12 @@ public class CarSpecification implements BaseSpecification<Car, Filter> {
   @Override
   public Specification<Car> getFilter(final Filter request) {
     return (root, query, cb) ->
-        where(withVin(request.getVin()))
-            .and(withOwnerLastname(request.getLastname()))
-            .and(withYear(request.getSpecificYear()))
-            .and(greaterOrEqualYear(request.getFrom()))
-            .and(withModel(request.getModelId()))
-            .and(lessOrEqualYear(request.getUntil()))
+        where(withVin(request.vin()))
+            .and(withOwnerLastname(request.lastname()))
+            .and(withYear(request.specificYear()))
+            .and(greaterOrEqualYear(request.from()))
+            .and(withModel(request.modelId()))
+            .and(lessOrEqualYear(request.until()))
             .toPredicate(root, query, cb);
   }
 

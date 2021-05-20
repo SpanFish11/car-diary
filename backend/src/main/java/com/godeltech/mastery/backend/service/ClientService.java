@@ -1,6 +1,7 @@
 package com.godeltech.mastery.backend.service;
 
 import com.godeltech.mastery.backend.domain.dto.request.ClientCreateRequest;
+import com.godeltech.mastery.backend.domain.dto.request.ResetPasswordRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.ClientDTO;
 import com.godeltech.mastery.backend.domain.entity.Client;
 import org.springframework.security.core.Authentication;
@@ -18,4 +19,6 @@ public interface ClientService {
   List<ClientDTO> getAllClients();
 
   Long createClient(ClientCreateRequest request);
+
+  void changePassword(ResetPasswordRequest request, Authentication principal);
 }

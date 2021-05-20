@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 
-import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -34,7 +34,7 @@ public class Model implements Serializable {
   @Column(name = "name", nullable = false, unique = true)
   private String name;
 
-  @ManyToOne(fetch = EAGER)
+  @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "brand_id", nullable = false)
   @JsonBackReference
   private Brand brand;

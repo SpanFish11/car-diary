@@ -8,50 +8,50 @@
 
     <v-container fill-height fluid>
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="4">
+        <v-col cols="12" md="4" sm="8">
           <v-card class="elevation-12">
             <v-card-text>
               <validation-observer ref="observer" v-slot="{ invalid }">
                 <v-form @submit.prevent="submit">
                   <validation-provider
                     v-slot="{ errors }"
-                    name="Email"
                     :rules="{ required: true, email: true }"
+                    name="Email"
                   >
                     <v-text-field
                       ref="email"
+                      v-model="user.email"
+                      :error-messages="errors"
                       label="Email"
                       name="Email"
-                      v-model="user.email"
-                      type="text"
-                      :error-messages="errors"
                       outlined
                       required
+                      type="text"
                     ></v-text-field>
                   </validation-provider>
                   <validation-provider
                     v-slot="{ errors }"
-                    name="Email"
                     :rules="{ required: true }"
+                    name="Email"
                   >
                     <v-text-field
                       ref="password"
                       v-model="user.password"
+                      :error-messages="errors"
                       label="Password"
                       name="Password"
-                      :error-messages="errors"
-                      type="password"
                       outlined
                       required
+                      type="password"
                     ></v-text-field>
                   </validation-provider>
 
                   <v-btn
-                    type="submit"
                     :disabled="invalid"
+                    class="v-btn--block"
                     color="success"
                     style="min-height: 50px"
-                    class="v-btn--block"
+                    type="submit"
                   >
                     Sign in
                   </v-btn>
@@ -78,7 +78,6 @@ export default {
   data: () => ({
     user: new AuthRequest(),
 
-    remember: false,
     inProgress: false,
     inLoading: false,
   }),

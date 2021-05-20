@@ -1,7 +1,6 @@
-package com.godeltech.mastery.backend.domain.entity.maintenance;
+package com.godeltech.mastery.backend.domain.entity;
 
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.GenerationType.IDENTITY;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.godeltech.mastery.backend.domain.entity.Appointment;
@@ -9,6 +8,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +18,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import lombok.Data;
+
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
@@ -39,12 +43,12 @@ public class Maintenance implements Serializable {
   @Column(name = "time_interval", nullable = false)
   private Integer timeInterval;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(fetch = LAZY, cascade = ALL)
   @JoinColumn(name = "maintenance_id")
   @JsonManagedReference
   private List<MaintenanceOperation> operations;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(fetch = LAZY, cascade = ALL)
   @JoinColumn(name = "maintenance_id")
   @JsonManagedReference
   private List<Detail> details;

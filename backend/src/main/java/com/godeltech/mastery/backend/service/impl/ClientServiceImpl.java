@@ -1,6 +1,7 @@
 package com.godeltech.mastery.backend.service.impl;
 
 import com.godeltech.mastery.backend.domain.dto.request.ClientCreateRequest;
+import com.godeltech.mastery.backend.domain.dto.request.ResetPasswordRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.ClientDTO;
 import com.godeltech.mastery.backend.domain.entity.Client;
 import com.godeltech.mastery.backend.domain.event.ClientCreateEvent;
@@ -29,6 +30,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
+
+  private static final int PASSWORD_LENGTH = 8;
 
   private final SimpleApplicationEventMulticaster simpleApplicationEventMulticaster;
   private final ClientRepository clientRepository;
@@ -68,13 +71,24 @@ public class ClientServiceImpl implements ClientService {
   public Long createClient(final ClientCreateRequest request) {
     checkEmailExist(request.getEmail());
     final var client = clientMapper.fromRequest(request);
-    final var password = randomAlphabetic(8);
+    final var password = randomAlphabetic(PASSWORD_LENGTH);
     client.setPassword(bCryptPasswordEncoder.encode(password));
     final var role = roleService.getRoleByRoleName(ROLE_USER.name());
     client.setRoles(new HashSet<>(Set.of(role)));
     final var clientId = clientRepository.save(client).getId();
     simpleApplicationEventMulticaster.multicastEvent(new ClientCreateEvent(this, client, password));
     return clientId;
+  }
+
+  @Override
+  public void changePassword(final ResetPasswordRequest request, final Authentication principal) {
+    final var client = getClient(principal);
+    final var bool = bCryptPasswordEncoder.matches(request.getOldPassword(), client.getPassword());
+    if (!bool) {
+      throw new IllegalArgumentException("Passwords do not match!");
+    }
+    client.setPassword(bCryptPasswordEncoder.encode(request.getNewPassword()));
+    clientRepository.save(client);
   }
 
   private void checkEmailExist(final String email) {
