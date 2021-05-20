@@ -1,22 +1,21 @@
 package com.godeltech.mastery.backend.domain.dto.responce;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import org.hibernate.validator.internal.engine.path.PathImpl;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import static java.lang.String.format;
+import static java.time.LocalDateTime.now;
 
-import javax.validation.ConstraintViolation;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
+import javax.validation.ConstraintViolation;
+import lombok.Data;
+import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 
 @Data
 @JsonInclude(NON_NULL)

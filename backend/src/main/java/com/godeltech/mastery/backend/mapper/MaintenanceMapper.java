@@ -1,13 +1,12 @@
-package com.godeltech.mastery.backend.mapper.maintenance;
+package com.godeltech.mastery.backend.mapper;
+
+import static org.mapstruct.ReportingPolicy.IGNORE;
 
 import com.godeltech.mastery.backend.domain.dto.responce.MaintenanceDTO;
 import com.godeltech.mastery.backend.domain.entity.Maintenance;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.List;
-
-import static org.mapstruct.ReportingPolicy.IGNORE;
 
 @Mapper(
     componentModel = "spring",

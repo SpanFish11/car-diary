@@ -2,9 +2,8 @@ package com.godeltech.mastery.backend.domain.dto.request;
 
 import com.godeltech.mastery.backend.validator.PasswordValueMatch;
 import com.godeltech.mastery.backend.validator.ValidPassword;
-import lombok.Data;
-
 import javax.validation.constraints.NotBlank;
+import lombok.Data;
 
 @PasswordValueMatch.List({
   @PasswordValueMatch(

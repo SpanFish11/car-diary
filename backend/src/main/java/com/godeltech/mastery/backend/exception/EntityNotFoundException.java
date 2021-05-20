@@ -1,8 +1,8 @@
 package com.godeltech.mastery.backend.exception;
 
-import java.io.Serial;
-
 import static java.lang.String.format;
+
+import java.io.Serial;
 
 public class EntityNotFoundException extends RuntimeException {
 

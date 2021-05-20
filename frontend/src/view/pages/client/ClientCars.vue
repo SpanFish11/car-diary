@@ -1,17 +1,17 @@
 <template>
   <div class="fill-height">
     <v-progress-linear
-        :active="inLoading"
-        :indeterminate="inLoading"
-        absolute
+      :active="inLoading"
+      :indeterminate="inLoading"
+      absolute
     ></v-progress-linear>
 
     <v-container fluid>
       <v-container text-center>
         <v-dialog
-            transition="dialog-top-transition"
-            v-model="dialog"
-            width="700"
+          transition="dialog-top-transition"
+          v-model="dialog"
+          width="700"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn v-bind="attrs" v-on="on" color="primary" elevation="5"
@@ -47,83 +47,83 @@
                             <v-row>
                               <v-col cols="12">
                                 <validation-provider
-                                    v-slot="{ errors }"
-                                    name="vin"
-                                    :rules="{
+                                  v-slot="{ errors }"
+                                  name="vin"
+                                  :rules="{
                                     required: true,
                                     min: 17,
                                     max: 17,
                                   }"
                                 >
                                   <v-text-field
-                                      label="VIN number*"
-                                      name="vin"
-                                      :error-messages="errors"
-                                      required
-                                      :counter="17"
-                                      clearable
-                                      v-model="car.vin"
+                                    label="VIN number*"
+                                    name="vin"
+                                    :error-messages="errors"
+                                    required
+                                    :counter="17"
+                                    clearable
+                                    v-model="car.vin"
                                   ></v-text-field>
                                 </validation-provider>
                               </v-col>
                               <v-col cols="12" sm="6" md="4">
                                 <validation-provider
-                                    v-slot="{ errors }"
-                                    name="brand"
-                                    :rules="{ required: true }"
+                                  v-slot="{ errors }"
+                                  name="brand"
+                                  :rules="{ required: true }"
                                 >
                                   <v-select
-                                      :items="brands"
-                                      label="Brand*"
-                                      name="brand"
-                                      required
-                                      :error-messages="errors"
-                                      clearable
-                                      @change="loadAllModelsByBrandId"
-                                      v-model="car.brandId"
+                                    :items="brands"
+                                    label="Brand*"
+                                    name="brand"
+                                    required
+                                    :error-messages="errors"
+                                    clearable
+                                    @change="loadAllModelsByBrandId"
+                                    v-model="car.brandId"
                                   ></v-select>
                                 </validation-provider>
                               </v-col>
                               <v-col cols="12" sm="6" md="4">
                                 <validation-provider
-                                    v-slot="{ errors }"
-                                    name="model"
-                                    :rules="{ required: true }"
+                                  v-slot="{ errors }"
+                                  name="model"
+                                  :rules="{ required: true }"
                                 >
                                   <v-select
-                                      label="Model*"
-                                      name="model"
-                                      :items="models"
-                                      :error-messages="errors"
-                                      required
-                                      clearable
-                                      v-model="car.modelId"
+                                    label="Model*"
+                                    name="model"
+                                    :items="models"
+                                    :error-messages="errors"
+                                    required
+                                    clearable
+                                    v-model="car.modelId"
                                   ></v-select>
                                 </validation-provider>
                               </v-col>
                               <v-tooltip :disabled="!car.equipmentId" bottom>
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-col
-                                      v-bind="attrs"
-                                      v-on="on"
-                                      cols="12"
-                                      sm="6"
-                                      md="4"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    cols="12"
+                                    sm="6"
+                                    md="4"
                                   >
                                     <validation-provider
-                                        v-slot="{ errors }"
-                                        name="equipment"
-                                        :rules="{ required: true }"
+                                      v-slot="{ errors }"
+                                      name="equipment"
+                                      :rules="{ required: true }"
                                     >
                                       <v-select
-                                          label="Equipment*"
-                                          :items="equipments"
-                                          :error-messages="errors"
-                                          name="equipment"
-                                          required
-                                          clearable
-                                          @change="loadEquipmentInfo"
-                                          v-model="car.equipmentId"
+                                        label="Equipment*"
+                                        :items="equipments"
+                                        :error-messages="errors"
+                                        name="equipment"
+                                        required
+                                        clearable
+                                        @change="loadEquipmentInfo"
+                                        v-model="car.equipmentId"
                                       ></v-select>
                                     </validation-provider>
                                   </v-col>
@@ -144,9 +144,9 @@
                               </v-tooltip>
                               <v-col cols="12" sm="6" md="4">
                                 <validation-provider
-                                    v-slot="{ errors }"
-                                    name="year"
-                                    :rules="{
+                                  v-slot="{ errors }"
+                                  name="year"
+                                  :rules="{
                                     required: true,
                                     numeric: true,
                                     between: [1900, new Date().getFullYear()],
@@ -155,21 +155,21 @@
                                   }"
                                 >
                                   <v-text-field
-                                      label="Manufacture year*"
-                                      name="year"
-                                      required
-                                      :counter="4"
-                                      :error-messages="errors"
-                                      clearable
-                                      v-model="car.year"
+                                    label="Manufacture year*"
+                                    name="year"
+                                    required
+                                    :counter="4"
+                                    :error-messages="errors"
+                                    clearable
+                                    v-model="car.year"
                                   ></v-text-field>
                                 </validation-provider>
                               </v-col>
                               <v-col cols="12" sm="6" md="4">
                                 <validation-provider
-                                    v-slot="{ errors }"
-                                    name="price"
-                                    :rules="{
+                                  v-slot="{ errors }"
+                                  name="price"
+                                  :rules="{
                                     required: true,
                                     min: 1,
                                     max: 7,
@@ -177,21 +177,21 @@
                                   }"
                                 >
                                   <v-text-field
-                                      label="Price*"
-                                      name="price"
-                                      :error-messages="errors"
-                                      :counter="7"
-                                      required
-                                      clearable
-                                      v-model="car.price"
+                                    label="Price*"
+                                    name="price"
+                                    :error-messages="errors"
+                                    :counter="7"
+                                    required
+                                    clearable
+                                    v-model="car.price"
                                   ></v-text-field>
                                 </validation-provider>
                               </v-col>
                               <v-col cols="12" sm="6" md="4">
                                 <validation-provider
-                                    v-slot="{ errors }"
-                                    name="mileage"
-                                    :rules="{
+                                  v-slot="{ errors }"
+                                  name="mileage"
+                                  :rules="{
                                     required: true,
                                     numeric: true,
                                     max_value: 999999,
@@ -199,13 +199,13 @@
                                   }"
                                 >
                                   <v-text-field
-                                      label="Mileage*"
-                                      name="mileage"
-                                      required
-                                      :counter="6"
-                                      :error-messages="errors"
-                                      clearable
-                                      v-model="car.mileage"
+                                    label="Mileage*"
+                                    name="mileage"
+                                    required
+                                    :counter="6"
+                                    :error-messages="errors"
+                                    clearable
+                                    v-model="car.mileage"
                                   ></v-text-field>
                                 </validation-provider>
                               </v-col>
@@ -216,9 +216,9 @@
                       </v-card>
 
                       <v-btn
-                          :disabled="invalid"
-                          color="primary"
-                          @click="e1 = 2"
+                        :disabled="invalid"
+                        color="primary"
+                        @click="e1 = 2"
                       >
                         Next
                         <v-icon right> mdi-arrow-right</v-icon>
@@ -231,28 +231,28 @@
                           <v-container fluid>
                             <v-container>
                               <v-img
-                                  contain
-                                  max-height="400"
-                                  v-if="url"
-                                  :src="url"
+                                contain
+                                max-height="400"
+                                v-if="url"
+                                :src="url"
                               />
                             </v-container>
                             <v-file-input
-                                @change="onFileChange"
-                                v-model="photoToUpload.photo"
-                                color="primary accent-4"
-                                accept="image/png, image/jpeg"
-                                :rules="[
+                              @change="onFileChange"
+                              v-model="photoToUpload.photo"
+                              color="primary accent-4"
+                              accept="image/png, image/jpeg"
+                              :rules="[
                                 (value) =>
                                   !value ||
                                   value.size < 5000000 ||
                                   'Photo size should be less than 5 MB!',
                               ]"
-                                counter
-                                label="Photo input"
-                                placeholder="Select your files"
-                                prepend-icon="mdi-paperclip"
-                                :show-size="1000"
+                              counter
+                              label="Photo input"
+                              placeholder="Select your files"
+                              prepend-icon="mdi-paperclip"
+                              :show-size="1000"
                             >
                             </v-file-input>
                           </v-container>
@@ -310,10 +310,10 @@
                           <v-divider></v-divider>
                           <v-container>
                             <v-img
-                                contain
-                                max-height="400"
-                                v-if="url"
-                                :src="url"
+                              contain
+                              max-height="400"
+                              v-if="url"
+                              :src="url"
                             />
                           </v-container>
                         </v-card-text>
@@ -326,18 +326,18 @@
                         Back
                       </v-btn>
                       <v-btn
-                          class="ml-2"
-                          :disabled="inLoading"
-                          color="orange"
-                          @click="resetForm"
-                      >Reset
+                        class="ml-2"
+                        :disabled="inLoading"
+                        color="orange"
+                        @click="resetForm"
+                        >Reset
                       </v-btn>
                       <v-btn
-                          class="ml-2"
-                          color="primary"
-                          :disabled="invalid || inLoading"
-                          @click="saveCar(currentUser.userId)"
-                      >Save
+                        class="ml-2"
+                        color="primary"
+                        :disabled="invalid || inLoading"
+                        @click="saveCar(currentUser.userId)"
+                        >Save
                       </v-btn>
                     </v-stepper-content>
                   </v-stepper-items>
@@ -357,48 +357,129 @@
                   <v-img height="250" :src="cars[n - 1].photo"></v-img>
 
                   <v-card-title
-                  >{{ cars[n - 1].brand }} {{ cars[n - 1].model }},
+                    >{{ cars[n - 1].brand }} {{ cars[n - 1].model }},
                     {{ cars[n - 1].year }}
                   </v-card-title>
 
                   <v-card-actions>
                     <router-link
-                        :to="{
+                      :to="{
                         name: 'Car details',
                         params: { carId: cars[n - 1].id },
                       }"
-                        custom
-                        v-slot="{ navigate }"
+                      custom
+                      v-slot="{ navigate }"
                     >
                       <v-btn
-                          @click="navigate"
-                          @keypress.enter="navigate"
-                          role="link"
-                          color="primary"
-                          text
+                        @click="navigate"
+                        @keypress.enter="navigate"
+                        role="link"
+                        color="primary"
+                        text
                       >
                         Details
                       </v-btn>
                     </router-link>
                     <v-dialog
-                        transition="dialog-bottom-transition"
-                        max-width="600"
+                      transition="dialog-bottom-transition"
+                      max-width="600"
                     >
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn
-                            color="primary"
-                            v-bind="attrs"
-                            v-on="on"
-                            text
-                        >Appointment
+                        <v-btn color="primary" v-bind="attrs" v-on="on" text
+                          >Appointment
                         </v-btn>
                       </template>
-                      <CreateAppointment v-bind:car-id="cars[n - 1].id"/>
+                      <CreateAppointment v-bind:car-id="cars[n - 1].id" />
                     </v-dialog>
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-text>
-                    <div>Mileage {{ cars[n - 1].mileage }}</div>
+                    <v-dialog
+                      transition="dialog-bottom-transition"
+                      max-width="400"
+                      persistent
+                      v-model="dialogMileage"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <div v-bind="attrs" v-on="on">
+                          Mileage {{ cars[n - 1].mileage }}
+                        </div>
+                      </template>
+                      <validation-observer
+                        ref="newMileageVal"
+                        v-slot="{ invalid }"
+                      >
+                        <form
+                          @submit.prevent="
+                            submitMileage(cars[n - 1].id, newMileage)
+                          "
+                        >
+                          <v-card>
+                            <v-toolbar color="primary" dark
+                              >Change Mileage for {{ cars[n - 1].brand }}
+                              {{ cars[n - 1].model }},
+                              {{ cars[n - 1].year }}
+                            </v-toolbar>
+                            <v-card-text>
+                              <v-container fluid>
+                                <validation-provider
+                                  v-slot="{ errors }"
+                                  name="New Mileage"
+                                  :rules="{
+                                    required: true,
+                                    numeric: true,
+                                    min_value: cars[n - 1].mileage + 1,
+                                    max: 7,
+                                  }"
+                                >
+                                  <v-text-field
+                                    v-model="newMileage"
+                                    name="New Mileage"
+                                    :counter="7"
+                                    :error-messages="errors"
+                                    :placeholder="`Current mileage is ${
+                                      cars[n - 1].mileage
+                                    }`"
+                                    label="New mileage"
+                                    required
+                                  >
+                                    <template v-slot:append>
+                                      <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                          <v-icon v-on="on"
+                                            >mdi-help-circle-outline</v-icon
+                                          >
+                                        </template>
+                                        <div>
+                                          Mileage should be greater then
+                                          {{ cars[n - 1].mileage }}
+                                        </div>
+                                      </v-tooltip>
+                                    </template>
+                                  </v-text-field>
+                                </validation-provider>
+                              </v-container>
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions class="justify-end">
+                              <v-btn
+                                text
+                                color="error"
+                                @click="dialogMileage = false"
+                                >Cancel
+                              </v-btn>
+                              <v-btn
+                                text
+                                :disabled="invalid || inLoading"
+                                color="primary"
+                                type="submit"
+                                >Save
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </form>
+                      </validation-observer>
+                    </v-dialog>
                   </v-card-text>
                 </v-card>
               </v-item>
@@ -418,10 +499,11 @@ import CreateAppointment from "@/view/pages/client/CreateAppointment";
 
 export default {
   name: "ClientCars",
-  components: {CreateAppointment},
+  components: { CreateAppointment },
   data: () => ({
     inLoading: false,
     dialog: false,
+    dialogMileage: false,
     cars: [],
     car: new NewCar(),
     e1: 1,
@@ -438,6 +520,7 @@ export default {
       horsePower: null,
       transmissionType: null,
     },
+    newMileage: null,
   }),
   mounted() {
     this.getAllCars(this.currentUser.userId);
@@ -596,6 +679,40 @@ export default {
       this.car.price = null;
       this.car.mileage = null;
       this.e1 = 1;
+    },
+    async submitMileage(carId, mileage) {
+      this.inLoading = true;
+      try {
+        const request = { carId: carId, mileage: mileage };
+        await CarDiaryDataService.changeCarMileage(
+          this.currentUser.userId,
+          request
+        );
+        const cars = await CarDiaryDataService.getAllClientsCars(
+          this.currentUser.userId
+        );
+        this.cars.find((c) => c.id === carId).mileage = cars.data.find(
+          (c) => c.id === carId
+        ).mileage;
+        this.dialogMileage = false;
+        this.inLoading = false;
+        this.setSnackbarSuccess({
+          show: true,
+          message: "Mileage changed successfully!",
+        });
+        this.resetMileageDialog();
+      } catch (error) {
+        this.inLoading = false;
+        this.dialogMileage = false;
+        console.log(error.response);
+        this.setSnackbarError({
+          show: true,
+          message: error.response.data.message,
+        });
+      }
+    },
+    resetMileageDialog() {
+      this.newMileage = null;
     },
   },
 };

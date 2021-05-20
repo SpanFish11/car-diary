@@ -1,5 +1,11 @@
 package com.godeltech.mastery.backend.service.impl;
 
+import static com.godeltech.mastery.backend.domain.entity.SystemRoles.ROLE_USER;
+import static java.lang.Boolean.TRUE;
+import static java.lang.String.format;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 import com.godeltech.mastery.backend.domain.dto.request.ClientCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.request.ResetPasswordRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.ClientDTO;
@@ -10,22 +16,15 @@ import com.godeltech.mastery.backend.mapper.ClientMapper;
 import com.godeltech.mastery.backend.repository.ClientRepository;
 import com.godeltech.mastery.backend.service.ClientService;
 import com.godeltech.mastery.backend.service.RoleService;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static com.godeltech.mastery.backend.domain.entity.SystemRoles.ROLE_USER;
-import static java.lang.Boolean.TRUE;
-import static java.lang.String.format;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
 @RequiredArgsConstructor

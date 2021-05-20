@@ -1,5 +1,8 @@
 package com.godeltech.mastery.backend.specification.impl;
 
+import static java.util.Objects.isNull;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 import com.godeltech.mastery.backend.domain.dto.request.Filter;
 import com.godeltech.mastery.backend.domain.entity.Car;
 import com.godeltech.mastery.backend.domain.entity.Car_;
@@ -8,9 +11,6 @@ import com.godeltech.mastery.backend.domain.entity.Model_;
 import com.godeltech.mastery.backend.specification.BaseSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import static java.util.Objects.isNull;
-import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 public class CarSpecification implements BaseSpecification<Car, Filter> {
