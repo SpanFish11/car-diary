@@ -1,27 +1,22 @@
 package com.godeltech.mastery.backend.domain.entity;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.godeltech.mastery.backend.domain.entity.Appointment;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.CascadeType;
-import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
+import lombok.Data;
 
 @Data
 @Entity
@@ -53,7 +48,8 @@ public class Maintenance implements Serializable {
   @JsonManagedReference
   private List<Detail> details;
 
-  @OneToOne(mappedBy = "regularService", fetch = EAGER)
+  @OneToMany(fetch = EAGER, cascade = ALL)
+  @JoinColumn(name = "maintenance_id")
   @JsonManagedReference
-  private Appointment appointment;
+  private List<Appointment> appointment;
 }

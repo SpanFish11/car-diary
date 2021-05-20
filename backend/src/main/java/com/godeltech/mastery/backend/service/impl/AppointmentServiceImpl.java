@@ -8,7 +8,8 @@ import com.godeltech.mastery.backend.domain.dto.responce.AppointmentDTO;
 import com.godeltech.mastery.backend.domain.entity.Appointment;
 import com.godeltech.mastery.backend.domain.entity.AppointmentStatus;
 import com.godeltech.mastery.backend.domain.entity.Car;
-import com.godeltech.mastery.backend.domain.entity.maintenance.Maintenance;
+import com.godeltech.mastery.backend.domain.entity.Client;
+import com.godeltech.mastery.backend.domain.entity.Maintenance;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.AppointmentMapper;
 import com.godeltech.mastery.backend.repository.AppointmentRepository;
@@ -37,22 +38,10 @@ public class AppointmentServiceImpl implements AppointmentService {
   public Long createAppointment(
       final AppointmentCreateRequest createRequest, final Authentication principal) {
     final var appointment = appointmentMapper.toEntity(createRequest);
-    if (TRUE.equals(appointment.getRepairment())) {
-      appointment.setRegularService(null);
-    } else {
-      final var maintenance = getMaintenanceById(createRequest.getMaintainceId());
-      appointment.setRegularService(maintenance);
-    }
+    setRegularService(appointment, createRequest);
     final Long carId = createRequest.getCarId();
-    final var car = carService.findCarById(carId);
     final var client = clientService.getClient(principal);
-    final boolean exists =
-        client.getCars().stream().anyMatch(currentCar -> currentCar.getId().equals(carId));
-    if (exists) {
-      appointment.setCar(car);
-    } else {
-      throw new IllegalArgumentException("Client does not have car with id = " + carId);
-    }
+    setCarByCurrentClient(appointment, carId, client);
     appointment.setStatus(PENDING);
     return appointmentRepository.save(appointment).getId();
   }
@@ -88,5 +77,25 @@ public class AppointmentServiceImpl implements AppointmentService {
     return maintenanceRepository
         .findById(id)
         .orElseThrow(() -> new EntityNotFoundException("maintenance", id));
+  }
+
+  private void setRegularService(Appointment appointment, AppointmentCreateRequest createRequest) {
+    if (TRUE.equals(appointment.getRepairment())) {
+      appointment.setRegularService(null);
+    } else {
+      final var maintenance = getMaintenanceById(createRequest.getMaintainceId());
+      appointment.setRegularService(maintenance);
+    }
+  }
+
+  private void setCarByCurrentClient(Appointment appointment, Long carId, Client client) {
+    final var car = carService.findCarById(carId);
+    final boolean exists =
+        client.getCars().stream().anyMatch(currentCar -> currentCar.getId().equals(carId));
+    if (exists) {
+      appointment.setCar(car);
+    } else {
+      throw new IllegalArgumentException("Client does not have car with id = " + carId);
+    }
   }
 }

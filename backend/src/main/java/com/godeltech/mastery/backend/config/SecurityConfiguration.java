@@ -34,7 +34,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   private static final String API = "/api/v1";
   private static final String MANAGER_ADMIN_ROLES = "hasAnyRole('MANAGER','ADMIN')";
   private static final String ALL_ROLES = "hasAnyRole('USER','MANAGER','ADMIN')";
-  private static final String USER_ROLE = "hasAnyRole('USER')";
 
   private final PasswordEncoder bCryptPasswordEncoder;
   private final UserDetailsService clientDetailServiceImpl;
@@ -67,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(API + "/cars/**").access(MANAGER_ADMIN_ROLES)
                     .antMatchers(API + "/clients/{\\d+}/cars").access(ALL_ROLES)
                     .antMatchers(API + "/clients").access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(API + "/clients/appointments").access(USER_ROLE)
+                    .antMatchers(API + "/clients/appointments").access(ALL_ROLES)
                     .antMatchers(API + "/equipments").access(ALL_ROLES)
                     .antMatchers(GET, API + "/guarantee/{\\d+}").access(ALL_ROLES)
                     .antMatchers(API + "/guarantee/**").access(MANAGER_ADMIN_ROLES)
@@ -75,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(GET, API + "/operations/{\\d+}").access(ALL_ROLES)
                     .antMatchers(POST, API + "/operations/**").access(MANAGER_ADMIN_ROLES)
                     .antMatchers(GET, API + "/appointments").access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(POST, API + "/appointments").access(USER_ROLE)
+                    .antMatchers(POST, API + "/appointments").access(ALL_ROLES)
                     .antMatchers(PUT, API + "/appointments/{\\d+}").access(MANAGER_ADMIN_ROLES)
                     .anyRequest().permitAll())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))

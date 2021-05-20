@@ -4,7 +4,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import static org.springframework.boot.SpringApplication.run;
 
-// @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @SpringBootApplication
 public class BackendApplication {
 

@@ -1,4 +1,7 @@
-package com.godeltech.mastery.backend.domain.entity.maintenance;
+package com.godeltech.mastery.backend.domain.entity;
+
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serial;
@@ -11,10 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 import lombok.Data;
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity

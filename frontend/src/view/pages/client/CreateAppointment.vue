@@ -189,7 +189,7 @@ export default {
           show: true,
           message: "Appointment created successfully!",
         });
-        await this.$router.push("/client/appointments");
+        await this.$router.push("/appointments");
       } catch (error) {
         console.log("ERROR: " + error.response);
         this.setSnackbarError({show: true, message: error.response.data});

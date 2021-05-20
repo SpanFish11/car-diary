@@ -1,5 +1,7 @@
 package com.godeltech.mastery.backend.mapper;
 
+import static org.mapstruct.ReportingPolicy.IGNORE;
+
 import com.godeltech.mastery.backend.domain.dto.request.AppointmentCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.AppointmentDTO;
 import com.godeltech.mastery.backend.domain.entity.Appointment;
@@ -7,7 +9,10 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {OperationMapper.class, CarMapper.class})
+@Mapper(
+    componentModel = "spring",
+    uses = {OperationMapper.class, CarMapper.class},
+    unmappedTargetPolicy = IGNORE)
 public interface AppointmentMapper {
 
   @Mapping(target = "repairment", source = "repairment")
