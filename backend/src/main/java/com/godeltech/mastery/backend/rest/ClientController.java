@@ -25,7 +25,7 @@ import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -79,7 +79,7 @@ public class ClientController {
               content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @GetMapping("/appointments")
-  public ResponseEntity<List<AppointmentDTO>> getAllAppointments(Authentication principal) {
+  public ResponseEntity<List<AppointmentDTO>> getAllAppointments(final User principal) {
     return ok(appointmentService.getAllAppointments(principal));
   }
 
@@ -176,7 +176,7 @@ public class ClientController {
 
   @PutMapping("/password/reset")
   public ResponseEntity<HttpStatus> changePassword(
-      @RequestBody @Valid final ResetPasswordRequest request, final Authentication principal) {
+      @RequestBody @Valid final ResetPasswordRequest request, final User principal) {
     clientService.changePassword(request, principal);
     return ok().build();
   }

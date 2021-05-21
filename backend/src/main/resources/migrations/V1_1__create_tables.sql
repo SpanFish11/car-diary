@@ -7,7 +7,7 @@ create table m_brands
 );
 
 alter table m_brands
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_brands_id_uindex
     on m_brands (id);
@@ -27,7 +27,7 @@ create table m_models
 );
 
 alter table m_models
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_models_id_uindex
     on m_models (id);
@@ -47,7 +47,7 @@ create table m_clients
 );
 
 alter table m_clients
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_clients_email_uindex
     on m_clients (email);
@@ -65,7 +65,7 @@ create table m_equipments
 );
 
 alter table m_equipments
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create table m_cars
 (
@@ -91,7 +91,7 @@ create table m_cars
 );
 
 alter table m_cars
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_cars_id_uindex
     on m_cars (id);
@@ -119,7 +119,7 @@ create table m_service_records
 );
 
 alter table m_service_records
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_service_records_id_uindex
     on m_service_records (id);
@@ -138,7 +138,7 @@ create table m_service_work
 );
 
 alter table m_service_work
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_service_work_id_uindex
     on m_service_work (id);
@@ -157,7 +157,7 @@ create table m_changable_parts
 );
 
 alter table m_changable_parts
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_changable_parts_id_uindex
     on m_changable_parts (id);
@@ -173,7 +173,7 @@ create table m_maintenance
 );
 
 alter table m_maintenance
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_maintenance_id_uindex
     on m_maintenance (id);
@@ -194,7 +194,7 @@ create table m_operations
 );
 
 alter table m_operations
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_operations_id_uindex
     on m_operations (id);
@@ -212,7 +212,7 @@ create table m_details
 );
 
 alter table m_details
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_details_id_uindex
     on m_details (id);
@@ -231,7 +231,7 @@ create table m_guarantee
 );
 
 alter table m_guarantee
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create table m_roles
 (
@@ -242,7 +242,7 @@ create table m_roles
 );
 
 alter table m_roles
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 create unique index m_roles_id_uindex
     on m_roles (id);
@@ -261,7 +261,7 @@ create table l_clients_roles
 );
 
 alter table l_clients_roles
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;
 
 CREATE FUNCTION change_mileage() RETURNS trigger AS
 $change_mileage$
@@ -280,4 +280,4 @@ CREATE TRIGGER change_mileage
     FOR EACH ROW
 EXECUTE PROCEDURE change_mileage();
 
-ALTER FUNCTION change_mileage() OWNER TO ctdidtksihqvpb;
+ALTER FUNCTION change_mileage() OWNER TO adjqovjatskhlb;

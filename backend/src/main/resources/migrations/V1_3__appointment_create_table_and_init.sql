@@ -15,4 +15,4 @@ create table m_appointment
 );
 
 alter table m_appointment
-    owner to ctdidtksihqvpb;
+    owner to adjqovjatskhlb;

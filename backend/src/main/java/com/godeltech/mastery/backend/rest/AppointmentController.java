@@ -15,9 +15,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +59,7 @@ public class AppointmentController {
   @PostMapping
   public ResponseEntity<Long> createAppointment(
       @RequestBody @Valid final AppointmentCreateRequest createRequest,
-      final Authentication principal) {
+      final @AuthenticationPrincipal User principal) {
     return new ResponseEntity<>(
         appointmentService.createAppointment(createRequest, principal), CREATED);
   }
@@ -65,7 +67,7 @@ public class AppointmentController {
   @PutMapping("/{appointment_id}")
   public ResponseEntity<AppointmentDTO> changeStatus(
       @PathVariable("appointment_id") final Long appointmentId,
-      @RequestParam final AppointmentStatus status) {
+      @RequestParam final @NotNull AppointmentStatus status) {
     return ok(appointmentService.changeAppointmentStatus(appointmentId, status));
   }
 }
