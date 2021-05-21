@@ -5,10 +5,6 @@ import static java.lang.Boolean.TRUE;
 import static java.lang.String.format;
 import static org.springframework.data.domain.PageRequest.of;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-import static org.springframework.data.domain.PageRequest.of;
-
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.request.ChangeMileageRequest;
@@ -28,7 +24,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,12 +85,6 @@ public class CarServiceImpl implements CarService {
   @Override
   public List<CarDTO> getAllCarsByClientId(final Long clientId) {
     final var client = clientService.getClientById(clientId);
-    return carMapper.map(carRepository.getAllByClient(client));
-  }
-
-  @Override
-  public List<CarDTO> getCurrentClientCars(final Authentication principal) {
-    final var client = clientService.getClient(principal);
     return carMapper.map(carRepository.getAllByClient(client));
   }
 
