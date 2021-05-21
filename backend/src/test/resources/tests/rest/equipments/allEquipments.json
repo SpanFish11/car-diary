@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Basic configuration",
+    "engineType": "Petrol",
+    "transmissionType": "Manual Transmission",
+    "engineSize": 2,
+    "horsePower": 235
+  },
+  {
+    "id": 2,
+    "name": "Average configuration",
+    "engineType": "Diesel",
+    "transmissionType": "Automated Manual Transmission",
+    "engineSize": 2,
+    "horsePower": 249
+  },
+  {
+    "id": 3,
+    "name": "Maximum configuration",
+    "engineType": "Petrol",
+    "transmissionType": "Automatic Transmission",
+    "engineSize": 2,
+    "horsePower": 310
+  },
+  {
+    "id": 4,
+    "name": "Special Edition",
+    "engineType": "Diesel",
+    "transmissionType": "Continuously Variable Transmission",
+    "engineSize": 2,
+    "horsePower": 450
+  }
+]

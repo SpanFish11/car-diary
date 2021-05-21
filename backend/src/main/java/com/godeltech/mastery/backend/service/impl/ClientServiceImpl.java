@@ -22,7 +22,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,8 +39,8 @@ public class ClientServiceImpl implements ClientService {
   private final RoleService roleService;
 
   @Override
-  public Client getClient(final Authentication principal) {
-    final var clientEmail = principal.getName();
+  public Client getClient(final User principal) {
+    final var clientEmail = principal.getUsername();
     if (isEmpty(clientEmail)) {
       throw new AccessDeniedException("Invalid access");
     }
@@ -80,7 +80,7 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public void changePassword(final ResetPasswordRequest request, final Authentication principal) {
+  public void changePassword(final ResetPasswordRequest request, final User principal) {
     final var client = getClient(principal);
     final var bool = bCryptPasswordEncoder.matches(request.getOldPassword(), client.getPassword());
     if (!bool) {
