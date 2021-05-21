@@ -6,8 +6,8 @@ You need install:
 
 ```
 - jdk 16 (recommend AdoptOpenJDK)
-- PostgreSQL (version 10 - 13)
-- Node.js (recommend 14.16.1 LTS)
+- PostgreSQL (recommend 13)
+- Node.js (recommend 16.2.0)
 ```
 
 ### For run frontend and backend
