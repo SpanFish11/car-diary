@@ -6,9 +6,13 @@ import java.time.LocalDate;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GuaranteeCreateRequest {
 
   @NotNull(message = "Start date is mandatory")
