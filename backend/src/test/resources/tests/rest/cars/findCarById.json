@@ -29,11 +29,6 @@
   },
   "used": true,
   "price": 15000.00,
-  "guarantee": {
-    "start": "2020-04-11",
-    "end": "2023-04-11",
-    "mileage": 100000,
-    "extended": false
-  },
+  "guarantee": null,
   "serviceOperations": []
 }

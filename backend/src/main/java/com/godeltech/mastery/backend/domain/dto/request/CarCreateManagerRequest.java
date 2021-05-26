@@ -17,7 +17,7 @@ public class CarCreateManagerRequest extends CarCreateRequest {
   @Min(value = 1, message = "Value should be greater then or equal to 1")
   private Long clientId;
 
-  @NotNull(message = "Client is mandatory")
+  @NotNull(message = "Ours is mandatory")
   private Boolean ours;
 
   @NotNull(message = "Used is mandatory")

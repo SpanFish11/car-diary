@@ -7,9 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
-import net.minidev.json.JSONArray;
+import com.godeltech.mastery.backend.util.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,13 +32,11 @@ class EquipmentControllerIntegrationTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private ObjectMapper objectMapper;
+  private TestUtils testUtils;
 
   @Test
   void getAllEquipments() throws Exception {
-    final var equipments =
-        objectMapper
-            .writeValueAsString(objectMapper.readValue(new File(ALL_EQUIPMENTS), JSONArray.class));
+    final var equipments = testUtils.toJSONArray(ALL_EQUIPMENTS);
 
     mockMvc
         .perform(get(API_EQUIPMENTS))

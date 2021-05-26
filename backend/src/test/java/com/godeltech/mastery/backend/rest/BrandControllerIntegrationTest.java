@@ -11,10 +11,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
-import java.io.File;
-import net.minidev.json.JSONArray;
+import com.godeltech.mastery.backend.util.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,13 +39,11 @@ class BrandControllerIntegrationTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private ObjectMapper objectMapper;
+  private TestUtils testUtils;
 
   @Test
   void getAllBrands() throws Exception {
-    final var brands =
-        objectMapper
-            .writeValueAsString(objectMapper.readValue(new File(ALL_BRANDS), JSONArray.class));
+    final var brands = testUtils.toJSONArray(ALL_BRANDS);
 
     mockMvc
         .perform(get(API_BRANDS))
@@ -59,9 +55,7 @@ class BrandControllerIntegrationTest {
   @Test
   void getAllModels_given_brandId_should_status_isOk() throws Exception {
     final var brandId = 2;
-    final var models =
-        objectMapper.writeValueAsString(
-            objectMapper.readValue(new File(MODELS_BY_BRAND_ID), JSONArray.class));
+    final var models = testUtils.toJSONArray(MODELS_BY_BRAND_ID);
 
     mockMvc
         .perform(get(API_MODELS_BY_BRAND_ID, brandId))

@@ -1,0 +1,63 @@
+{
+  "content": [
+    {
+      "id": 6,
+      "brand": {
+        "id": 2,
+        "name": "Geely"
+      },
+      "model": {
+        "id": 1,
+        "name": "Coolray"
+      },
+      "year": 2021,
+      "photoUrl": "url",
+      "vin": "4S3BMHB68B3786050",
+      "mileage": 0,
+      "ours": true,
+      "client": {
+        "id": 1,
+        "firstName": "Christopher",
+        "lastName": "Gray",
+        "email": "sopice5177@gridmire.com"
+      },
+      "equipment": {
+        "id": 1,
+        "name": "Basic configuration",
+        "engineType": "Petrol",
+        "transmissionType": "Manual Transmission",
+        "engineSize": 2.0,
+        "horsePower": 235
+      },
+      "used": false,
+      "price": 20000.00,
+      "guarantee": null,
+      "serviceOperations": []
+    }
+  ],
+  "pageable": {
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "pageSize": 5,
+    "pageNumber": 1,
+    "offset": 5,
+    "paged": true,
+    "unpaged": false
+  },
+  "totalPages": 2,
+  "totalElements": 6,
+  "last": true,
+  "number": 1,
+  "size": 5,
+  "numberOfElements": 1,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "first": false,
+  "empty": false
+}

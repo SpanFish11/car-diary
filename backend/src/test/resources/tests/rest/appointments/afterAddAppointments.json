@@ -90,7 +90,7 @@
       "serviceOperations": []
     },
     "description": "Description",
-    "date": "2021-05-25",
+    "date": "${date}",
     "status": "PENDING"
   }
 ]

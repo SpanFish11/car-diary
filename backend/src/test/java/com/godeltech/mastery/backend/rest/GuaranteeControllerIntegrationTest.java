@@ -16,10 +16,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.godeltech.mastery.backend.domain.dto.request.GuaranteeCreateRequest;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
-import com.godeltech.mastery.backend.utils.TemplateDoc;
+import com.godeltech.mastery.backend.util.TestUtils;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,22 +50,19 @@ class GuaranteeControllerIntegrationTest {
   private MockMvc mockMvc;
 
   @Autowired
-  private ObjectMapper objectMapper;
-
-  @Autowired
-  private TemplateDoc templateDoc;
+  private TestUtils testUtils;
 
   @BeforeEach
   void setUp() {
-    templateDoc.setPath("classpath:/tests/rest/guarantee/");
+    testUtils.setPath("classpath:/tests/rest/guarantee/");
   }
 
   @Test
   void createGuarantee() throws Exception {
     final var carId = 2;
-    final var request = objectMapper.writeValueAsString(new GuaranteeCreateRequest(now(), FALSE));
+    final var request = testUtils.objectToJSON(new GuaranteeCreateRequest(now(), FALSE));
     final var responseAfterCreate = "3";
-    final var response = templateDoc
+    final var response = testUtils
         .replaceAllTokens(AFTER_ADD_GUARANTEE, "start", now().toString(), "stop",
             now().plusYears(3).toString());
 
@@ -85,7 +81,7 @@ class GuaranteeControllerIntegrationTest {
   @Test
   void createGuarantee_given_carId_should_status_isBadRequest() throws Exception {
     final var carId = 1;
-    final var request = objectMapper.writeValueAsString(new GuaranteeCreateRequest(now(), FALSE));
+    final var request = testUtils.objectToJSON(new GuaranteeCreateRequest(now(), FALSE));
 
     mockMvc
         .perform(post(API_GET_GUARANTEE, carId).contentType(APPLICATION_JSON).content(request))
@@ -104,7 +100,7 @@ class GuaranteeControllerIntegrationTest {
   @Test
   void getGuarantee() throws Exception {
     final var carId = 1;
-    final var guarantee = templateDoc.readFileToString(GUARANTEE_BY_ID);
+    final var guarantee = testUtils.readFileToString(GUARANTEE_BY_ID);
 
     mockMvc.perform(get(API_GET_GUARANTEE, carId))
         .andExpect(content().contentType(APPLICATION_JSON))
@@ -133,7 +129,7 @@ class GuaranteeControllerIntegrationTest {
   @Test
   void extendedGuarantee() throws Exception {
     final var carId = 1;
-    final var guarantee = templateDoc.readFileToString(GUARANTEE_AFTER_EXTEND);
+    final var guarantee = testUtils.readFileToString(GUARANTEE_AFTER_EXTEND);
 
     mockMvc.perform(put(API_GET_GUARANTEE, carId))
         .andExpect(content().contentType(APPLICATION_JSON))

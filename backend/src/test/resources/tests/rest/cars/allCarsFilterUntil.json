@@ -1,0 +1,97 @@
+{
+  "content": [
+    {
+      "id": 1,
+      "brand": {
+        "id": 2,
+        "name": "Geely"
+      },
+      "model": {
+        "id": 1,
+        "name": "Coolray"
+      },
+      "year": 2017,
+      "photoUrl": "url",
+      "vin": "4S3BMHB68B3286050",
+      "mileage": 25405,
+      "ours": true,
+      "client": {
+        "id": 1,
+        "firstName": "Christopher",
+        "lastName": "Gray",
+        "email": "sopice5177@gridmire.com"
+      },
+      "equipment": {
+        "id": 1,
+        "name": "Basic configuration",
+        "engineType": "Petrol",
+        "transmissionType": "Manual Transmission",
+        "engineSize": 2.0,
+        "horsePower": 235
+      },
+      "used": true,
+      "price": 15000.00,
+      "guarantee": null,
+      "serviceOperations": []
+    },
+    {
+      "id": 2,
+      "brand": {
+        "id": 2,
+        "name": "Geely"
+      },
+      "model": {
+        "id": 1,
+        "name": "Coolray"
+      },
+      "year": 2018,
+      "photoUrl": "url",
+      "vin": "4S3BMHB68B3386050",
+      "mileage": 0,
+      "ours": true,
+      "client": {
+        "id": 1,
+        "firstName": "Christopher",
+        "lastName": "Gray",
+        "email": "sopice5177@gridmire.com"
+      },
+      "equipment": {
+        "id": 1,
+        "name": "Basic configuration",
+        "engineType": "Petrol",
+        "transmissionType": "Manual Transmission",
+        "engineSize": 2.0,
+        "horsePower": 235
+      },
+      "used": false,
+      "price": 10000.00,
+      "guarantee": null,
+      "serviceOperations": []
+    }
+  ],
+  "pageable": {
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "pageSize": 5,
+    "pageNumber": 0,
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "totalPages": 1,
+  "totalElements": 2,
+  "last": true,
+  "number": 0,
+  "size": 5,
+  "numberOfElements": 2,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "first": true,
+  "empty": false
+}

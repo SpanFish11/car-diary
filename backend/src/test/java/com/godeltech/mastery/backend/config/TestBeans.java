@@ -1,7 +1,7 @@
 package com.godeltech.mastery.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.godeltech.mastery.backend.utils.TemplateDoc;
+import com.godeltech.mastery.backend.util.TestUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ResourceLoader;
@@ -10,8 +10,8 @@ import org.springframework.core.io.ResourceLoader;
 public class TestBeans {
 
   @Bean
-  public TemplateDoc templateDoc(final ResourceLoader resourceLoader,
+  public TestUtils templateDoc(final ResourceLoader resourceLoader,
       final ObjectMapper objectMapper) {
-    return new TemplateDoc(resourceLoader, objectMapper);
+    return new TestUtils(resourceLoader, objectMapper);
   }
 }
