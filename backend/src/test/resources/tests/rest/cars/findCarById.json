@@ -1,0 +1,39 @@
+{
+  "id": 1,
+  "brand": {
+    "id": 2,
+    "name": "Geely"
+  },
+  "model": {
+    "id": 1,
+    "name": "Coolray"
+  },
+  "year": 2017,
+  "photoUrl": "url",
+  "vin": "4S3BMHB68B3286050",
+  "mileage": 25405,
+  "ours": true,
+  "client": {
+    "id": 1,
+    "firstName": "Christopher",
+    "lastName": "Gray",
+    "email": "sopice5177@gridmire.com"
+  },
+  "equipment": {
+    "id": 1,
+    "name": "Basic configuration",
+    "engineType": "Petrol",
+    "transmissionType": "Manual Transmission",
+    "engineSize": 2.0,
+    "horsePower": 235
+  },
+  "used": true,
+  "price": 15000.00,
+  "guarantee": {
+    "start": "2020-04-11",
+    "end": "2023-04-11",
+    "mileage": 100000,
+    "extended": false
+  },
+  "serviceOperations": []
+}

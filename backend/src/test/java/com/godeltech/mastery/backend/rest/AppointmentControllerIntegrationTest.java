@@ -8,6 +8,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -36,15 +38,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = "/tests/appointments/initTestDB.sql")
+@Sql(scripts = {"/tests/schema.sql",
+    "/tests/rest/appointments/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
+@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
 class AppointmentControllerIntegrationTest {
 
   private static final String ALL_APPOINTMENTS =
-      "src/test/resources/tests/appointments/allAppointments.json";
+      "src/test/resources/tests/rest/appointments/allAppointments.json";
   private static final String AFTER_ADD_APPOINTMENT =
-      "src/test/resources/tests/appointments/afterAddAppointments.json";
+      "src/test/resources/tests/rest/appointments/afterAddAppointments.json";
   private static final String AFTER_CHANGE_STATUS =
-      "src/test/resources/tests/appointments/afterChangeStatus.json";
+      "src/test/resources/tests/rest/appointments/afterChangeStatus.json";
   private static final String API_APPOINTMENTS = "/api/v1/appointments";
   private static final String API_APPOINTMENTS_BY_ID = "/api/v1/appointments/{appointment_id}";
 
@@ -142,7 +146,7 @@ class AppointmentControllerIntegrationTest {
         Arguments.of(new AppointmentCreateRequest(TRUE, 1L, "Description", 1L, null),
             "Appointment date is mandatory"),
         Arguments.of(new AppointmentCreateRequest(TRUE, 1L, "Description", 1L, now().minusDays(1)),
-            "Appointment date is mandatory")
+            "Appointment date should be in the present of future")
     );
   }
 }

@@ -1,6 +1,8 @@
 package com.godeltech.mastery.backend.rest;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,11 +21,13 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = "/tests/maintenances/initDb.sql")
+@Sql(scripts = {"/tests/schema.sql",
+    "/tests/rest/maintenances/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
+@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
 class MaintenanceControllerIntegrationTest {
 
   private static final String ALL_MAINTENANCES =
-      "src/test/resources/tests/maintenances/allMaintenances.json";
+      "src/test/resources/tests/rest/maintenances/allMaintenances.json";
   private static final String API_MAINTENANCES = "/api/v1/maintenances";
 
   @Autowired

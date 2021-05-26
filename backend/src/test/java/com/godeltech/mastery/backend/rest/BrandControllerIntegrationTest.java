@@ -5,6 +5,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,12 +26,14 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = "/tests/brands/initTestDB.sql")
+@Sql(scripts = {"/tests/schema.sql",
+    "/tests/rest/brands/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
+@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
 class BrandControllerIntegrationTest {
 
-  private static final String ALL_BRANDS = "src/test/resources/tests/brands/allBrands.json";
+  private static final String ALL_BRANDS = "src/test/resources/tests/rest/brands/allBrands.json";
   private static final String MODELS_BY_BRAND_ID =
-      "src/test/resources/tests/brands/modelsById.json";
+      "src/test/resources/tests/rest/brands/modelsById.json";
   private static final String API_BRANDS = "/api/v1/brands";
   private static final String API_MODELS_BY_BRAND_ID = "/api/v1/brands/{brand_id}/models";
 

@@ -1,0 +1,96 @@
+[
+  {
+    "id": 1,
+    "repairment": true,
+    "regularService": null,
+    "car": {
+      "id": 1,
+      "brand": {
+        "id": 1,
+        "name": "Nissan"
+      },
+      "model": {
+        "id": 1,
+        "name": "Qashqai"
+      },
+      "year": 2017,
+      "photoUrl": "https://spanfishbucket.s3.eu-central-1.amazonaws.com/cars/988912e4-5f92-4989-ad49-5cc2611b7f05.jpg",
+      "vin": "4S3BMHB68B3286050",
+      "mileage": 25405,
+      "ours": true,
+      "client": {
+        "id": 1,
+        "firstName": "Christopher",
+        "lastName": "Gray",
+        "email": "sopice5177@gridmire.com"
+      },
+      "equipment": {
+        "id": 1,
+        "name": "Basic configuration",
+        "engineType": "Petrol",
+        "transmissionType": "Manual Transmission",
+        "engineSize": 2.0,
+        "horsePower": 235
+      },
+      "used": true,
+      "price": 15000.00,
+      "guarantee": {
+        "start": "2020-01-20",
+        "end": "2025-01-20",
+        "mileage": 150000,
+        "extended": true
+      },
+      "serviceOperations": []
+    },
+    "description": "Something go wrong",
+    "date": "2021-05-24",
+    "status": "PENDING"
+  },
+  {
+    "id": 2,
+    "repairment": true,
+    "regularService": null,
+    "car": {
+      "id": 1,
+      "brand": {
+        "id": 1,
+        "name": "Nissan"
+      },
+      "model": {
+        "id": 1,
+        "name": "Qashqai"
+      },
+      "year": 2017,
+      "photoUrl": "https://spanfishbucket.s3.eu-central-1.amazonaws.com/cars/988912e4-5f92-4989-ad49-5cc2611b7f05.jpg",
+      "vin": "4S3BMHB68B3286050",
+      "mileage": 25405,
+      "ours": true,
+      "client": {
+        "id": 1,
+        "firstName": "Christopher",
+        "lastName": "Gray",
+        "email": "sopice5177@gridmire.com"
+      },
+      "equipment": {
+        "id": 1,
+        "name": "Basic configuration",
+        "engineType": "Petrol",
+        "transmissionType": "Manual Transmission",
+        "engineSize": 2.0,
+        "horsePower": 235
+      },
+      "used": true,
+      "price": 15000.00,
+      "guarantee": {
+        "start": "2020-01-20",
+        "end": "2025-01-20",
+        "mileage": 150000,
+        "extended": true
+      },
+      "serviceOperations": []
+    },
+    "description": "Description",
+    "date": "2021-05-25",
+    "status": "PENDING"
+  }
+]
