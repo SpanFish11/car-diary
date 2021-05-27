@@ -20,6 +20,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 import com.godeltech.mastery.backend.domain.dto.request.ClientCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.request.ResetPasswordRequest;
@@ -39,11 +40,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -60,7 +59,7 @@ class ClientServiceUnitTest {
   @Test
   @WithMockUser(value = "someUser@app.com")
   void getClient() {
-    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    final User auth = (User) getContext().getAuthentication().getPrincipal();
 
     final var expected =
         Client.builder()
@@ -217,7 +216,7 @@ class ClientServiceUnitTest {
   @Test
   @WithMockUser
   void changePassword() {
-    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    final User auth = (User) getContext().getAuthentication().getPrincipal();
     final ResetPasswordRequest request = new ResetPasswordRequest();
     request.setOldPassword("sDrw324");
     final var client =
@@ -239,7 +238,7 @@ class ClientServiceUnitTest {
   @Test
   @WithMockUser(username = "someUser@app.com", password = "sDrw324")
   void changePasswordIfPasswordNotMatch() {
-    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    final User auth = (User) getContext().getAuthentication().getPrincipal();
     final ResetPasswordRequest request = new ResetPasswordRequest();
     request.setOldPassword("dfsdfe5343");
     final var client = Client.builder().password("sDrw324").email(auth.getUsername()).build();

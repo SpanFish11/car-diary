@@ -67,7 +67,7 @@ public class AppointmentController {
   @PutMapping("/{appointment_id}")
   public ResponseEntity<AppointmentDTO> changeStatus(
       @PathVariable("appointment_id") final Long appointmentId,
-      @RequestParam final @NotNull AppointmentStatus status) {
+      @RequestParam final AppointmentStatus status) {
     return ok(appointmentService.changeAppointmentStatus(appointmentId, status));
   }
 }
