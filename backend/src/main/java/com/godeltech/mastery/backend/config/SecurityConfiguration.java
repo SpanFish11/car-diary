@@ -6,11 +6,6 @@ import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.PATCH;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
 import com.godeltech.mastery.backend.security.AuthTokenFilter;
 import com.godeltech.mastery.backend.security.JwtAuthEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -65,40 +60,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .csrf(CsrfConfigurer::disable)
         .authorizeRequests(
             auth ->
-                auth.antMatchers(API + "/auth")
-                    .permitAll()
-                    .antMatchers(API + "/brands")
-                    .access(ALL_ROLES)
-                    .antMatchers(PATCH, API + "/cars/{\\d+}/photos")
-                    .access(ALL_ROLES)
-                    .antMatchers(API + "/cars/**")
-                    .access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(API + "/clients/{\\d+}/cars")
-                    .access(ALL_ROLES)
-                    .antMatchers(API + "/clients")
-                    .access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(API + "/clients/appointments")
-                    .access(ALL_ROLES)
-                    .antMatchers(API + "/equipments")
-                    .access(ALL_ROLES)
-                    .antMatchers(GET, API + "/guarantee/{\\d+}")
-                    .access(ALL_ROLES)
-                    .antMatchers(API + "/guarantee/**")
-                    .access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(PUT, API + "/guarantee/{\\d+}")
-                    .access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(API + "/maintenances")
-                    .access(ALL_ROLES)
-                    .antMatchers(GET, API + "/operations/{\\d+}")
-                    .access(ALL_ROLES)
-                    .antMatchers(POST, API + "/operations/**")
-                    .access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(GET, API + "/appointments")
-                    .access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(POST, API + "/appointments")
-                    .access(ALL_ROLES)
-                    .antMatchers(PUT, API + "/appointments/{\\d+}")
-                    .access(MANAGER_ADMIN_ROLES)
+                auth.antMatchers(API + "/auth").permitAll()
+                    .antMatchers(API + "/brands").access(ALL_ROLES)
+                    .antMatchers(PATCH, API + "/cars/{\\d+}/photos").access(ALL_ROLES)
+                    .antMatchers(API + "/cars/**").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/clients/{\\d+}/cars").access(ALL_ROLES)
+                    .antMatchers(API + "/clients").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/clients/appointments").access(ALL_ROLES)
+                    .antMatchers(API + "/equipments").access(ALL_ROLES)
+                    .antMatchers(GET, API + "/guarantee/{\\d+}").access(ALL_ROLES)
+                    .antMatchers(API + "/guarantee/**").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(PUT, API + "/guarantee/{\\d+}").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/maintenances").access(ALL_ROLES)
+                    .antMatchers(GET, API + "/operations/{\\d+}").access(ALL_ROLES)
+                    .antMatchers(POST, API + "/operations/**").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(GET, API + "/appointments").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(POST, API + "/appointments").access(ALL_ROLES)
+                    .antMatchers(PUT, API + "/appointments/{\\d+}").access(MANAGER_ADMIN_ROLES)
                     .anyRequest()
                     .permitAll())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
