@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-class ModelServiceImplTest {
+class ModelServiceUnitTest {
 
   @Mock ModelRepository modelRepository;
   @InjectMocks ModelServiceImpl modelService;

@@ -39,10 +39,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -57,25 +58,25 @@ class ClientServiceUnitTest {
   @InjectMocks ClientServiceImpl clientService;
 
   @Test
-  @WithMockUser(username = "someUser@app.com")
+  @WithMockUser(value = "someUser@app.com")
   void getClient() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     final var expected =
         Client.builder()
             .id(34L)
             .firstName("John")
             .lastName("Snow")
-            .email(authentication.getName())
+            .email(auth.getUsername())
             .build();
 
-    given(clientRepository.getByEmailIgnoreCase(authentication.getName()))
+    given(clientRepository.getByEmailIgnoreCase(auth.getUsername()))
         .willReturn(Optional.of(expected));
 
-    final var actual = clientService.getClient(authentication);
+    final var actual = clientService.getClient(auth);
     assertThat(actual, is(expected));
 
-    then(clientRepository).should(only()).getByEmailIgnoreCase(authentication.getName());
+    then(clientRepository).should(only()).getByEmailIgnoreCase(auth.getUsername());
   }
 
   @Test
@@ -216,13 +217,14 @@ class ClientServiceUnitTest {
   @Test
   @WithMockUser
   void changePassword() {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     final ResetPasswordRequest request = new ResetPasswordRequest();
     request.setOldPassword("sDrw324");
     final var client =
-        Client.builder().password(request.getOldPassword()).email(auth.getName()).build();
+        Client.builder().password(request.getOldPassword()).email(auth.getUsername()).build();
 
-    given(clientRepository.getByEmailIgnoreCase(auth.getName())).willReturn(Optional.of(client));
+    given(clientRepository.getByEmailIgnoreCase(auth.getUsername()))
+        .willReturn(Optional.of(client));
     given(
             bCryptPasswordEncoder.matches(
                 request.getOldPassword(), clientService.getClient(auth).getPassword()))
@@ -230,20 +232,21 @@ class ClientServiceUnitTest {
 
     clientService.changePassword(request, auth);
 
-    then(clientRepository).should(times(2)).getByEmailIgnoreCase(eq(auth.getName()));
+    then(clientRepository).should(times(2)).getByEmailIgnoreCase(eq(auth.getUsername()));
     then(bCryptPasswordEncoder).should(times(1)).matches(eq(request.getOldPassword()), anyString());
   }
 
   @Test
   @WithMockUser(username = "someUser@app.com", password = "sDrw324")
   void changePasswordIfPasswordNotMatch() {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     final ResetPasswordRequest request = new ResetPasswordRequest();
     request.setOldPassword("dfsdfe5343");
-    final var client = Client.builder().password("sDrw324").email(auth.getName()).build();
+    final var client = Client.builder().password("sDrw324").email(auth.getUsername()).build();
     final String message = "Passwords do not match!";
 
-    given(clientRepository.getByEmailIgnoreCase(auth.getName())).willReturn(Optional.of(client));
+    given(clientRepository.getByEmailIgnoreCase(auth.getUsername()))
+        .willReturn(Optional.of(client));
     given(
             bCryptPasswordEncoder.matches(
                 request.getOldPassword(), clientService.getClient(auth).getPassword()))
@@ -254,7 +257,7 @@ class ClientServiceUnitTest {
             IllegalArgumentException.class, () -> clientService.changePassword(request, auth));
     assertThat(actual.getMessage(), is(message));
 
-    then(clientRepository).should(times(2)).getByEmailIgnoreCase(eq(auth.getName()));
+    then(clientRepository).should(times(2)).getByEmailIgnoreCase(eq(auth.getUsername()));
     then(bCryptPasswordEncoder)
         .should(only())
         .matches(request.getOldPassword(), clientService.getClient(auth).getPassword());
