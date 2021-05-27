@@ -31,7 +31,7 @@ public class AppointmentCreateRequest {
   private Long carId;
 
   @NotNull(message = "Appointment date is mandatory")
-  @FutureOrPresent(message = "Appointment date should be in the present of past")
+  @FutureOrPresent(message = "Appointment date should be in the present of future")
   @Temporal(DATE)
   private LocalDate date;
 }

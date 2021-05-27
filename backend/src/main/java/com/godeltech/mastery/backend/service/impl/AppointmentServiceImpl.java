@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,7 +36,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
   @Override
   public Long createAppointment(
-      final AppointmentCreateRequest createRequest, final Authentication principal) {
+      final AppointmentCreateRequest createRequest, final User principal) {
     final var appointment = appointmentMapper.toEntity(createRequest);
     setRegularService(appointment, createRequest);
     final Long carId = createRequest.getCarId();
@@ -60,7 +60,7 @@ public class AppointmentServiceImpl implements AppointmentService {
   }
 
   @Override
-  public List<AppointmentDTO> getAllAppointments(Authentication principal) {
+  public List<AppointmentDTO> getAllAppointments(final User principal) {
     final List<AppointmentDTO> appointments = new ArrayList<>();
     final Set<Car> cars = clientService.getClient(principal).getCars();
     cars.forEach(car -> appointments.addAll(appointmentMapper.toListDTO(car.getAppointments())));
@@ -79,7 +79,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         .orElseThrow(() -> new EntityNotFoundException("maintenance", id));
   }
 
-  private void setRegularService(Appointment appointment, AppointmentCreateRequest createRequest) {
+  private void setRegularService(final Appointment appointment,
+      final AppointmentCreateRequest createRequest) {
     if (TRUE.equals(appointment.getRepairment())) {
       appointment.setRegularService(null);
     } else {
@@ -88,7 +89,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
   }
 
-  private void setCarByCurrentClient(Appointment appointment, Long carId, Client client) {
+  private void setCarByCurrentClient(final Appointment appointment, final Long carId,
+      final Client client) {
     final var car = carService.findCarById(carId);
     final boolean exists =
         client.getCars().stream().anyMatch(currentCar -> currentCar.getId().equals(carId));

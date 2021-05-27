@@ -1,8 +1,3 @@
-DELETE
-FROM m_models;
-DELETE
-FROM m_brands;
-
 INSERT INTO m_brands (id, name)
 VALUES (1, 'Nissan');
 INSERT INTO m_brands (id, name)
