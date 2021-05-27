@@ -35,25 +35,24 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = {"/tests/schema.sql",
-    "/tests/rest/appointments/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
-@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/schema.sql", "/tests/rest/appointments/data.sql"},
+    executionPhase = BEFORE_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/drop.sql"},
+    executionPhase = AFTER_TEST_METHOD)
 class AppointmentControllerIntegrationTest {
 
   private static final String ALL_APPOINTMENTS =
       "src/test/resources/tests/rest/appointments/allAppointments.json";
-  private static final String AFTER_ADD_APPOINTMENT =
-      "src/test/resources/tests/rest/appointments/afterAddAppointments.json";
+  private static final String AFTER_ADD_APPOINTMENT = "afterAddAppointments.json";
   private static final String AFTER_CHANGE_STATUS =
       "src/test/resources/tests/rest/appointments/afterChangeStatus.json";
   private static final String API_APPOINTMENTS = "/api/v1/appointments";
   private static final String API_APPOINTMENTS_BY_ID = "/api/v1/appointments/{appointment_id}";
 
-  @Autowired
-  private MockMvc mockMvc;
-
-  @Autowired
-  private TestUtils testUtils;
+  @Autowired private MockMvc mockMvc;
+  @Autowired private TestUtils testUtils;
 
   @BeforeEach
   void setUp() {
@@ -76,13 +75,14 @@ class AppointmentControllerIntegrationTest {
   void createAppointment() throws Exception {
     final var appointment = new AppointmentCreateRequest(TRUE, 1L, "Description", 1L, now());
     final var json = testUtils.objectToJSON(appointment);
-    final var appointments = testUtils
-        .replaceAllTokens("afterAddAppointments.json", "date", now().toString());
+    final var appointments =
+        testUtils.replaceAllTokens(AFTER_ADD_APPOINTMENT, "date", now().toString());
 
     mockMvc
         .perform(post(API_APPOINTMENTS).contentType(APPLICATION_JSON).content(json))
         .andExpect(content().contentType(APPLICATION_JSON))
-        .andExpect(status().isCreated()).andExpect(content().json("2"));
+        .andExpect(status().isCreated())
+        .andExpect(content().json("2"));
 
     mockMvc
         .perform(get(API_APPOINTMENTS))
@@ -93,13 +93,16 @@ class AppointmentControllerIntegrationTest {
 
   @ParameterizedTest
   @ArgumentsSource(AppointmentRequestForExceptionArgumentsProvider.class)
-  void createAppointmentIncorrectData(final AppointmentCreateRequest request,
-      final String message) throws Exception {
+  void createAppointmentIncorrectData(final AppointmentCreateRequest request, final String message)
+      throws Exception {
 
     mockMvc
-        .perform(post(API_APPOINTMENTS).contentType(APPLICATION_JSON)
-            .content(testUtils.objectToJSON(request)))
-        .andExpect(content().contentType(APPLICATION_JSON)).andExpect(status().is4xxClientError())
+        .perform(
+            post(API_APPOINTMENTS)
+                .contentType(APPLICATION_JSON)
+                .content(testUtils.objectToJSON(request)))
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(status().is4xxClientError())
         .andExpect(
             result ->
                 assertThat(
@@ -107,7 +110,8 @@ class AppointmentControllerIntegrationTest {
                     instanceOf(MethodArgumentNotValidException.class)))
         .andExpect(
             result ->
-                assertThat(requireNonNull(result.getResolvedException()).getMessage(),
+                assertThat(
+                    requireNonNull(result.getResolvedException()).getMessage(),
                     containsString(message)));
   }
 
@@ -117,8 +121,8 @@ class AppointmentControllerIntegrationTest {
     final var status = CONFIRM.name();
     final var appointment = testUtils.toJSONObject(AFTER_CHANGE_STATUS);
 
-    mockMvc.perform(put(API_APPOINTMENTS_BY_ID, appointmentId)
-        .param("status", status))
+    mockMvc
+        .perform(put(API_APPOINTMENTS_BY_ID, appointmentId).param("status", status))
         .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(appointment));

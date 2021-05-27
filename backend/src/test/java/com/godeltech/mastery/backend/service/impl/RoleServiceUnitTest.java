@@ -49,7 +49,8 @@ class RoleServiceUnitTest {
     given(roleRepository.findRoleByRoleName(incorrectRoleName)).willThrow(excepted);
 
     final var actual =
-        assertThrows(EntityNotFoundException.class, () -> roleService.getRoleByRoleName(incorrectRoleName));
+        assertThrows(
+            EntityNotFoundException.class, () -> roleService.getRoleByRoleName(incorrectRoleName));
     assertThat(actual.getMessage(), is(message));
 
     then(roleRepository).should(only()).findRoleByRoleName(eq(incorrectRoleName));

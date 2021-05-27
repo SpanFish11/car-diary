@@ -19,20 +19,20 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = {"/tests/schema.sql",
-    "/tests/rest/equipments/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
-@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/schema.sql", "/tests/rest/equipments/data.sql"},
+    executionPhase = BEFORE_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/drop.sql"},
+    executionPhase = AFTER_TEST_METHOD)
 class EquipmentControllerIntegrationTest {
 
   private static final String ALL_EQUIPMENTS =
       "src/test/resources/tests/rest/equipments/allEquipments.json";
   private static final String API_EQUIPMENTS = "/api/v1/equipments";
 
-  @Autowired
-  private MockMvc mockMvc;
-
-  @Autowired
-  private TestUtils testUtils;
+  @Autowired private MockMvc mockMvc;
+  @Autowired private TestUtils testUtils;
 
   @Test
   void getAllEquipments() throws Exception {

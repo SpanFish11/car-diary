@@ -27,8 +27,7 @@ public class TestUtils {
   private final ResourceLoader resourceLoader;
   private final ObjectMapper objectMapper;
 
-  @Setter
-  private String path;
+  @Setter private String path;
 
   public String replaceAllTokens(final String path, final String... tokenValues) {
     var result = readFileToString(path);
@@ -43,8 +42,8 @@ public class TestUtils {
     return asString(resource);
   }
 
-  public LinkedMultiValueMap<String, String> toParams(final Integer page, final Integer size,
-      final Filter filter) throws JsonProcessingException {
+  public LinkedMultiValueMap<String, String> toParams(
+      final Integer page, final Integer size, final Filter filter) throws JsonProcessingException {
     final var json = objectMapper.writeValueAsString(filter);
     final TypeReference<Map<String, String>> typeRef = new TypeReference<>() {};
     final Map<String, String> params = objectMapper.readValue(json, typeRef);
@@ -57,8 +56,7 @@ public class TestUtils {
 
   public String toJSONObject(final String pathname) throws IOException {
     return objectMapper.writeValueAsString(
-        objectMapper.readValue(
-            new File(pathname), JSONObject.class));
+        objectMapper.readValue(new File(pathname), JSONObject.class));
   }
 
   public String objectToJSON(final Object obj) throws JsonProcessingException {
@@ -67,8 +65,7 @@ public class TestUtils {
 
   public String toJSONArray(final String pathname) throws IOException {
     return objectMapper.writeValueAsString(
-        objectMapper.readValue(
-            new File(pathname), JSONArray.class));
+        objectMapper.readValue(new File(pathname), JSONArray.class));
   }
 
   private String asString(final Resource resource) {

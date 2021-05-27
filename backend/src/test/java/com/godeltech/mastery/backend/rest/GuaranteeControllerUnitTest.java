@@ -29,8 +29,9 @@ class GuaranteeControllerUnitTest {
   private static final int EXTENDED_MILEAGE = 150_000;
   private static final int REGULAR_MILEAGE = 100_000;
 
-  @Mock private GuaranteeService guaranteeService;
   @InjectMocks GuaranteeController guaranteeController;
+
+  @Mock private GuaranteeService guaranteeService;
 
   @Test
   void createGuarantee() {

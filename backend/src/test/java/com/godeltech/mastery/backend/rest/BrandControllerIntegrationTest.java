@@ -24,9 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = {"/tests/schema.sql",
-    "/tests/rest/brands/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
-@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/schema.sql", "/tests/rest/brands/data.sql"},
+    executionPhase = BEFORE_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/drop.sql"},
+    executionPhase = AFTER_TEST_METHOD)
 class BrandControllerIntegrationTest {
 
   private static final String ALL_BRANDS = "src/test/resources/tests/rest/brands/allBrands.json";
@@ -35,11 +38,8 @@ class BrandControllerIntegrationTest {
   private static final String API_BRANDS = "/api/v1/brands";
   private static final String API_MODELS_BY_BRAND_ID = "/api/v1/brands/{brand_id}/models";
 
-  @Autowired
-  private MockMvc mockMvc;
-
-  @Autowired
-  private TestUtils testUtils;
+  @Autowired private MockMvc mockMvc;
+  @Autowired private TestUtils testUtils;
 
   @Test
   void getAllBrands() throws Exception {
