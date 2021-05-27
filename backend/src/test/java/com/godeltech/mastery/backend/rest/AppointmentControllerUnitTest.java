@@ -13,6 +13,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.only;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 import com.godeltech.mastery.backend.domain.dto.request.AppointmentCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.AppointmentDTO;
@@ -25,7 +26,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -56,7 +56,7 @@ class AppointmentControllerUnitTest {
   @Test
   @WithMockUser(value = "userexample@app.com")
   void createAppointment() {
-    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    final User auth = (User) getContext().getAuthentication().getPrincipal();
     final var createRequest = new AppointmentCreateRequest(false, null, "Not working", 3L, now());
     final var appointmentId = 4L;
     final ResponseEntity<Long> expected = new ResponseEntity<>(appointmentId, CREATED);
@@ -72,7 +72,7 @@ class AppointmentControllerUnitTest {
   @Test
   @WithMockUser(value = "user@app.com")
   void createAppointmentReturnException() {
-    final User auth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    final User auth = (User) getContext().getAuthentication().getPrincipal();
     final var maintenanceId = 67L;
     final var createRequest =
         new AppointmentCreateRequest(false, maintenanceId, "Not working", 3L, now());
