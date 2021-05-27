@@ -79,8 +79,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         .orElseThrow(() -> new EntityNotFoundException("maintenance", id));
   }
 
-  private void setRegularService(final Appointment appointment,
-      final AppointmentCreateRequest createRequest) {
+  private void setRegularService(
+      final Appointment appointment, final AppointmentCreateRequest createRequest) {
     if (TRUE.equals(appointment.getRepairment())) {
       appointment.setRegularService(null);
     } else {
@@ -89,8 +89,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
   }
 
-  private void setCarByCurrentClient(final Appointment appointment, final Long carId,
-      final Client client) {
+  private void setCarByCurrentClient(
+      final Appointment appointment, final Long carId, final Client client) {
     final var car = carService.findCarById(carId);
     final boolean exists =
         client.getCars().stream().anyMatch(currentCar -> currentCar.getId().equals(carId));

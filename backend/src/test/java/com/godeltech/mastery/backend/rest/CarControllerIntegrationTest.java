@@ -35,13 +35,15 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = {"/tests/schema.sql",
-    "/tests/rest/cars/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
-@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/schema.sql", "/tests/rest/cars/data.sql"},
+    executionPhase = BEFORE_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/drop.sql"},
+    executionPhase = AFTER_TEST_METHOD)
 class CarControllerIntegrationTest {
 
   private static final String CAR_CREATE_REQUEST = "carCreateRequest.json";
@@ -50,11 +52,8 @@ class CarControllerIntegrationTest {
   private static final String API_CARS = "/api/v1/cars";
   private static final String GET_BY_ID = API_CARS + "/{car_id}";
 
-  @Autowired
-  private MockMvc mockMvc;
-
-  @Autowired
-  private TestUtils testUtils;
+  @Autowired private MockMvc mockMvc;
+  @Autowired private TestUtils testUtils;
 
   @BeforeEach
   void setUp() {
@@ -63,8 +62,9 @@ class CarControllerIntegrationTest {
 
   @ParameterizedTest
   @ArgumentsSource(GetAllCarsPageSizeAndFilterArgumentsProvider.class)
-  void getAllCars(final String fileName, final Integer page, final Integer size,
-      final Filter filter) throws Exception {
+  void getAllCars(
+      final String fileName, final Integer page, final Integer size, final Filter filter)
+      throws Exception {
     final var params = testUtils.toParams(page, size, filter);
     final var json = testUtils.readFileToString(fileName);
 
@@ -140,23 +140,24 @@ class CarControllerIntegrationTest {
 
   @Test
   void createCar() throws Exception {
-    final var newCar = CarCreateManagerRequest
-        .managerRequestBuilder()
-        .modelId(2L)
-        .equipmentId(1L)
-        .mileage(0)
-        .ours(TRUE)
-        .clientId(2L)
-        .price(new BigDecimal(50000))
-        .year(1950)
-        .used(FALSE)
-        .vin("4S3BMHB68B3290050")
-        .build();
+    final var newCar =
+        CarCreateManagerRequest.managerRequestBuilder()
+            .modelId(2L)
+            .equipmentId(1L)
+            .mileage(0)
+            .ours(TRUE)
+            .clientId(2L)
+            .price(new BigDecimal(50000))
+            .year(1950)
+            .used(FALSE)
+            .vin("4S3BMHB68B3290050")
+            .build();
     final var request = testUtils.objectToJSON(newCar);
     final var responseAfterCreate = "7";
     final var response = testUtils.toJSONObject(CREATED_CAR);
 
-    mockMvc.perform(post(API_CARS).contentType(APPLICATION_JSON).content(request))
+    mockMvc
+        .perform(post(API_CARS).contentType(APPLICATION_JSON).content(request))
         .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(status().isCreated())
         .andExpect(content().json(responseAfterCreate));
@@ -172,9 +173,12 @@ class CarControllerIntegrationTest {
   @ArgumentsSource(CarCreateRequestArgumentsProvider.class)
   void createCarIncorrectData(final String message, final String... carRequest) throws Exception {
     mockMvc
-        .perform(post(API_CARS).contentType(APPLICATION_JSON)
-            .content(testUtils.replaceAllTokens(CAR_CREATE_REQUEST, carRequest)))
-        .andExpect(content().contentType(APPLICATION_JSON)).andExpect(status().isBadRequest())
+        .perform(
+            post(API_CARS)
+                .contentType(APPLICATION_JSON)
+                .content(testUtils.replaceAllTokens(CAR_CREATE_REQUEST, carRequest)))
+        .andExpect(content().contentType(APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
         .andExpect(
             result ->
                 assertThat(
@@ -182,7 +186,8 @@ class CarControllerIntegrationTest {
                     instanceOf(MethodArgumentNotValidException.class)))
         .andExpect(
             result ->
-                assertThat(requireNonNull(result.getResolvedException()).getMessage(),
+                assertThat(
+                    requireNonNull(result.getResolvedException()).getMessage(),
                     containsString(message)));
   }
 

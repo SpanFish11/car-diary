@@ -20,34 +20,18 @@ public class GetAllCarsPageSizeAndFilterArgumentsProvider implements ArgumentsPr
   private static final String FILTER_PERIOD = "allCarsFilterPeriod.json";
 
   @Override
-  public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
-    return Stream
-        .of(Arguments
-                .of(PAGE_ONE, 0, 5, new Filter(null, null, null, null, null, null)),
-            Arguments
-                .of(PAGE_TWO, 1, 5, new Filter(null, null, null, null, null, null)),
-            Arguments
-                .of(PAGE_SIZE_TEN, 0, 10, new Filter(null, null, null, null, null, null)),
-            Arguments
-                .of(FILTER_MODEL_ID, 0, 5, new Filter(2L, null, null, null, null, null)),
-            Arguments
-                .of(FILTER_VIN, 0, 5,
-                    new Filter(null, "4S3BMHB68B3286050", null, null, null, null)),
-            Arguments
-                .of(FILTER_LAST_NAME, 0, 5,
-                    new Filter(null, null, "Stephens", null, null, null)),
-            Arguments
-                .of(FILTER_SPECIFIC_YEAR, 0, 5,
-                    new Filter(null, null, null, 2021, null, null)),
-            Arguments
-                .of(FILTER_FROM, 0, 5,
-                    new Filter(null, null, null, null, null, 2019)),
-            Arguments
-                .of(FILTER_UNTIL, 0, 5,
-                    new Filter(null, null, null, null, 2018, null)),
-            Arguments
-                .of(FILTER_PERIOD, 0, 5,
-                    new Filter(null, null, null, null, 2020, 2018))
-        );
+  public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+    return Stream.of(
+        Arguments.of(PAGE_ONE, 0, 5, new Filter(null, null, null, null, null, null)),
+        Arguments.of(PAGE_TWO, 1, 5, new Filter(null, null, null, null, null, null)),
+        Arguments.of(PAGE_SIZE_TEN, 0, 10, new Filter(null, null, null, null, null, null)),
+        Arguments.of(FILTER_MODEL_ID, 0, 5, new Filter(2L, null, null, null, null, null)),
+        Arguments.of(
+            FILTER_VIN, 0, 5, new Filter(null, "4S3BMHB68B3286050", null, null, null, null)),
+        Arguments.of(FILTER_LAST_NAME, 0, 5, new Filter(null, null, "Stephens", null, null, null)),
+        Arguments.of(FILTER_SPECIFIC_YEAR, 0, 5, new Filter(null, null, null, 2021, null, null)),
+        Arguments.of(FILTER_FROM, 0, 5, new Filter(null, null, null, null, null, 2019)),
+        Arguments.of(FILTER_UNTIL, 0, 5, new Filter(null, null, null, null, 2018, null)),
+        Arguments.of(FILTER_PERIOD, 0, 5, new Filter(null, null, null, null, 2020, 2018)));
   }
 }

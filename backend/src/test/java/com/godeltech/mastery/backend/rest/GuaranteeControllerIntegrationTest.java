@@ -35,9 +35,12 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(scripts = {"/tests/schema.sql",
-    "/tests/rest/guarantee/data.sql"}, executionPhase = BEFORE_TEST_METHOD)
-@Sql(scripts = {"/tests/drop.sql"}, executionPhase = AFTER_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/schema.sql", "/tests/rest/guarantee/data.sql"},
+    executionPhase = BEFORE_TEST_METHOD)
+@Sql(
+    scripts = {"/tests/drop.sql"},
+    executionPhase = AFTER_TEST_METHOD)
 class GuaranteeControllerIntegrationTest {
 
   private static final String GUARANTEE_BY_ID = "getGuarantee.json";
@@ -46,11 +49,13 @@ class GuaranteeControllerIntegrationTest {
   private static final String API_GUARANTEE = "/api/v1/guarantee";
   private static final String API_GET_GUARANTEE = API_GUARANTEE + "/{car_id}";
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
+  @Autowired private TestUtils testUtils;
 
-  @Autowired
-  private TestUtils testUtils;
+  private static Stream<Arguments> provideExtendedGuaranteeRequestForException() {
+    return Stream.of(
+        Arguments.of(2, "Guarantee doesn't exist"), Arguments.of(3, "Guarantee already extended"));
+  }
 
   @BeforeEach
   void setUp() {
@@ -62,11 +67,12 @@ class GuaranteeControllerIntegrationTest {
     final var carId = 2;
     final var request = testUtils.objectToJSON(new GuaranteeCreateRequest(now(), FALSE));
     final var responseAfterCreate = "3";
-    final var response = testUtils
-        .replaceAllTokens(AFTER_ADD_GUARANTEE, "start", now().toString(), "stop",
-            now().plusYears(3).toString());
+    final var response =
+        testUtils.replaceAllTokens(
+            AFTER_ADD_GUARANTEE, "start", now().toString(), "stop", now().plusYears(3).toString());
 
-    mockMvc.perform(post(API_GET_GUARANTEE, carId).contentType(APPLICATION_JSON).content(request))
+    mockMvc
+        .perform(post(API_GET_GUARANTEE, carId).contentType(APPLICATION_JSON).content(request))
         .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(status().isCreated())
         .andExpect(content().json(responseAfterCreate));
@@ -102,7 +108,8 @@ class GuaranteeControllerIntegrationTest {
     final var carId = 1;
     final var guarantee = testUtils.readFileToString(GUARANTEE_BY_ID);
 
-    mockMvc.perform(get(API_GET_GUARANTEE, carId))
+    mockMvc
+        .perform(get(API_GET_GUARANTEE, carId))
         .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(guarantee));
@@ -131,7 +138,8 @@ class GuaranteeControllerIntegrationTest {
     final var carId = 1;
     final var guarantee = testUtils.readFileToString(GUARANTEE_AFTER_EXTEND);
 
-    mockMvc.perform(put(API_GET_GUARANTEE, carId))
+    mockMvc
+        .perform(put(API_GET_GUARANTEE, carId))
         .andExpect(content().contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(guarantee));
@@ -158,9 +166,8 @@ class GuaranteeControllerIntegrationTest {
 
   @ParameterizedTest
   @MethodSource("provideExtendedGuaranteeRequestForException")
-  void extendedGuarantee_given_carId_should_status_isBadRequest(final Integer carId,
-      final String message)
-      throws Exception {
+  void extendedGuarantee_given_carId_should_status_isBadRequest(
+      final Integer carId, final String message) throws Exception {
     mockMvc
         .perform(put(API_GET_GUARANTEE, carId))
         .andExpect(content().contentType(APPLICATION_JSON))
@@ -168,16 +175,11 @@ class GuaranteeControllerIntegrationTest {
         .andExpect(
             result ->
                 assertThat(
-                    result.getResolvedException(),
-                    instanceOf(IllegalArgumentException.class)))
+                    result.getResolvedException(), instanceOf(IllegalArgumentException.class)))
         .andExpect(
             result ->
-                assertThat(requireNonNull(result.getResolvedException()).getMessage(),
+                assertThat(
+                    requireNonNull(result.getResolvedException()).getMessage(),
                     containsString(message)));
-  }
-
-  private static Stream<Arguments> provideExtendedGuaranteeRequestForException() {
-    return Stream.of(Arguments.of(2, "Guarantee doesn't exist"),
-        Arguments.of(3, "Guarantee already extended"));
   }
 }

@@ -5,10 +5,6 @@ import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.IDENTITY;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serial;
 import java.io.Serializable;

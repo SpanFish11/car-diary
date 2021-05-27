@@ -27,6 +27,9 @@
     <properties>
         <main.basedir>${project.basedir}</main.basedir>
         <java.version>16</java.version>
+        <sonar.projectKey>SpanFish11_car-diary</sonar.projectKey>
+        <sonar.organization>spanfish11</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
 </project>

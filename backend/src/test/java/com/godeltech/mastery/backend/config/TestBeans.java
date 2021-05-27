@@ -10,8 +10,8 @@ import org.springframework.core.io.ResourceLoader;
 public class TestBeans {
 
   @Bean
-  public TestUtils templateDoc(final ResourceLoader resourceLoader,
-      final ObjectMapper objectMapper) {
+  public TestUtils templateDoc(
+      final ResourceLoader resourceLoader, final ObjectMapper objectMapper) {
     return new TestUtils(resourceLoader, objectMapper);
   }
 }

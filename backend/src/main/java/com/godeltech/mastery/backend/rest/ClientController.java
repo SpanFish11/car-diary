@@ -25,6 +25,7 @@ import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -68,18 +69,19 @@ public class ClientController {
       summary = "Get all client appointments",
       description = "Endpoint for getting all client appointments",
       responses = {
-          @ApiResponse(responseCode = "200", description = "Ok"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Bad Request",
-              content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description = "Internal Server Error",
-              content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
+        @ApiResponse(responseCode = "200", description = "Ok"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Bad Request",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error",
+            content = @Content(schema = @Schema(implementation = ExceptionResponseDTO.class)))
       })
   @GetMapping("/appointments")
-  public ResponseEntity<List<AppointmentDTO>> getAllAppointments(final User principal) {
+  public ResponseEntity<List<AppointmentDTO>> getAllAppointments(
+      final @AuthenticationPrincipal User principal) {
     return ok(appointmentService.getAllAppointments(principal));
   }
 
@@ -176,7 +178,8 @@ public class ClientController {
 
   @PutMapping("/password/reset")
   public ResponseEntity<HttpStatus> changePassword(
-      @RequestBody @Valid final ResetPasswordRequest request, final User principal) {
+      @RequestBody @Valid final ResetPasswordRequest request,
+      final @AuthenticationPrincipal User principal) {
     clientService.changePassword(request, principal);
     return ok().build();
   }
