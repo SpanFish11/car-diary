@@ -1,5 +1,8 @@
 package com.godeltech.mastery.backend.config;
 
+import static software.amazon.awssdk.auth.credentials.AwsBasicCredentials.create;
+import static software.amazon.awssdk.regions.Region.of;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Utilities;
-
-import static software.amazon.awssdk.auth.credentials.AwsBasicCredentials.create;
-import static software.amazon.awssdk.regions.Region.of;
 
 @Slf4j
 @Configuration

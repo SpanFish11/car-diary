@@ -1,0 +1,11 @@
+{
+  "modelId": "${modelId}",
+  "year": "${year}",
+  "vin": "${vin}",
+  "mileage": "${mileage}",
+  "price": "${price}",
+  "equipmentId": "${equipmentId}",
+  "clientId": "${clientId}",
+  "ours": "${ours}",
+  "used": "${used}"
+}

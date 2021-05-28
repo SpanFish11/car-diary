@@ -1,7 +1,13 @@
 package com.godeltech.mastery.backend.service.impl;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+import static java.lang.String.format;
+import static org.springframework.data.domain.PageRequest.of;
+
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateRequest;
+import com.godeltech.mastery.backend.domain.dto.request.ChangeMileageRequest;
 import com.godeltech.mastery.backend.domain.dto.request.Filter;
 import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
 import com.godeltech.mastery.backend.domain.entity.Car;
@@ -14,18 +20,12 @@ import com.godeltech.mastery.backend.service.ClientService;
 import com.godeltech.mastery.backend.service.EquipmentService;
 import com.godeltech.mastery.backend.service.ModelService;
 import com.godeltech.mastery.backend.specification.impl.CarSpecification;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-import static org.springframework.data.domain.PageRequest.of;
 
 @Service
 @RequiredArgsConstructor
@@ -89,9 +89,19 @@ public class CarServiceImpl implements CarService {
   }
 
   @Override
-  public List<CarDTO> getCurrentClientCars(final Authentication principal) {
-    final var client = clientService.getClient(principal);
-    return carMapper.map(carRepository.getAllByClient(client));
+  public void changeCarMileage(Long clientId, ChangeMileageRequest changeMileageRequest) {
+    final var client = clientService.getClientById(clientId);
+    final var car =
+        client.getCars().stream()
+            .filter(c -> c.getId().equals(changeMileageRequest.getCarId()))
+            .findFirst()
+            .orElseThrow(() -> new EntityNotFoundException("car", changeMileageRequest.getCarId()));
+    if (changeMileageRequest.getMileage() <= car.getMileage()) {
+      throw new IllegalArgumentException(
+          format("Mileage should be greater then %s", car.getMileage()));
+    }
+    car.setMileage(changeMileageRequest.getMileage());
+    carRepository.save(car);
   }
 
   private <T extends CarCreateRequest> Car saveCar(

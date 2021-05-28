@@ -1,5 +1,11 @@
 package com.godeltech.mastery.backend.config;
 
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 import com.godeltech.mastery.backend.security.AuthTokenFilter;
 import com.godeltech.mastery.backend.security.JwtAuthEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +24,6 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.PATCH;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
@@ -65,13 +66,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(API + "/cars/**").access(MANAGER_ADMIN_ROLES)
                     .antMatchers(API + "/clients/{\\d+}/cars").access(ALL_ROLES)
                     .antMatchers(API + "/clients").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/clients/appointments").access(ALL_ROLES)
                     .antMatchers(API + "/equipments").access(ALL_ROLES)
                     .antMatchers(GET, API + "/guarantee/{\\d+}").access(ALL_ROLES)
                     .antMatchers(API + "/guarantee/**").access(MANAGER_ADMIN_ROLES)
-                    .antMatchers(API + "/maintenances").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(PUT, API + "/guarantee/{\\d+}").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(API + "/maintenances").access(ALL_ROLES)
                     .antMatchers(GET, API + "/operations/{\\d+}").access(ALL_ROLES)
                     .antMatchers(POST, API + "/operations/**").access(MANAGER_ADMIN_ROLES)
-                    .anyRequest().permitAll())
+                    .antMatchers(GET, API + "/appointments").access(MANAGER_ADMIN_ROLES)
+                    .antMatchers(POST, API + "/appointments").access(ALL_ROLES)
+                    .antMatchers(PUT, API + "/appointments/{\\d+}").access(MANAGER_ADMIN_ROLES)
+                    .anyRequest()
+                    .permitAll())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
         .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

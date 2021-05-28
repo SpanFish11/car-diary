@@ -1,13 +1,12 @@
 package com.godeltech.mastery.backend.domain.dto.request;
 
+import java.math.BigDecimal;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 @Data
 @ToString(callSuper = true)
@@ -18,7 +17,7 @@ public class CarCreateManagerRequest extends CarCreateRequest {
   @Min(value = 1, message = "Value should be greater then or equal to 1")
   private Long clientId;
 
-  @NotNull(message = "Client is mandatory")
+  @NotNull(message = "Ours is mandatory")
   private Boolean ours;
 
   @NotNull(message = "Used is mandatory")

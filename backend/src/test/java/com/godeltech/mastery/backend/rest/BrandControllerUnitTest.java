@@ -1,26 +1,25 @@
 package com.godeltech.mastery.backend.rest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.only;
+import static org.springframework.http.ResponseEntity.ok;
+
 import com.godeltech.mastery.backend.domain.dto.responce.BrandDTO;
 import com.godeltech.mastery.backend.domain.dto.responce.ModelDTO;
 import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.service.BrandService;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.only;
-import static org.springframework.http.ResponseEntity.ok;
 
 @ExtendWith(SpringExtension.class)
 class BrandControllerUnitTest {
@@ -43,7 +42,7 @@ class BrandControllerUnitTest {
   }
 
   @Test
-  void getAllModelById_givenId_shouldReturnModels() {
+  void getAllModelById() {
     final Long brandId = 1L;
     final var models = List.of(new ModelDTO(3L, "Tuggella"), new ModelDTO(9L, "Atlas"));
     final ResponseEntity<List<ModelDTO>> expected = ok(models);
@@ -53,12 +52,12 @@ class BrandControllerUnitTest {
     final ResponseEntity<List<ModelDTO>> actual = brandController.getAllModelById(brandId);
     assertThat(actual, is(expected));
 
-    then(brandService).should(only()).getModelsByBrandId(argThat(brandId::equals));
+    then(brandService).should(only()).getModelsByBrandId(eq(brandId));
   }
 
   @Test
-  void getAllModelById_givenId_shouldTrowException_NotFoundBrand() {
-    final Long brandId = 5555L;
+  void getAllModelByIncorrectId() {
+    final Long brandId = 999L;
     final var exception = new EntityNotFoundException("brand", brandId);
     final var message = exception.getMessage();
 
@@ -68,6 +67,6 @@ class BrandControllerUnitTest {
         assertThrows(EntityNotFoundException.class, () -> brandController.getAllModelById(brandId));
     assertThat(actual.getMessage(), is(message));
 
-    then(brandService).should(only()).getModelsByBrandId(argThat(brandId::equals));
+    then(brandService).should(only()).getModelsByBrandId(eq(brandId));
   }
 }

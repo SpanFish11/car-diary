@@ -7,29 +7,29 @@
         v-model="menu"
         :close-on-content-click="false"
         :return-value.sync="date"
-        transition="scale-transition"
-        offset-y
         min-width="auto"
+        offset-y
+        transition="scale-transition"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-model="date"
+            v-bind="attrs"
+            v-on="on"
             label="Start Guarantee"
             prepend-icon="mdi-calendar"
             readonly
-            v-bind="attrs"
-            v-on="on"
           ></v-text-field>
         </template>
         <v-date-picker v-model="date" no-title scrollable v-bind:max="maxDate">
           <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
-          <v-btn text color="primary" @click="$refs.menu.save(date)">
+          <v-btn color="primary" text @click="menu = false"> Cancel</v-btn>
+          <v-btn color="primary" text @click="$refs.menu.save(date)">
             OK
           </v-btn>
         </v-date-picker>
       </v-menu>
-      <v-switch v-model="extended" inset :label="`Extended`"></v-switch>
+      <v-switch v-model="extended" :label="`Extended`" inset></v-switch>
       <v-btn
         color="success"
         v-bind:disabled="disableSubmit"

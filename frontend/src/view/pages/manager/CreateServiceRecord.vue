@@ -13,13 +13,13 @@
             <v-row align="center">
               <v-col cols="12">
                 <v-autocomplete
-                  clearable
                   v-model="serviceOperationName"
                   :items="maintenances"
+                  clearable
                   dense
                   filled
-                  label="Maintenance"
                   hint="Select maintenance if it is, otherwise, leave it blank"
+                  label="Maintenance"
                   persistent-hint
                   @change="someMethod(serviceOperationName)"
                 ></v-autocomplete>
@@ -28,23 +28,23 @@
               <v-col cols="12">
                 <validation-provider
                   v-slot="{ errors }"
-                  name="Mileage"
                   :rules="{
                     required: true,
                     numeric: true,
                     min_value: currentMileage,
                     max_value: 999999,
                   }"
+                  name="Mileage"
                 >
                   <v-text-field
-                    :counter="6"
                     v-model="mileage"
-                    label="Mileage"
+                    :counter="6"
                     :error-messages="errors"
-                    filled
-                    dense
-                    clearable
                     :placeholder="`Current value is ${currentMileage}`"
+                    clearable
+                    dense
+                    filled
+                    label="Mileage"
                   ></v-text-field>
                 </validation-provider>
               </v-col>
@@ -60,38 +60,38 @@
                   <template v-slot:activator="{ on, attrs }">
                     <validation-provider
                       v-slot="{ errors }"
-                      name="Date"
                       :rules="{ required: true }"
+                      name="Date"
                     >
                       <v-text-field
                         v-model="date"
-                        clearable
-                        filled
-                        dense
+                        v-bind="attrs"
+                        v-on="on"
                         :error-messages="errors"
+                        clearable
+                        dense
+                        filled
                         label="Date"
                         placeholder="Choose a date"
                         prepend-icon="mdi-calendar"
                         readonly
-                        v-bind="attrs"
-                        v-on="on"
                       ></v-text-field>
                     </validation-provider>
                   </template>
                   <v-date-picker v-model="date" no-title scrollable>
                     <v-spacer></v-spacer>
                     <v-btn
+                      color="error"
                       elevation="10"
                       text
-                      color="error"
                       @click="serviceOperationDate = false"
                     >
                       Cancel
                     </v-btn>
                     <v-btn
+                      color="success"
                       elevation="10"
                       text
-                      color="success"
                       @click="$refs.dialog.save(date)"
                     >
                       OK
@@ -104,11 +104,11 @@
                 <v-data-table
                   :headers="serviceWorksHeaders"
                   :items="serviceWorks"
-                  hide-default-footer
                   class="elevation-1"
+                  hide-default-footer
                 >
                   <template v-slot:top>
-                    <v-toolbar flat dense>
+                    <v-toolbar dense flat>
                       <v-toolbar-title>Operations</v-toolbar-title>
                       <v-divider class="mx-4" inset vertical></v-divider>
                       <v-spacer></v-spacer>
@@ -119,13 +119,13 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            elevation="10"
-                            color="primary"
-                            dark
-                            small
-                            class="mb-2"
                             v-bind="attrs"
                             v-on="on"
+                            class="mb-2"
+                            color="primary"
+                            dark
+                            elevation="10"
+                            small
                           >
                             New Operation
                           </v-btn>
@@ -150,32 +150,30 @@
                                         editedServiceOperationItem.guarantee
                                       "
                                       :items="serviceVariable"
-                                      label="Guarantee"
                                       :rules="[
                                         (v) => v !== null || 'Item is required',
                                       ]"
                                       clearable
                                       dense
+                                      label="Guarantee"
                                     ></v-select>
                                   </v-col>
                                   <v-col cols="12">
                                     <v-text-field
                                       v-model="editedServiceOperationItem.name"
-                                      label="Name"
-                                      type="text"
                                       :rules="[
                                         (v) => v !== null || 'Item is required',
                                       ]"
                                       clearable
                                       dense
+                                      label="Name"
+                                      type="text"
                                     ></v-text-field>
                                   </v-col>
 
                                   <v-col cols="12">
                                     <v-text-field
                                       v-model="editedServiceOperationItem.price"
-                                      dense
-                                      clearable
                                       :rules="[
                                         (v) => v !== null || 'Item is required',
                                         (v) =>
@@ -183,6 +181,8 @@
                                             v
                                           ) || 'Only numbers',
                                       ]"
+                                      clearable
+                                      dense
                                       label="Price"
                                     ></v-text-field>
                                   </v-col>
@@ -193,18 +193,18 @@
                             <v-card-actions>
                               <v-spacer></v-spacer>
                               <v-btn
-                                elevation="10"
                                 color="red darken-1"
+                                elevation="10"
                                 text
                                 @click="closeServiceOperation"
                               >
                                 Cancel
                               </v-btn>
                               <v-btn
-                                elevation="10"
-                                color="green darken-1"
-                                text
                                 :disabled="!serviceServiceOperationFormValid"
+                                color="green darken-1"
+                                elevation="10"
+                                text
                                 @click="saveServiceOperation"
                               >
                                 Save
@@ -224,15 +224,15 @@
                           <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn
-                              elevation="10"
                               color="red darken-1"
+                              elevation="10"
                               text
                               @click="closeServiceOperationDelete"
                               >Cancel
                             </v-btn>
                             <v-btn
-                              elevation="10"
                               color="green darken-1"
+                              elevation="10"
                               text
                               @click="deleteServiceOperationItemConfirm"
                               >OK
@@ -247,16 +247,16 @@
                   <template v-slot:[`item.guarantee`]="{ item }">
                     <v-simple-checkbox
                       v-model="item.guarantee"
-                      disabled
                       dense
+                      disabled
                     ></v-simple-checkbox>
                   </template>
 
                   <template v-slot:[`item.actions`]="{ item }">
                     <v-icon
                       :disabled="item.disabled === true"
-                      color="green"
                       class="mr-2"
+                      color="green"
                       @click="editServiceOperationItem(item)"
                     >
                       mdi-pencil
@@ -275,11 +275,11 @@
                 <v-data-table
                   :headers="servicePartsHeaders"
                   :items="serviceParts"
-                  hide-default-footer
                   class="elevation-1"
+                  hide-default-footer
                 >
                   <template v-slot:top>
-                    <v-toolbar flat dense>
+                    <v-toolbar dense flat>
                       <v-toolbar-title>Parts</v-toolbar-title>
                       <v-divider class="mx-4" inset vertical></v-divider>
                       <v-spacer></v-spacer>
@@ -287,13 +287,13 @@
                       <v-dialog v-model="dialogServicePart" max-width="500px">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
-                            elevation="10"
-                            color="primary"
-                            dark
-                            small
-                            class="mb-2"
                             v-bind="attrs"
                             v-on="on"
+                            class="mb-2"
+                            color="primary"
+                            dark
+                            elevation="10"
+                            small
                           >
                             New Operation Part
                           </v-btn>
@@ -316,32 +316,30 @@
                                     <v-select
                                       v-model="editedServicePartItem.replaced"
                                       :items="serviceVariable"
-                                      label="Replaced"
                                       :rules="[
                                         (v) => v !== null || 'Item is required',
                                       ]"
                                       clearable
                                       dense
+                                      label="Replaced"
                                     ></v-select>
                                   </v-col>
                                   <v-col cols="12">
                                     <v-text-field
                                       v-model="editedServicePartItem.model"
-                                      label="Model"
-                                      type="text"
                                       :rules="[
                                         (v) => v !== null || 'Item is required',
                                       ]"
                                       clearable
                                       dense
+                                      label="Model"
+                                      type="text"
                                     ></v-text-field>
                                   </v-col>
 
                                   <v-col cols="12">
                                     <v-text-field
                                       v-model="editedServicePartItem.price"
-                                      dense
-                                      clearable
                                       :rules="[
                                         (v) => v !== null || 'Item is required',
                                         (v) =>
@@ -349,6 +347,8 @@
                                             v
                                           ) || 'Only numbers',
                                       ]"
+                                      clearable
+                                      dense
                                       label="Price"
                                     ></v-text-field>
                                   </v-col>
@@ -359,18 +359,18 @@
                             <v-card-actions>
                               <v-spacer></v-spacer>
                               <v-btn
-                                elevation="10"
                                 color="red darken-1"
+                                elevation="10"
                                 text
                                 @click="closeServicePart"
                               >
                                 Cancel
                               </v-btn>
                               <v-btn
-                                elevation="10"
-                                color="green darken-1"
-                                text
                                 :disabled="!servicePartItemFormValid"
+                                color="green darken-1"
+                                elevation="10"
+                                text
                                 @click="saveServicePart"
                               >
                                 Save
@@ -390,15 +390,15 @@
                           <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn
-                              elevation="10"
                               color="red darken-1"
+                              elevation="10"
                               text
                               @click="closeServicePartDelete"
                               >Cancel
                             </v-btn>
                             <v-btn
-                              elevation="10"
                               color="green darken-1"
+                              elevation="10"
                               text
                               @click="deleteServicePartnItemConfirm"
                               >OK
@@ -413,16 +413,16 @@
                   <template v-slot:[`item.replaced`]="{ item }">
                     <v-simple-checkbox
                       v-model="item.replaced"
-                      disabled
                       dense
+                      disabled
                     ></v-simple-checkbox>
                   </template>
 
                   <template v-slot:[`item.actions`]="{ item }">
                     <v-icon
                       :disabled="item.disabled === true"
-                      color="green"
                       class="mr-2"
+                      color="green"
                       @click="editServicePartItem(item)"
                     >
                       mdi-pencil
@@ -441,11 +441,11 @@
             <v-container class="mt-5 mb-5">
               <v-row align="stretch" justify="center">
                 <v-btn
-                  elevation="10"
-                  class="mr-4 mt-5"
-                  type="submit"
-                  color="success"
                   :disabled="invalid"
+                  class="mr-4 mt-5"
+                  color="success"
+                  elevation="10"
+                  type="submit"
                 >
                   submit
                 </v-btn>
@@ -688,7 +688,6 @@ export default {
         });
         this.$router.go(1);
       } catch (error) {
-        // todo распарсить детаилс
         console.log(error.response);
         this.overlay = false;
         this.message = `${error.response.data.message}`;

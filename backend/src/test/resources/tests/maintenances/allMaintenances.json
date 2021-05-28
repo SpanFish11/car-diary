@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "operationNumber": "TO-0",
+    "mileage": 2000,
+    "timeInterval": 2,
+    "operations": [
+      {
+        "id": 1,
+        "name": "Oil and oil filter replacement",
+        "price": 75.09
+      }
+    ],
+    "details": [
+      {
+        "id": 1,
+        "name": "Oil",
+        "price": 3.23
+      },
+      {
+        "id": 2,
+        "name": "Oil filter",
+        "price": 9.99
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "operationNumber": "TO-1(intermediate)",
+    "mileage": 15000,
+    "timeInterval": 12,
+    "operations": [
+      {
+        "id": 2,
+        "name": "Oil and oil filter replacement",
+        "price": 65.15
+      },
+      {
+        "id": 3,
+        "name": "Air filter replacement",
+        "price": 56.34
+      },
+      {
+        "id": 4,
+        "name": "Cabin filter replacement",
+        "price": 37.55
+      }
+    ],
+    "details": [
+      {
+        "id": 3,
+        "name": "Oil",
+        "price": 3.75
+      },
+      {
+        "id": 4,
+        "name": "Oil filter",
+        "price": 10.99
+      },
+      {
+        "id": 5,
+        "name": "Air filter",
+        "price": 14.56
+      },
+      {
+        "id": 6,
+        "name": "Cabin filter",
+        "price": 17.67
+      }
+    ]
+  }
+]

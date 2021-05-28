@@ -14,7 +14,7 @@
           width="700"
         >
           <template v-slot:activator="{ on, attrs }">
-            <v-btn v-bind="attrs" v-on="on" elevation="5" color="primary"
+            <v-btn v-bind="attrs" v-on="on" color="primary" elevation="5"
               >Add New Car
             </v-btn>
           </template>
@@ -321,8 +321,8 @@
 
                       <v-btn @click="e1 = 2" text>
                         <v-icon :disabled="inLoading" left>
-                          mdi-arrow-left</v-icon
-                        >
+                          mdi-arrow-left
+                        </v-icon>
                         Back
                       </v-btn>
                       <v-btn
@@ -380,10 +380,106 @@
                         Details
                       </v-btn>
                     </router-link>
+                    <v-dialog
+                      transition="dialog-bottom-transition"
+                      max-width="600"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" v-bind="attrs" v-on="on" text
+                          >Appointment
+                        </v-btn>
+                      </template>
+                      <CreateAppointment v-bind:car-id="cars[n - 1].id" />
+                    </v-dialog>
                   </v-card-actions>
                   <v-divider></v-divider>
                   <v-card-text>
-                    <div>Mileage {{ cars[n - 1].mileage }}</div>
+                    <v-dialog
+                      transition="dialog-bottom-transition"
+                      max-width="400"
+                      persistent
+                      v-model="dialogMileage"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <div v-bind="attrs" v-on="on">
+                          Mileage {{ cars[n - 1].mileage }}
+                        </div>
+                      </template>
+                      <validation-observer
+                        ref="newMileageVal"
+                        v-slot="{ invalid }"
+                      >
+                        <form
+                          @submit.prevent="
+                            submitMileage(cars[n - 1].id, newMileage)
+                          "
+                        >
+                          <v-card>
+                            <v-toolbar color="primary" dark
+                              >Change Mileage for {{ cars[n - 1].brand }}
+                              {{ cars[n - 1].model }},
+                              {{ cars[n - 1].year }}
+                            </v-toolbar>
+                            <v-card-text>
+                              <v-container fluid>
+                                <validation-provider
+                                  v-slot="{ errors }"
+                                  name="New Mileage"
+                                  :rules="{
+                                    required: true,
+                                    numeric: true,
+                                    min_value: cars[n - 1].mileage + 1,
+                                    max: 7,
+                                  }"
+                                >
+                                  <v-text-field
+                                    v-model="newMileage"
+                                    name="New Mileage"
+                                    :counter="7"
+                                    :error-messages="errors"
+                                    :placeholder="`Current mileage is ${
+                                      cars[n - 1].mileage
+                                    }`"
+                                    label="New mileage"
+                                    required
+                                  >
+                                    <template v-slot:append>
+                                      <v-tooltip bottom>
+                                        <template v-slot:activator="{ on }">
+                                          <v-icon v-on="on"
+                                            >mdi-help-circle-outline</v-icon
+                                          >
+                                        </template>
+                                        <div>
+                                          Mileage should be greater then
+                                          {{ cars[n - 1].mileage }}
+                                        </div>
+                                      </v-tooltip>
+                                    </template>
+                                  </v-text-field>
+                                </validation-provider>
+                              </v-container>
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions class="justify-end">
+                              <v-btn
+                                text
+                                color="error"
+                                @click="dialogMileage = false"
+                                >Cancel
+                              </v-btn>
+                              <v-btn
+                                text
+                                :disabled="invalid || inLoading"
+                                color="primary"
+                                type="submit"
+                                >Save
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </form>
+                      </validation-observer>
+                    </v-dialog>
                   </v-card-text>
                 </v-card>
               </v-item>
@@ -399,12 +495,15 @@
 import { mapMutations, mapState } from "vuex";
 import CarDiaryDataService from "@/services/CarDiaryDataService";
 import NewCar from "@/models/new_car";
+import CreateAppointment from "@/view/pages/client/CreateAppointment";
 
 export default {
   name: "ClientCars",
+  components: { CreateAppointment },
   data: () => ({
     inLoading: false,
     dialog: false,
+    dialogMileage: false,
     cars: [],
     car: new NewCar(),
     e1: 1,
@@ -421,6 +520,7 @@ export default {
       horsePower: null,
       transmissionType: null,
     },
+    newMileage: null,
   }),
   mounted() {
     this.getAllCars(this.currentUser.userId);
@@ -579,6 +679,40 @@ export default {
       this.car.price = null;
       this.car.mileage = null;
       this.e1 = 1;
+    },
+    async submitMileage(carId, mileage) {
+      this.inLoading = true;
+      try {
+        const request = { carId: carId, mileage: mileage };
+        await CarDiaryDataService.changeCarMileage(
+          this.currentUser.userId,
+          request
+        );
+        const cars = await CarDiaryDataService.getAllClientsCars(
+          this.currentUser.userId
+        );
+        this.cars.find((c) => c.id === carId).mileage = cars.data.find(
+          (c) => c.id === carId
+        ).mileage;
+        this.dialogMileage = false;
+        this.inLoading = false;
+        this.setSnackbarSuccess({
+          show: true,
+          message: "Mileage changed successfully!",
+        });
+        this.resetMileageDialog();
+      } catch (error) {
+        this.inLoading = false;
+        this.dialogMileage = false;
+        console.log(error.response);
+        this.setSnackbarError({
+          show: true,
+          message: error.response.data.message,
+        });
+      }
+    },
+    resetMileageDialog() {
+      this.newMileage = null;
     },
   },
 };

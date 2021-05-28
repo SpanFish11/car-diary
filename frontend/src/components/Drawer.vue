@@ -33,7 +33,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <router-link :to="item.to" custom v-slot="{ navigate }">
+            <router-link v-slot="{ navigate }" :to="item.to" custom>
               <v-list-item-title
                 @click="navigate"
                 @keypress.enter="navigate"
@@ -68,6 +68,11 @@ export default {
         icon: "mdi-car-multiple",
         to: "/client",
       },
+      {
+        title: "My appointments",
+        icon: "mdi-calendar-multiple",
+        to: "/appointments",
+      },
     ],
     other: [
       {
@@ -84,6 +89,11 @@ export default {
         title: "Add New Client",
         icon: "mdi-account",
         to: "/manager/client/add",
+      },
+      {
+        title: "All Appointments",
+        icon: "mdi-calendar-multiple",
+        to: "/appointments",
       },
     ],
   }),

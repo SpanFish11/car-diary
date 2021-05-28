@@ -2,9 +2,9 @@
   <div>
     <v-snackbar
       v-model="snackbarSuccess"
-      color="success"
       :multi-line="true"
       :timeout="10000"
+      color="success"
       top
     >
       {{ snackbarSuccessMessage }}
@@ -18,9 +18,9 @@
 
     <v-snackbar
       v-model="snackbarError"
-      color="error"
       :multi-line="true"
       :timeout="10000"
+      color="error"
       top
     >
       {{ snackbarErrorMessage }}

@@ -1,5 +1,8 @@
 package com.godeltech.mastery.backend.specification.impl;
 
+import static java.util.Objects.isNull;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 import com.godeltech.mastery.backend.domain.dto.request.Filter;
 import com.godeltech.mastery.backend.domain.entity.Car;
 import com.godeltech.mastery.backend.domain.entity.Car_;
@@ -9,21 +12,18 @@ import com.godeltech.mastery.backend.specification.BaseSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import static java.util.Objects.isNull;
-import static org.springframework.data.jpa.domain.Specification.where;
-
 @Service
 public class CarSpecification implements BaseSpecification<Car, Filter> {
 
   @Override
   public Specification<Car> getFilter(final Filter request) {
     return (root, query, cb) ->
-        where(withVin(request.getVin()))
-            .and(withOwnerLastname(request.getLastname()))
-            .and(withYear(request.getSpecificYear()))
-            .and(greaterOrEqualYear(request.getFrom()))
-            .and(withModel(request.getModelId()))
-            .and(lessOrEqualYear(request.getUntil()))
+        where(withVin(request.vin()))
+            .and(withOwnerLastname(request.lastname()))
+            .and(withYear(request.specificYear()))
+            .and(greaterOrEqualYear(request.from()))
+            .and(withModel(request.modelId()))
+            .and(lessOrEqualYear(request.until()))
             .toPredicate(root, query, cb);
   }
 

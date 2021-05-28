@@ -1,13 +1,14 @@
 package com.godeltech.mastery.backend.mapper;
 
+import static org.mapstruct.ReportingPolicy.IGNORE;
+
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateManagerRequest;
 import com.godeltech.mastery.backend.domain.dto.request.CarCreateRequest;
 import com.godeltech.mastery.backend.domain.dto.responce.CarDTO;
 import com.godeltech.mastery.backend.domain.entity.Car;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.List;
 
 @Mapper(
     componentModel = "spring",
@@ -18,7 +19,8 @@ import java.util.List;
       EquipmentMapper.class,
       OperationMapper.class,
       GuaranteeMapper.class
-    })
+    },
+    unmappedTargetPolicy = IGNORE)
 public interface CarMapper {
 
   @Mapping(target = "year", source = "year")

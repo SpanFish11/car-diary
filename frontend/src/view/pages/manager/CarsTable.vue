@@ -7,9 +7,9 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-menu
             v-model="menu"
+            :close-on-content-click="false"
             :nudge-width="200"
             offset-x
-            :close-on-content-click="false"
             transition="scale-transition"
           >
             <template v-slot:activator="{ on, attrs }">
@@ -20,7 +20,7 @@
                 color="red"
                 overlap
               >
-                <v-btn color="primary" v-bind="attrs" v-on="on"> Filters</v-btn>
+                <v-btn v-bind="attrs" v-on="on" color="primary"> Filters</v-btn>
               </v-badge>
             </template>
 
@@ -35,10 +35,10 @@
                     <v-select
                       v-model="filter.modelId"
                       :items="models"
-                      menu-props="auto"
                       clearable
-                      label="Model"
                       hide-details
+                      label="Model"
+                      menu-props="auto"
                       prepend-icon="mdi-car"
                       single-line
                     ></v-select>
@@ -48,12 +48,12 @@
                   <v-col cols="5">
                     <v-select
                       v-model="filter.specificYear"
-                      :items="years"
-                      menu-props="auto"
-                      clearable
-                      label="Specific Year"
                       :disabled="filter.from || filter.until"
+                      :items="years"
+                      clearable
                       hide-details
+                      label="Specific Year"
+                      menu-props="auto"
                       prepend-icon="mdi-calendar"
                       single-line
                     ></v-select>
@@ -63,12 +63,12 @@
                   <v-col cols="5">
                     <v-select
                       v-model="filter.from"
-                      :items="years"
-                      menu-props="auto"
                       :disabled="filter.specificYear"
+                      :items="years"
                       clearable
-                      label="From"
                       hide-details
+                      label="From"
+                      menu-props="auto"
                       prepend-icon="mdi-calendar"
                       single-line
                       @change="generateYears"
@@ -76,13 +76,13 @@
                   </v-col>
                   <v-col cols="5">
                     <v-select
-                      :disabled="filter.specificYear"
                       v-model="filter.until"
+                      :disabled="filter.specificYear"
                       :items="years"
-                      menu-props="auto"
                       clearable
-                      label="Until"
                       hide-details
+                      label="Until"
+                      menu-props="auto"
                       prepend-icon="mdi-calendar"
                       single-line
                       @change="generateYears"
@@ -95,20 +95,20 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text color="red" @click="menuCancel"> Cancel</v-btn>
-                <v-btn text color="orange" @click="menuReset"> Reset</v-btn>
+                <v-btn color="red" text @click="menuCancel"> Cancel</v-btn>
+                <v-btn color="orange" text @click="menuReset"> Reset</v-btn>
                 <v-btn color="primary" text @click="menuSave"> Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-menu>
 
           <v-spacer></v-spacer>
-          <router-link :to="{ name: 'Sold Car' }" custom v-slot="{ navigate }">
+          <router-link v-slot="{ navigate }" :to="{ name: 'Sold Car' }" custom>
             <v-btn
               color="primary"
+              role="link"
               @click="navigate"
               @keypress.enter="navigate"
-              role="link"
             >
               New Car
             </v-btn>
@@ -116,12 +116,6 @@
         </v-toolbar>
       </v-card-title>
       <v-data-table
-        :headers="headers"
-        :items="cars"
-        :options.sync="options"
-        :server-items-length="totalCars"
-        :loading="loading"
-        elevation="1"
         :footer-props="{
           showFirstLastPage: true,
           firstIcon: 'mdi-arrow-collapse-left',
@@ -129,31 +123,37 @@
           prevIcon: 'mdi-arrow-left',
           nextIcon: 'mdi-arrow-right',
         }"
+        :headers="headers"
+        :items="cars"
+        :loading="loading"
+        :options.sync="options"
+        :server-items-length="totalCars"
+        elevation="1"
       >
         <template v-slot:top>
           <v-toolbar flat>
             <v-row>
               <v-col cols="7" sm="6">
                 <v-text-field
-                  dense
-                  clearable
+                  v-model="filter.search"
+                  :disabled="!filter.filterOn"
                   append-icon="mdi-magnify"
+                  clearable
+                  dense
+                  hide-details
                   label="Search"
                   single-line
-                  hide-details
-                  :disabled="!filter.filterOn"
-                  v-model="filter.search"
                   @change="getDataFromApi"
                 ></v-text-field>
               </v-col>
               <v-col cols="5" sm="3">
                 <v-autocomplete
-                  :items="searchBy"
                   v-model="filter.filterOn"
+                  :items="searchBy"
                   clearable
                   dense
-                  @change="changeSearchBy"
                   label="Search By"
+                  @change="changeSearchBy"
                 ></v-autocomplete>
               </v-col>
             </v-row>
@@ -173,36 +173,36 @@
 
         <template v-slot:[`item.actions`]="{ item }">
           <router-link
+            v-slot="{ navigate }"
             :to="{
               name: 'Car details',
               params: { carId: item.id },
             }"
             custom
-            v-slot="{ navigate }"
           >
             <v-btn
+              color="primary"
+              role="link"
               @click="navigate"
               @keypress.enter="navigate"
-              role="link"
-              color="primary"
             >
               Details
             </v-btn>
           </router-link>
           <router-link
+            v-slot="{ navigate }"
             :to="{
               name: 'Add New Service Record',
               params: { id: item.id },
             }"
             custom
-            v-slot="{ navigate }"
           >
             <v-btn
+              class="ml-1"
+              color="primary"
+              role="link"
               @click="navigate"
               @keypress.enter="navigate"
-              role="link"
-              color="primary"
-              class="ml-1"
             >
               Add Service Record
             </v-btn>

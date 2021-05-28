@@ -29,15 +29,33 @@
       transition="scale-transition"
     >
       <template v-slot:activator="{ attrs, on }">
-        <v-btn class="ml-2" min-width="0" text v-bind="attrs" v-on="on">
+        <v-btn v-bind="attrs" v-on="on" class="ml-2" min-width="0" text>
           <v-icon>mdi-account</v-icon>
         </v-btn>
       </template>
 
-      <v-list :tile="false" nav dense>
+      <v-list :tile="false" dense>
         <v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-form-textbox-password</v-icon>
+          </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title @click="logout"> Log Out </v-list-item-title>
+            <router-link v-slot="{ navigate }" custom to="/password">
+              <v-list-item-title
+                role="link"
+                @click="navigate"
+                @keypress.enter="navigate"
+                >Change Password
+              </v-list-item-title>
+            </router-link>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon>mdi-account-arrow-left</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title @click="logout">Log Out</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

@@ -6,10 +6,9 @@ import com.godeltech.mastery.backend.exception.EntityNotFoundException;
 import com.godeltech.mastery.backend.mapper.EquipmentMapper;
 import com.godeltech.mastery.backend.repository.EquipmentRepository;
 import com.godeltech.mastery.backend.service.EquipmentService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -1,17 +1,16 @@
 package com.godeltech.mastery.backend.domain.dto.request;
 
-import lombok.Data;
+import static javax.persistence.TemporalType.DATE;
 
+import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Temporal;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
-import java.util.List;
-
-import static javax.persistence.TemporalType.DATE;
+import lombok.Data;
 
 @Data
 public class OperationCreateRequest {

@@ -1,10 +1,9 @@
 package com.godeltech.mastery.backend;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import static org.springframework.boot.SpringApplication.run;
 
-// @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 @SpringBootApplication
 public class BackendApplication {
 

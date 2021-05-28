@@ -1,5 +1,13 @@
 package com.godeltech.mastery.backend.exception;
 
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
+
 import com.godeltech.mastery.backend.domain.dto.responce.ExceptionResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -8,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,14 +27,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
-
 @Slf4j
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -34,6 +35,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler({IllegalArgumentException.class})
   protected ResponseEntity<Object> handleIllegalArgumentException(
       final IllegalArgumentException ex, final WebRequest request) {
+    logging(ex, request);
+    final var exResponse = new ExceptionResponseDTO(BAD_REQUEST);
+    exResponse.setMessage(ex.getMessage());
+    return buildResponseEntity(exResponse);
+  }
+
+  @ExceptionHandler({BadCredentialsException.class})
+  protected ResponseEntity<Object> handleBadCredentialsException(
+      final BadCredentialsException ex, final WebRequest request) {
     logging(ex, request);
     final var exResponse = new ExceptionResponseDTO(BAD_REQUEST);
     exResponse.setMessage(ex.getMessage());

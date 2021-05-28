@@ -1,8 +1,10 @@
 package com.godeltech.mastery.backend.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,13 +12,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.time.LocalDate;
-
-import static javax.persistence.GenerationType.IDENTITY;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @Table(name = "m_guarantee")
+@EqualsAndHashCode(exclude = "car")
 public class Guarantee {
 
   @Id
@@ -29,10 +37,13 @@ public class Guarantee {
   @Column(name = "end_date", nullable = false)
   private LocalDate end;
 
+  @Column(name = "mileage", nullable = false)
+  private Integer mileage;
+
   @Column(name = "extended", nullable = false)
   private Boolean extended;
 
-  @OneToOne
+  @OneToOne(fetch = LAZY)
   @JoinColumn(name = "car_id", referencedColumnName = "id")
   @JsonBackReference
   private Car car;
